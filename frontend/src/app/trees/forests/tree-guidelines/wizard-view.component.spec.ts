@@ -34,6 +34,31 @@ describe('WizardViewComponent', () => {
     expect(component.currentStep.step).toEqual(0);
   });
 
+  it('should go to previous step with subsections from later step with subsections', () => {
+    component.forest = forest;
+    component.jumpToStep({
+        "step": 3,
+        "title": "Tree Cutting",
+        "subsections": [
+            {
+                "step": 0,
+                "title": "Before you cut"
+            },
+            {
+                "step": 1,
+                "title": "When you cut"
+            },
+            {
+                "step": 2,
+                "title": "After you cut"
+            }
+        ]
+    });
+    component.currentSubsection = component.findSubsectionStep(component.currentStep, 0);
+    component.previousStep();
+    expect(component.currentStep.step).toEqual(2);
+  });
+
   it('should go to previous step with subsections from later step with no subsections', () => {
     component.forest = forest;
     component.jumpToStep({
@@ -52,6 +77,31 @@ describe('WizardViewComponent', () => {
     });
     component.previousStep();
     expect(component.currentStep.step).toEqual(4);
+  });
+
+  it('should go to previous step with subsections after currentSubsection removed', () => {
+    component.forest = forest;
+    component.jumpToStep({
+        "step": 3,
+        "title": "Tree Cutting",
+        "subsections": [
+            {
+                "step": 0,
+                "title": "Before you cut"
+            },
+            {
+                "step": 1,
+                "title": "When you cut"
+            },
+            {
+                "step": 2,
+                "title": "After you cut"
+            }
+        ]
+    });
+    component.currentSubsection = null;
+    component.previousStep();
+    expect(component.currentStep.step).toEqual(2);
   });
 
   it('should go to next step', () => {
@@ -85,6 +135,31 @@ describe('WizardViewComponent', () => {
     expect(component.currentStep.step).toEqual(2);
   });
 
+  it('should go to next step which has subsections after currentSubsection is removed', () => {
+    component.forest = forest;
+    component.jumpToStep({
+      "step": 1,
+      "title": "Where to Find Your Tree",
+      "subsections": [
+          {
+              "step": 0,
+              "title": "Districts and maps"
+          },
+          {
+              "step": 1,
+              "title": "Prohibited areas"
+          },
+          {
+              "step": 2,
+              "title": "Places to try"
+          }
+      ]
+    });
+    component.currentSubsection = null;
+    component.nextStep();
+    expect(component.currentStep.step).toEqual(2);
+  });
+
   it('should go to next step which has no subsections', () => {
     component.forest = forest;
     component.jumpToStep({
@@ -92,6 +167,7 @@ describe('WizardViewComponent', () => {
         "title": "Trip planning"
     });
     component.nextStep();
+    console.log(JSON.stringify(component.sectionInfo, null, 4))
     expect(component.currentStep.step).toEqual(5);
   });
 
