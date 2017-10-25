@@ -26,10 +26,63 @@ describe('WizardViewComponent', () => {
     component.forest = forest;
     fixture.detectChanges();
   });
-
-  it('should go to previous step', () => {
+  
+  it('should go to previous step from later step', () => {
     component.forest = forest;
+    component.nextStep();
     component.previousStep();
-    expect(component).toBeTruthy();
+    expect(component.currentStep.step).toEqual(0);
   });
+
+  it('should go to previous step with subsections from later step with no subsections', () => {
+    component.forest = forest;
+    component.jumpToStep({
+        "step": 4,
+        "title": "Trip planning"
+    });
+    component.previousStep();
+    expect(component.currentStep.step).toEqual(3);
+  });
+
+  it('should go to previous step without subsections from later step with no subsections', () => {
+    component.forest = forest;
+    component.jumpToStep({
+        "step": 5,
+        "title": "Safety first"
+    });
+    component.previousStep();
+    expect(component.currentStep.step).toEqual(4);
+  });
+
+  it('should go to next step', () => {
+    component.forest = forest;
+    component.nextStep();
+    expect(component.currentStep.step).toEqual(1);
+  });
+
+  it('should go to next subsection step', () => {
+    component.forest = forest;
+    component.jumpToStep({
+      "step": 1,
+      "title": "Where to Find Your Tree",
+      "subsections": [
+          {
+              "step": 0,
+              "title": "Districts and maps"
+          },
+          {
+              "step": 1,
+              "title": "Prohibited areas"
+          },
+          {
+              "step": 2,
+              "title": "Places to try"
+          }
+      ]
+    });
+    component.currentSubsection = component.findSubsectionStep(component.currentStep, 2);
+    component.nextStep();
+    expect(component.currentStep.step).toEqual(2);
+  });
+
 });
