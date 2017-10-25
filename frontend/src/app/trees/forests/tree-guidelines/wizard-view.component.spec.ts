@@ -60,7 +60,7 @@ describe('WizardViewComponent', () => {
     expect(component.currentStep.step).toEqual(1);
   });
 
-  it('should go to next subsection step', () => {
+  it('should go to next step which has subsections', () => {
     component.forest = forest;
     component.jumpToStep({
       "step": 1,
@@ -83,6 +83,16 @@ describe('WizardViewComponent', () => {
     component.currentSubsection = component.findSubsectionStep(component.currentStep, 2);
     component.nextStep();
     expect(component.currentStep.step).toEqual(2);
+  });
+
+  it('should go to next step which has no subsections', () => {
+    component.forest = forest;
+    component.jumpToStep({
+        "step": 4,
+        "title": "Trip planning"
+    });
+    component.nextStep();
+    expect(component.currentStep.step).toEqual(5);
   });
 
 });
