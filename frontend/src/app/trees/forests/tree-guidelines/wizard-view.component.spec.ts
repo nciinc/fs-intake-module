@@ -101,7 +101,33 @@ describe('WizardViewComponent', () => {
     });
     component.currentSubsection = null;
     component.previousStep();
-    expect(component.currentStep.step).toEqual(2);
+    expect(component.currentStep.step).toEqual(3);
+  });
+
+  it('should go to previous step without subsections from later step, second subsection', () => {
+    component.forest = forest;
+    component.jumpToStep({
+        "step": 1,
+        "title": "Where to Find Your Tree",
+        "subsections": [
+            {
+                "step": 0,
+                "title": "Districts and maps"
+            },
+            {
+                "step": 1,
+                "title": "Prohibited areas"
+            },
+            {
+                "step": 2,
+                "title": "Places to try"
+            }
+        ]
+    });
+    component.currentSubsection = component.findSubsectionStep(component.currentStep, 1);
+    component.previousStep();
+    console.log('currentSubsection', JSON.stringify(component.currentSubsection, null, 4))
+    expect(component.currentStep.step).toEqual(1);
   });
 
   it('should go to next step', () => {
@@ -157,7 +183,7 @@ describe('WizardViewComponent', () => {
     });
     component.currentSubsection = null;
     component.nextStep();
-    expect(component.currentStep.step).toEqual(2);
+    expect(component.currentStep.step).toEqual(1);
   });
 
   it('should go to next step which has no subsections', () => {
@@ -167,7 +193,7 @@ describe('WizardViewComponent', () => {
         "title": "Trip planning"
     });
     component.nextStep();
-    console.log(JSON.stringify(component.sectionInfo, null, 4))
+    //console.log(JSON.stringify(component.sectionInfo, null, 4))
     expect(component.currentStep.step).toEqual(5);
   });
 
