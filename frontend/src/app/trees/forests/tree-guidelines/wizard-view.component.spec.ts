@@ -26,7 +26,7 @@ describe('WizardViewComponent', () => {
     component.forest = forest;
     fixture.detectChanges();
   });
-  
+
   it('should go to previous step from later step', () => {
     component.forest = forest;
     component.nextStep();
@@ -37,20 +37,20 @@ describe('WizardViewComponent', () => {
   it('should go to previous step with subsections from later step with subsections', () => {
     component.forest = forest;
     component.jumpToStep({
-        "step": 3,
-        "title": "Tree Cutting",
-        "subsections": [
+        'step': 3,
+        'title': 'Tree Cutting',
+        'subsections': [
             {
-                "step": 0,
-                "title": "Before you cut"
+                'step': 0,
+                'title': 'Before you cut'
             },
             {
-                "step": 1,
-                "title": "When you cut"
+                'step': 1,
+                'title': 'When you cut'
             },
             {
-                "step": 2,
-                "title": "After you cut"
+                'step': 2,
+                'title': 'After you cut'
             }
         ]
     });
@@ -62,8 +62,8 @@ describe('WizardViewComponent', () => {
   it('should go to previous step with subsections from later step with no subsections', () => {
     component.forest = forest;
     component.jumpToStep({
-        "step": 4,
-        "title": "Trip planning"
+        'step': 4,
+        'title': 'Trip planning'
     });
     component.previousStep();
     expect(component.currentStep.step).toEqual(3);
@@ -72,8 +72,8 @@ describe('WizardViewComponent', () => {
   it('should go to previous step without subsections from later step with no subsections', () => {
     component.forest = forest;
     component.jumpToStep({
-        "step": 5,
-        "title": "Safety first"
+        'step': 5,
+        'title': 'Safety first'
     });
     component.previousStep();
     expect(component.currentStep.step).toEqual(4);
@@ -82,20 +82,20 @@ describe('WizardViewComponent', () => {
   it('should go to previous step with subsections after currentSubsection removed', () => {
     component.forest = forest;
     component.jumpToStep({
-        "step": 3,
-        "title": "Tree Cutting",
-        "subsections": [
+        'step': 3,
+        'title': 'Tree Cutting',
+        'subsections': [
             {
-                "step": 0,
-                "title": "Before you cut"
+                'step': 0,
+                'title': 'Before you cut'
             },
             {
-                "step": 1,
-                "title": "When you cut"
+                'step': 1,
+                'title': 'When you cut'
             },
             {
-                "step": 2,
-                "title": "After you cut"
+                'step': 2,
+                'title': 'After you cut'
             }
         ]
     });
@@ -107,26 +107,25 @@ describe('WizardViewComponent', () => {
   it('should go to previous step without subsections from later step, second subsection', () => {
     component.forest = forest;
     component.jumpToStep({
-        "step": 1,
-        "title": "Where to Find Your Tree",
-        "subsections": [
+        'step': 1,
+        'title': 'Where to Find Your Tree',
+        'subsections': [
             {
-                "step": 0,
-                "title": "Districts and maps"
+                'step': 0,
+                'title': 'Districts and maps'
             },
             {
-                "step": 1,
-                "title": "Prohibited areas"
+                'step': 1,
+                'title': 'Prohibited areas'
             },
             {
-                "step": 2,
-                "title": "Places to try"
+                'step': 2,
+                'title': 'Places to try'
             }
         ]
     });
     component.currentSubsection = component.findSubsectionStep(component.currentStep, 1);
     component.previousStep();
-    console.log('currentSubsection', JSON.stringify(component.currentSubsection, null, 4))
     expect(component.currentStep.step).toEqual(1);
   });
 
@@ -139,20 +138,20 @@ describe('WizardViewComponent', () => {
   it('should go to next step which has subsections', () => {
     component.forest = forest;
     component.jumpToStep({
-      "step": 1,
-      "title": "Where to Find Your Tree",
-      "subsections": [
+      'step': 1,
+      'title': 'Where to Find Your Tree',
+      'subsections': [
           {
-              "step": 0,
-              "title": "Districts and maps"
+              'step': 0,
+              'title': 'Districts and maps'
           },
           {
-              "step": 1,
-              "title": "Prohibited areas"
+              'step': 1,
+              'title': 'Prohibited areas'
           },
           {
-              "step": 2,
-              "title": "Places to try"
+              'step': 2,
+              'title': 'Places to try'
           }
       ]
     });
@@ -164,20 +163,20 @@ describe('WizardViewComponent', () => {
   it('should go to next step which has subsections after currentSubsection is removed', () => {
     component.forest = forest;
     component.jumpToStep({
-      "step": 1,
-      "title": "Where to Find Your Tree",
-      "subsections": [
+      'step': 1,
+      'title': 'Where to Find Your Tree',
+      'subsections': [
           {
-              "step": 0,
-              "title": "Districts and maps"
+              'step': 0,
+              'title': 'Districts and maps'
           },
           {
-              "step": 1,
-              "title": "Prohibited areas"
+              'step': 1,
+              'title': 'Prohibited areas'
           },
           {
-              "step": 2,
-              "title": "Places to try"
+              'step': 2,
+              'title': 'Places to try'
           }
       ]
     });
@@ -189,11 +188,10 @@ describe('WizardViewComponent', () => {
   it('should go to next step which has no subsections', () => {
     component.forest = forest;
     component.jumpToStep({
-        "step": 4,
-        "title": "Trip planning"
+        'step': 4,
+        'title': 'Trip planning'
     });
     component.nextStep();
-    //console.log(JSON.stringify(component.sectionInfo, null, 4))
     expect(component.currentStep.step).toEqual(5);
   });
 
