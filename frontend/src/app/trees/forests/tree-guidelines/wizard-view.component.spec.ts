@@ -5,6 +5,7 @@ import { forest } from '../../_mocks/forest';
 import { TreesService } from '../../_services/trees.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpModule } from '@angular/http';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('WizardViewComponent', () => {
   let component: WizardViewComponent;
@@ -14,6 +15,7 @@ describe('WizardViewComponent', () => {
     async(() => {
       TestBed.configureTestingModule({
         declarations: [WizardViewComponent],
+        schemas: [NO_ERRORS_SCHEMA],
         providers: [TreesService],
         imports: [HttpModule, RouterTestingModule]
       }).compileComponents();
@@ -192,7 +194,6 @@ describe('WizardViewComponent', () => {
         'title': 'Trip planning'
     });
     component.nextStep();
-    console.log(JSON.stringify(component.sectionInfo, null, 4))
     expect(component.currentStep.step).toEqual(5);
   });
 
