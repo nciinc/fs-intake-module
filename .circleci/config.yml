@@ -56,7 +56,7 @@ jobs:
       #     command: cd frontend; yarn run docs;
       - run:
           name: run dist on frontend
-          command: cd frontent; yarn dist-staging
+          command: cd frontend; yarn dist-staging
 
 ## Run tests
       - run:
