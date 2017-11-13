@@ -1,4 +1,4 @@
-cd server;
+cd ../server;
 yarn start &
 serverid=$!
 sleep 1

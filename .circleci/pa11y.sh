@@ -1,4 +1,4 @@
-cd frontend;
+cd ../frontend;
 ng serve &
 serverid=$!
 sleep 30

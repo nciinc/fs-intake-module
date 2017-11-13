@@ -1,5 +1,5 @@
 
-cd frontend
+cd ../frontend
 yarn
 cd ../server
 yarn
