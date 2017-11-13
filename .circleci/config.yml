@@ -16,6 +16,9 @@ jobs:
       - run:
           name: Add typedoc
           command: sudo yarn global add typedoc
+      - run:
+          namd: Install angular cli
+          command: sudo yarn global add @angular/cli
       # - run:
       #     name: Download google chrome
       #     command: curl -L -o google-chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
