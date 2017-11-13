@@ -28,9 +28,9 @@ jobs:
       # - run:
       #     name: remove google chome install files
       #     command: rm google-chrome.deb
-      # - run:
+      - run:
           name: install dependencies
-          command: install-dependencies.sh
+          command: ./install-dependencies.sh
       - save_cache:
           key: dependency-cache-trees1123123
           paths:
