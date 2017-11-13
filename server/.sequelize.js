@@ -11,12 +11,10 @@ const dbConfig = {
   password: dbAuth[1],
   host: dbParams.hostname,
   port: dbParams.port,
+  ssl: false,
   dialect: dbParams.protocol.split(':')[0],
   seederStorage: 'sequelize',
-  logging: console.log,
-  ssl: {
-    require: false
-  }
+  logging: console.log
 };
 
 if (dbParams.hostname !== 'localhost' && dbParams.hostname !== 'fs-intake-postgres') {
