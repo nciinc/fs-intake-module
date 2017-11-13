@@ -80,7 +80,7 @@ jobs:
           command: cd server; ls -la; pwd;
       - run:
           name: Migrate db
-          command: cd server; ./node_modules/sequelize-cli/lib/sequelize db:migrate --config=
+          command: cd server; ./node_modules/sequelize-cli/lib/sequelize db:migrate
       - run:
           name: seed db with intake data
           command: cd server; yarn seed-ci
