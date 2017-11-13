@@ -25,7 +25,7 @@ if (dbParams.hostname !== 'localhost' && dbParams.hostname !== 'fs-intake-postgr
   }
   dbConfig.dialectOptions = {
     ssl: {
-      require: dbConfig.ssl;
+      require: dbConfig.ssl
     }
   };
 }
