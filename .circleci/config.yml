@@ -12,10 +12,10 @@ jobs:
           command: rm -rf ~/.yarn
       - run:
           name: instal yarn
-          command: npm i -g yarn
+          command: sudo npm i -g yarn
       - run:
           name: Add typedoc
-          command: yarn global add typedoc
+          command: sudo yarn global add typedoc
       # - run:
       #     name: Download google chrome
       #     command: curl -L -o google-chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
@@ -47,7 +47,7 @@ jobs:
 ## Run tests
       - run:
           name: install protractor
-          command: cd ../frontend; npm install -g protractor
+          command: cd ../frontend; sudo npm install -g protractor
       - run:
           name: Migrate db
           command: cd ../server; yarn migrate
