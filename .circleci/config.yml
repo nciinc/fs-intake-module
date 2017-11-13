@@ -64,6 +64,9 @@ jobs:
             - frontend/node_modules
             - server/node_modules
             - cache/yarn
+      - run:
+          name: Migrate db
+          command: cd server; ./node_modules/sequelize-cli/lib/sequelize db:migrate
       # - run:
       #     name: generate typedocs
       #     command: cd frontend; yarn run docs;
@@ -79,9 +82,7 @@ jobs:
           command: cd frontend; ls -la; pwd;
       - run:
           command: cd server; ls -la; pwd;
-      - run:
-          name: Migrate db
-          command: cd server; ./node_modules/sequelize-cli/lib/sequelize db:migrate
+
       - run:
           name: seed db with intake data
           command: cd server; yarn seed-ci
