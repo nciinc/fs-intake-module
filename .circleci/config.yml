@@ -8,88 +8,88 @@ jobs:
     steps:
       - checkout
       - run:
-        name: remove yarn dependencies
-        command: rm -rf ~/.yarn
+          name: remove yarn dependencies
+          command: rm -rf ~/.yarn
       - run:
-        name: instal yarn
-        command: npm i -g yarn
+          name: instal yarn
+          command: npm i -g yarn
       - run:
-        name: Add typedoc
-        command: yarn global add typedoc
+          name: Add typedoc
+          command: yarn global add typedoc
       - run:
-        name: Download google chrome
-        command: curl -L -o google-chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          name: Download google chrome
+          command: curl -L -o google-chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
       - run:
-        name: install google chrome
-        command: sudo dpkg -i google-chrome.deb
+          name: install google chrome
+          command: sudo dpkg -i google-chrome.deb
       - run:
-        name: configure google chrome
-        command: sudo sed -i 's|HERE/chrome\"|HERE/chrome\" --disable-setuid-sandbox|g' /opt/google/chrome/google-chrome
+          name: configure google chrome
+          command: sudo sed -i 's|HERE/chrome\"|HERE/chrome\" --disable-setuid-sandbox|g' /opt/google/chrome/google-chrome
       - run:
-        name: remove google chome install files
-        command: rm google-chrome.deb
+          name: remove google chome install files
+          command: rm google-chrome.deb
       - run:
-        name: install dependencies
-        command: ./install-dependencies.sh
+          name: install dependencies
+          command: ./install-dependencies.sh
       - save_cache:
-        key: dependency-cache-trees1123123
-        paths:
-          - ../frontend/node_modules
-          - ../server/node_modules
-          - ../.cache/yarn
+          key: dependency-cache-trees1123123
+          paths:
+            - ../frontend/node_modules
+            - ../server/node_modules
+            - ../.cache/yarn
       - run:
-        name: generate typedocs
-        command: cd ../frontend; yarn run docs;
+          name: generate typedocs
+          command: cd ../frontend; yarn run docs;
       - run:
-        name: run dist on frontend
-        command: cd ../frontent; yarn dist-staging
+          name: run dist on frontend
+          command: cd ../frontent; yarn dist-staging
 
 ## Run tests
       - run:
-        name: install protractor
-        command: cd ../frontend; npm install -g protractor
+          name: install protractor
+          command: cd ../frontend; npm install -g protractor
       - run:
-        name: Migrate db
-        command: cd ../server; yarn migrate
+          name: Migrate db
+          command: cd ../server; yarn migrate
       - run:
-        name: seed db with intake data
-        command: cd ../server; yarn seed-ci
+          name: seed db with intake data
+          command: cd ../server; yarn seed-ci
       - run:
-        name: seed db with trees data
-        command: cd ../server; yarn seed
+          name: seed db with trees data
+          command: cd ../server; yarn seed
       - run:
-        name: run e2e tests
-        command: ./run-e2e.sh
+          name: run e2e tests
+          command: ./run-e2e.sh
       - run:
-        name: frontend unit tests
-        command: cd ../frontend; yarn run test:ci
+          name: frontend unit tests
+          command: cd ../frontend; yarn run test:ci
       - run:
-        name: frontend linting
-        command: cd ../frontend; yarn run lint
+          name: frontend linting
+          command: cd ../frontend; yarn run lint
       - run:
-        name: pa11y test
-        command: ./pa11y.sh
+          name: pa11y test
+          command: ./pa11y.sh
       - run:
-        name: server unit tests
-        command: cd ../server; yarn coverage
+          name: server unit tests
+          command: cd ../server; yarn coverage
       - run:
-        name: server linting
-        command: cd ../server; yarn run lint
+          name: server linting
+          command: cd ../server; yarn run lint
       - run:
-        name: server snyk tests
-        command: cd ../server; yarn run snyk-test
+          name: server snyk tests
+          command: cd ../server; yarn run snyk-test
       - run:
-        name: frontend snyk tests
-        command: cd ../frontend; yarn run snyk-test
+          name: frontend snyk tests
+          command: cd ../frontend; yarn run snyk-test
       - store_artifacts:
-        path: ../frontend/coverage
-        prefix: frontend-coverage
+          path: ../frontend/coverage
+          prefix: frontend-coverage
       - store_artifacts:
-        path: ../server/coverage
-        prefix: server-coverage
+          path: ../server/coverage
+          prefix: server-coverage
       - store_artifacts:
-        path: ../frontend/e2e-test-results
-        prefix: e2e-results
+          path: ../frontend/e2e-test-results
+          prefix: e2e-results
 
 # deployment:
 #  prod:
