@@ -14,7 +14,9 @@ const dbConfig = {
   dialect: dbParams.protocol.split(':')[0],
   seederStorage: 'sequelize',
   logging: console.log,
-  ssl: false
+  ssl: {
+    require: false
+  }
 };
 
 if (dbParams.hostname !== 'localhost' && dbParams.hostname !== 'fs-intake-postgres') {
