@@ -51,9 +51,9 @@ jobs:
             - frontend/node_modules
             - server/node_modules
             - cache/yarn
-      - run:
-          name: generate typedocs
-          command: cd frontend; yarn run docs;
+      # - run:
+      #     name: generate typedocs
+      #     command: cd frontend; yarn run docs;
       - run:
           name: run dist on frontend
           command: cd frontent; yarn dist-staging
