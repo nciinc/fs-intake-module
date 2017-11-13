@@ -3,12 +3,11 @@ jobs:
   build:
     docker:
       - image: circleci/node:6.12.0-browsers
-        environment:
-          - DATABASE_URL: "postgres://ubuntu@localhost:5432/db_name?sslmode=disable"
       - image: postgres:9.6
         environment:
           - POSTGRES_USER: "ubuntu"
           - POSTGRES_DB: "db_name"
+          - POSTGRES_PASSWORD: ""
     # environment:
       # - PATH: "${PATH}:${HOME}/${CIRCLE_PROJECT_REPONAME}/frontend/node_modules/.bin" # yarn
     steps:
@@ -81,6 +80,8 @@ jobs:
       - run:
           name: Migrate db
           command: cd server; ./node_modules/sequelize-cli/lib/sequelize db:migrate
+        environment:
+            - DATABASE_URL: "postgres://ubuntu@localhost:5432/db_name?sslmode=disable"
       - run:
           name: seed db with intake data
           command: cd server; yarn seed-ci
