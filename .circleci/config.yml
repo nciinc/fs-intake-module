@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/node:6
+      - image: circleci/node:6.12.0-browsers
     environment:
       - PATH: "${PATH}:${HOME}/${CIRCLE_PROJECT_REPONAME}/frontend/node_modules/.bin" # yarn
     steps:
@@ -16,19 +16,19 @@ jobs:
       - run:
           name: Add typedoc
           command: yarn global add typedoc
-      - run:
-          name: Download google chrome
-          command: curl -L -o google-chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-      - run:
-          name: install google chrome
-          command: sudo dpkg -i google-chrome.deb
-      - run:
-          name: configure google chrome
-          command: sudo sed -i 's|HERE/chrome\"|HERE/chrome\" --disable-setuid-sandbox|g' /opt/google/chrome/google-chrome
-      - run:
-          name: remove google chome install files
-          command: rm google-chrome.deb
-      - run:
+      # - run:
+      #     name: Download google chrome
+      #     command: curl -L -o google-chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+      # - run:
+      #     name: install google chrome
+      #     command: sudo dpkg -i google-chrome.deb
+      # - run:
+      #     name: configure google chrome
+      #     command: sudo sed -i 's|HERE/chrome\"|HERE/chrome\" --disable-setuid-sandbox|g' /opt/google/chrome/google-chrome
+      # - run:
+      #     name: remove google chome install files
+      #     command: rm google-chrome.deb
+      # - run:
           name: install dependencies
           command: ./install-dependencies.sh
       - save_cache:
