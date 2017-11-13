@@ -1,4 +1,5 @@
 'use strict';
+const util = require('src/util.es6');
 
 const url = require('url');
 
@@ -17,10 +18,14 @@ const dbConfig = {
 };
 
 if (dbParams.hostname !== 'localhost' && dbParams.hostname !== 'fs-intake-postgres') {
-  dbConfig.ssl = true;
+  if (util.isLocalOrCI) {
+    dbConfig.ssl = false;
+  } else {
+    dbConfig.ssl = true;
+  }
   dbConfig.dialectOptions = {
     ssl: {
-      require: true
+      require: dbConfig.ssl;
     }
   };
 }
