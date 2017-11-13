@@ -81,7 +81,7 @@ jobs:
           name: Migrate db
           command: cd server; ./node_modules/sequelize-cli/lib/sequelize db:migrate
         environment:
-            - DATABASE_URL: "postgres://ubuntu@localhost:5432/db_name?sslmode=disable"
+          DATABASE_URL: "postgres://ubuntu@localhost:5432/db_name?sslmode=disable"
       - run:
           name: seed db with intake data
           command: cd server; yarn seed-ci
