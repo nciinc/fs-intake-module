@@ -1,5 +1,4 @@
 'use strict';
-const util = require('./src/util.es6');
 
 const url = require('url');
 
@@ -14,18 +13,15 @@ const dbConfig = {
   port: dbParams.port,
   dialect: dbParams.protocol.split(':')[0],
   seederStorage: 'sequelize',
-  logging: console.log
+  logging: console.log,
+  ssl: false
 };
 
 if (dbParams.hostname !== 'localhost' && dbParams.hostname !== 'fs-intake-postgres') {
-  if (util.isLocalOrCI) {
-    dbConfig.ssl = false;
-  } else {
-    dbConfig.ssl = false;
-  }
+  dbConfig.ssl = true;
   dbConfig.dialectOptions = {
     ssl: {
-      require: dbConfig.ssl
+      require: true
     }
   };
 }
