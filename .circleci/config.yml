@@ -75,9 +75,9 @@ jobs:
           name: install protractor
           command: cd frontend; sudo npm install -g protractor
       - run:
-          command: cd frontend; ls -ltr; pwd;
+          command: cd frontend; ls -la; pwd;
       - run:
-          command: cd server; ls -ltr; pwd;
+          command: cd server; ls -la; pwd;
       - run:
           name: Migrate db
           command: cd server; ./node_modules/sequelize-cli/lib/sequelize db:migrate
