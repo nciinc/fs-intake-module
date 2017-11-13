@@ -29,22 +29,22 @@ jobs:
       #     name: remove google chome install files
       #     command: rm google-chrome.deb
 
-
-      - run:
-          name: install frontend dependencies
-          command: cd frontend; yarn;
-      - run:
-          name: install server dependencies
-          command: cd server; yarn;
-      - run:
-          name: install server mocha;
-          command: cd server; sudo yarn global add mocha;
-      - run:
-          name: install server mocha;
-          command: cd server; sudo yarn global add nyc;
+      # 
       # - run:
-      #     name: install dependencies
-      #     command: ./install-dependencies.sh
+      #     name: install frontend dependencies
+      #     command: cd frontend; yarn;
+      # - run:
+      #     name: install server dependencies
+      #     command: cd server; yarn;
+      # - run:
+      #     name: install server mocha;
+      #     command: cd server; sudo yarn global add mocha;
+      # - run:
+      #     name: install server mocha;
+      #     command: cd server; sudo yarn global add nyc;
+      - run:
+          name: install dependencies
+          command: .circleci/install-dependencies.sh
       - save_cache:
           key: dependency-cache-trees1123123
           paths:
