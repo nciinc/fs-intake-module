@@ -29,7 +29,7 @@ jobs:
       #     name: remove google chome install files
       #     command: rm google-chrome.deb
 
-      # 
+      #
       # - run:
       #     name: install frontend dependencies
       #     command: cd frontend; yarn;
@@ -48,61 +48,61 @@ jobs:
       - save_cache:
           key: dependency-cache-trees1123123
           paths:
-            - ../frontend/node_modules
-            - ../server/node_modules
-            - ../.cache/yarn
+            - frontend/node_modules
+            - server/node_modules
+            - cache/yarn
       - run:
           name: generate typedocs
-          command: cd ../frontend; yarn run docs;
+          command: cd frontend; yarn run docs;
       - run:
           name: run dist on frontend
-          command: cd ../frontent; yarn dist-staging
+          command: cd frontent; yarn dist-staging
 
 ## Run tests
       - run:
           name: install protractor
-          command: cd ../frontend; sudo npm install -g protractor
+          command: cd frontend; sudo npm install -g protractor
       - run:
           name: Migrate db
-          command: cd ../server; yarn migrate
+          command: cd server; yarn migrate
       - run:
           name: seed db with intake data
-          command: cd ../server; yarn seed-ci
+          command: cd server; yarn seed-ci
       - run:
           name: seed db with trees data
-          command: cd ../server; yarn seed
+          command: cd server; yarn seed
       - run:
           name: run e2e tests
-          command: ./run-e2e.sh
+          command: .circleci/run-e2e.sh
       - run:
           name: frontend unit tests
-          command: cd ../frontend; yarn run test:ci
+          command: cd frontend; yarn run test:ci
       - run:
           name: frontend linting
-          command: cd ../frontend; yarn run lint
+          command: cd frontend; yarn run lint
       - run:
           name: pa11y test
-          command: ./pa11y.sh
+          command: .circleci/pa11y.sh
       - run:
           name: server unit tests
-          command: cd ../server; yarn coverage
+          command: cd server; yarn coverage
       - run:
           name: server linting
-          command: cd ../server; yarn run lint
+          command: cd server; yarn run lint
       - run:
           name: server snyk tests
-          command: cd ../server; yarn run snyk-test
+          command: cd server; yarn run snyk-test
       - run:
           name: frontend snyk tests
-          command: cd ../frontend; yarn run snyk-test
+          command: cd frontend; yarn run snyk-test
       - store_artifacts:
-          path: ../frontend/coverage
+          path: frontend/coverage
           prefix: frontend-coverage
       - store_artifacts:
-          path: ../server/coverage
+          path: server/coverage
           prefix: server-coverage
       - store_artifacts:
-          path: ../frontend/e2e-test-results
+          path: frontend/e2e-test-results
           prefix: e2e-results
 
 # deployment:
