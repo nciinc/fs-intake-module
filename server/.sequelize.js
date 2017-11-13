@@ -1,5 +1,5 @@
 'use strict';
-const util = require('src/util.es6');
+const util = require('./src/util.es6');
 
 const url = require('url');
 
