@@ -3,6 +3,12 @@ jobs:
   build:
     docker:
       - image: circleci/node:6.12.0-browsers
+        environment:
+          - DATABASE_URL: "postgres://ubuntu@localhost:5432/db_name"
+      - image: postgres:9.6
+        environment:
+          - POSTGRES_USER: "ubuntu"
+          - POSTGRES_DB: "db_name"
     # environment:
       # - PATH: "${PATH}:${HOME}/${CIRCLE_PROJECT_REPONAME}/frontend/node_modules/.bin" # yarn
     steps:
