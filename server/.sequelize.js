@@ -21,7 +21,7 @@ if (dbParams.hostname !== 'localhost' && dbParams.hostname !== 'fs-intake-postgr
   if (util.isLocalOrCI) {
     dbConfig.ssl = false;
   } else {
-    dbConfig.ssl = true;
+    dbConfig.ssl = false;
   }
   dbConfig.dialectOptions = {
     ssl: {
