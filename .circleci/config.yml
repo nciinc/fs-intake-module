@@ -4,7 +4,7 @@ jobs:
     docker:
       - image: circleci/node:6.12.0-browsers
         environment:
-          - DATABASE_URL: "postgres://ubuntu@localhost:5432/db_name"
+          - DATABASE_URL: "postgres://ubuntu@localhost:5432/db_name?sslmode=disable"
       - image: postgres:9.6
         environment:
           - POSTGRES_USER: "ubuntu"
@@ -80,7 +80,7 @@ jobs:
           command: cd server; ls -la; pwd;
       - run:
           name: Migrate db
-          command: cd server; ./node_modules/sequelize-cli/lib/sequelize db:migrate
+          command: cd server; ./node_modules/sequelize-cli/lib/sequelize db:migrate --config=
       - run:
           name: seed db with intake data
           command: cd server; yarn seed-ci
