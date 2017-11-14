@@ -3,15 +3,11 @@ jobs:
   build:
     docker:
       - image: circleci/node:6.12.0-browsers
-        # environment:
-#          DATABASE_URL: "postgres://ubuntu@127.0.0.1:5432/circle_test?sslmode=disable"
       - image: postgres:9.6
         environment:
           POSTGRES_USER: "ubuntu"
           POSTGRES_DB: "circle_test"
           POSTGRES_PASSWORD: ""
-    # environment:
-      # - PATH: "${PATH}:${HOME}/${CIRCLE_PROJECT_REPONAME}/frontend/node_modules/.bin" # yarn
     steps:
       - checkout
       - run:
@@ -29,32 +25,6 @@ jobs:
       - run:
           name: Install sequelize
           command: yarn global add sequelize-cli
-      # - run:
-      #     name: Download google chrome
-      #     command: curl -L -o google-chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-      # - run:
-      #     name: install google chrome
-      #     command: sudo dpkg -i google-chrome.deb
-      # - run:
-      #     name: configure google chrome
-      #     command: sudo sed -i 's|HERE/chrome\"|HERE/chrome\" --disable-setuid-sandbox|g' /opt/google/chrome/google-chrome
-      # - run:
-      #     name: remove google chome install files
-      #     command: rm google-chrome.deb
-
-      #
-      # - run:
-      #     name: install frontend dependencies
-      #     command: cd frontend; yarn;
-      # - run:
-      #     name: install server dependencies
-      #     command: cd server; yarn;
-      # - run:
-      #     name: install server mocha;
-      #     command: cd server; sudo yarn global add mocha;
-      # - run:
-      #     name: install server mocha;
-      #     command: cd server; sudo yarn global add nyc;
       - run:
           name: install dependencies
           command: .circleci/install-dependencies.sh
@@ -67,9 +37,9 @@ jobs:
       - run:
           name: Migrate db
           command: cd server; ./node_modules/sequelize-cli/lib/sequelize db:migrate
-      # - run:
-      #     name: generate typedocs
-      #     command: cd frontend; yarn run docs;
+      - run:
+          name: generate typedocs
+          command: cd frontend; yarn run docs;
       - run:
           name: run dist on frontend
           command: cd frontend; yarn dist-staging
