@@ -20,6 +20,9 @@ jobs:
           name: Install angular cli
           command: sudo yarn global add @angular/cli
       - run:
+          name: Install typedoc
+          command: sudo yarn global add typedoc
+      - run:
           name: Install sequelize
           command: yarn global add sequelize-cli
       - run:
@@ -112,7 +115,6 @@ workflows:
             branches:
               only: 81_circle_updates
 
-              
 # deployment:
 #  prod:
   #   branch: master
