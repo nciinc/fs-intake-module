@@ -146,7 +146,7 @@ workflows:
             - build
           filters:
             branches:
-              only: 81_circle_updates
+              only: sprint-3-development
       - prod-deploy:
           requires:
             - build
