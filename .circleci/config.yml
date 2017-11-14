@@ -98,7 +98,7 @@ jobs:
           command: rm -rf ~/.yarn
       - run:
           name: instal yarn
-          command: sudo npm i -g yarn      
+          command: sudo npm i -g yarn
       - run:
           name: install dependencies
           command: .circleci/install-dependencies.sh
@@ -112,7 +112,7 @@ jobs:
           command: cd frontend; yarn dist-trees;
       - run:
           name: deploy
-          command: ./cg-deploy/deploy.sh public-staging
+          command: ./cg-deploy/deploy.sh public-trees-staging
 
 workflows:
   version: 2
