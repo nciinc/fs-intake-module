@@ -96,9 +96,6 @@ jobs:
           name: frontend linting
           command: cd frontend; yarn run lint
       - run:
-          name: pa11y test
-          command: .circleci/pa11y.sh
-      - run:
           name: server unit tests
           command: cd server; yarn coverage
       - run:
@@ -113,6 +110,9 @@ jobs:
       - run:
           name: run e2e tests
           command: .circleci/run-e2e.sh
+      - run:
+          name: pa11y test
+          command: .circleci/pa11y.sh
       - store_artifacts:
           path: frontend/coverage
           prefix: frontend-coverage
