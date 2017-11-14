@@ -88,7 +88,7 @@ jobs:
       #     path: frontend/e2e-test-results
       #     prefix: e2e-results
 
-  serve-job:
+  deploy-job:
     docker:
       - image: circleci/node:6.12.0
     working_directory: /frontend
@@ -108,7 +108,7 @@ workflows:
   build-deploy:
     jobs:
       - build
-      - serve-job:
+      - deploy-job:
           requires:
             - build
           filters:
