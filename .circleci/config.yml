@@ -88,32 +88,32 @@ jobs:
       #     path: frontend/e2e-test-results
       #     prefix: e2e-results
 
-  deploy-job:
-    docker:
-      - image: circleci/node:6.12.0
-    working_directory: /frontend
-    steps:
-      - run:
-          name: Run update script
-          command: cd frontend; yarn run update-version;
-      - run:
-          name: Create dist
-          command: cd frontend; yarn dist-trees;
-      - run:
-          name: deploy
-          command: ./cg-deploy/deploy.sh public-staging
-
-workflows:
-  version: 2
-  build-deploy:
-    jobs:
-      - build
-      - deploy-job:
-          requires:
-            - build
-          filters:
-            branches:
-              only: 81_circle_updates
+#   deploy-job:
+#     docker:
+#       - image: circleci/node:6.12.0
+#     working_directory: /frontend
+#     steps:
+#       - run:
+#           name: Run update script
+#           command: cd frontend; yarn run update-version;
+#       - run:
+#           name: Create dist
+#           command: cd frontend; yarn dist-trees;
+#       - run:
+#           name: deploy
+#           command: ./cg-deploy/deploy.sh public-staging
+#
+# workflows:
+#   version: 2
+#   build-deploy:
+#     jobs:
+#       - build
+#       - deploy-job:
+#           requires:
+#             - build
+#           filters:
+#             branches:
+#               only: 81_circle_updates
 
 # deployment:
 #  prod:
