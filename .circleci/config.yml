@@ -99,9 +99,9 @@ jobs:
       - run:
           name: Create dist
           command: cd frontend; yarn dist-trees;
-      # - run:
-      #     name: deploy
-      #     command: ./cg-deploy/deploy.sh public-staging
+      - run:
+          name: deploy
+          command: ./cg-deploy/deploy.sh public-staging
 
 workflows:
   version: 2
