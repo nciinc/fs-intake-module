@@ -94,6 +94,15 @@ jobs:
     steps:
       - checkout
       - run:
+          name: remove yarn dependencies
+          command: rm -rf ~/.yarn
+      - run:
+          name: instal yarn
+          command: sudo npm i -g yarn      
+      - run:
+          name: install dependencies
+          command: .circleci/install-dependencies.sh
+      - run:
           command: ls -a; pwd;
       - run:
           name: Run update script
