@@ -91,7 +91,6 @@ jobs:
   deploy-job:
     docker:
       - image: circleci/node:6.12.0
-    working_directory: /frontend
     steps:
       - run:
           name: Run update script
