@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  build:
+  build-job:
     docker:
       - image: circleci/node:6.12.0-browsers
       - image: postgres:9.6
@@ -17,9 +17,6 @@ jobs:
           name: instal yarn
           command: sudo npm i -g yarn
       - run:
-          name: Add typedoc
-          command: sudo yarn global add typedoc
-      - run:
           name: Install angular cli
           command: sudo yarn global add @angular/cli
       - run:
@@ -34,64 +31,86 @@ jobs:
             - frontend/node_modules
             - server/node_modules
             - cache/yarn
-      - run:
-          name: Migrate db
-          command: cd server; ./node_modules/sequelize-cli/lib/sequelize db:migrate
-      - run:
-          name: generate typedocs
-          command: cd frontend; yarn run docs;
-      - run:
-          name: run dist on frontend
-          command: cd frontend; yarn dist-staging
-
-## Run tests
-      - run:
-          name: install protractor
-          command: cd frontend; sudo npm install -g protractor
-      - run:
-          command: cd frontend; ls -la; pwd;
-      - run:
-          command: cd server; ls -la; pwd;
-
-      - run:
-          name: seed db with intake data
-          command: cd server; yarn seed-ci
-      - run:
-          name: seed db with trees data
-          command: cd server; yarn seed
-      - run:
-          name: run e2e tests
-          command: .circleci/run-e2e.sh
-      - run:
-          name: pa11y test
-          command: .circleci/pa11y.sh
-      - run:
-          name: frontend unit tests
-          command: cd frontend; yarn run test:ci
-      - run:
-          name: frontend linting
-          command: cd frontend; yarn run lint
-      - run:
-          name: server unit tests
-          command: cd server; yarn coverage
-      - run:
-          name: server linting
-          command: cd server; yarn run lint
+#       - run:
+#           name: Migrate db
+#           command: cd server; ./node_modules/sequelize-cli/lib/sequelize db:migrate
+#       - run:
+#           name: seed db with intake data
+#           command: cd server; yarn seed-ci
+#       - run:
+#           name: seed db with trees data
+#           command: cd server; yarn seed
+#       - run:
+#           name: run dist on frontend
+#           command: cd frontend; yarn dist-staging
+#
+# ## Run tests
+#       - run:
+#           name: install protractor
+#           command: cd frontend; sudo npm install -g protractor
+#       - run:
+#           name: run e2e tests
+#           command: .circleci/run-e2e.sh
+#       - run:
+#           name: pa11y test
+#           command: .circleci/pa11y.sh
+#       - run:
+#           name: frontend unit tests
+#           command: cd frontend; yarn run test:ci
+#       - run:
+#           name: frontend linting
+#           command: cd frontend; yarn run lint
+#       - run:
+#           name: server unit tests
+#           command: cd server; yarn coverage
+#       - run:
+#           name: server linting
+#           command: cd server; yarn run lint
       - run:
           name: server snyk tests
           command: cd server; yarn run snyk-test
       - run:
           name: frontend snyk tests
           command: cd frontend; yarn run snyk-test
-      - store_artifacts:
-          path: frontend/coverage
-          prefix: frontend-coverage
-      - store_artifacts:
-          path: server/coverage
-          prefix: server-coverage
-      - store_artifacts:
-          path: frontend/e2e-test-results
-          prefix: e2e-results
+      - run:
+          name: generate typedocs
+          command: cd frontend; yarn run docs
+      # - store_artifacts:
+      #     path: frontend/coverage
+      #     prefix: frontend-coverage
+      # - store_artifacts:
+      #     path: server/coverage
+      #     prefix: server-coverage
+      # - store_artifacts:
+      #     path: frontend/e2e-test-results
+      #     prefix: e2e-results
+
+  deploy-job:
+    docker:
+      - image: circleci/node:6.12.0
+    working_directory: /frontend
+    steps:
+      - run:
+          name: Run update script
+          command: cd frontend; yarn run update-version;
+      - run:
+          name: Create dist
+          command: cd frontend; yarn dist-trees;
+      - run:
+          name: deploy
+          command: ./cg-deploy/deploy.sh public-staging
+
+ workflows:
+   version: 2
+   build-deploy:
+     jobs:
+       - build-job
+       - deploy-job:
+           requires:
+             - build-job
+           filters:
+             branches:
+               only: 81_circle_updates
 
 # deployment:
 #  prod:
