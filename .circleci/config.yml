@@ -182,7 +182,7 @@ workflows:
           requires:
       - run-e2e:
           requires:
-            run-all-other-tests
+            - run-all-other-tests
       - staging-deploy:
           requires:
             - run-e2e
