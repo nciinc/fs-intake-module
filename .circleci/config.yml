@@ -178,21 +178,20 @@ workflows:
   version: 2
   build-deploy:
     jobs:
-      - run-e2e:
-          requires:
       - run-all-other-tests:
           requires:
+      - run-e2e:
+          requires:
+            run-all-other-tests
       - staging-deploy:
           requires:
             - run-e2e
-            - run-all-other-tests
           filters:
             branches:
               only: sprint-5-development
       - prod-deploy:
           requires:
             - run-e2e
-            - run-all-other-tests
           filters:
             branches:
               only: master
