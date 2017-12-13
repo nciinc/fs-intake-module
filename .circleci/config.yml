@@ -1,78 +1,77 @@
 version: 2
 jobs:
-    run-all-other-tests:
-      docker:
-        - image: circleci/node:6.12.0-browsers
-        - image: postgres:9.6
-          environment:
-            POSTGRES_USER: "ubuntu"
-            POSTGRES_DB: "circle_test"
-            POSTGRES_PASSWORD: ""
-      steps:
-        - checkout
-        - run:
-            name: install yarn
-            command: sudo npm i -g yarn
-        - run:
-            name: Install angular cli
-            command: sudo yarn global add @angular/cli
-        - run:
-            name: Install typedoc
-            command: sudo yarn global add typedoc
-        - run:
-            name: Install sequelize
-            command: yarn global add sequelize-cli
-        - run:
-            name: install dependencies
-            command: .circleci/install-dependencies.sh
-        - run:
-            name: run dist on frontend
-            command: cd frontend; yarn dist-staging
-  ## Setting up DB
-        - run:
-            name: Migrate db
-            command: cd server; ./node_modules/sequelize-cli/lib/sequelize db:migrate
-        - run:
-            name: seed db with intake data
-            command: cd server; yarn seed-ci
-        - run:
-            name: seed db with trees data
-            command: cd server; yarn seed
-        - run:
-            name: install protractor
-            command: cd frontend; sudo npm install -g protractor
-  ## Run tests
-        - run:
-            name: pa11y test
-            command: .circleci/pa11y.sh
-        - run:
-            name: frontend unit tests
-            command: cd frontend; yarn run test:ci
-        - run:
-            name: frontend linting
-            command: cd frontend; yarn run lint
-        - run:
-            name: server unit tests
-            command: cd server; yarn coverage
-        - run:
-            name: server linting
-            command: cd server; yarn run lint
-        - run:
-            name: server snyk tests
-            command: cd server; yarn run snyk-test
-        - run:
-            name: frontend snyk tests
-            command: cd frontend; yarn run snyk-test
-        - run:
-            name: generate typedocs
-            command: cd frontend; yarn run docs
-        - store_artifacts:
-            path: frontend/coverage
-            prefix: frontend-coverage
-        - store_artifacts:
-            path: server/coverage
-            prefix: server-coverage
-
+  run-all-other-tests:
+    docker:
+      - image: circleci/node:6.12.0-browsers
+      - image: postgres:9.6
+        environment:
+          POSTGRES_USER: "ubuntu"
+          POSTGRES_DB: "circle_test"
+          POSTGRES_PASSWORD: ""
+    steps:
+      - checkout
+      - run:
+          name: install yarn
+          command: sudo npm i -g yarn
+      - run:
+          name: Install angular cli
+          command: sudo yarn global add @angular/cli
+      - run:
+          name: Install typedoc
+          command: sudo yarn global add typedoc
+      - run:
+          name: Install sequelize
+          command: yarn global add sequelize-cli
+      - run:
+          name: install dependencies
+          command: .circleci/install-dependencies.sh
+      - run:
+          name: run dist on frontend
+          command: cd frontend; yarn dist-staging
+## Setting up DB
+      - run:
+          name: Migrate db
+          command: cd server; ./node_modules/sequelize-cli/lib/sequelize db:migrate
+      - run:
+          name: seed db with intake data
+          command: cd server; yarn seed-ci
+      - run:
+          name: seed db with trees data
+          command: cd server; yarn seed
+      - run:
+          name: install protractor
+          command: cd frontend; sudo npm install -g protractor
+## Run tests
+      - run:
+          name: pa11y test
+          command: .circleci/pa11y.sh
+      - run:
+          name: frontend unit tests
+          command: cd frontend; yarn run test:ci
+      - run:
+          name: frontend linting
+          command: cd frontend; yarn run lint
+      - run:
+          name: server unit tests
+          command: cd server; yarn coverage
+      - run:
+          name: server linting
+          command: cd server; yarn run lint
+      - run:
+          name: server snyk tests
+          command: cd server; yarn run snyk-test
+      - run:
+          name: frontend snyk tests
+          command: cd frontend; yarn run snyk-test
+      - run:
+          name: generate typedocs
+          command: cd frontend; yarn run docs
+      - store_artifacts:
+          path: frontend/coverage
+          prefix: frontend-coverage
+      - store_artifacts:
+          path: server/coverage
+          prefix: server-coverage
   run-e2e:
     docker:
       - image: circleci/node:6.12.0-browsers
