@@ -72,6 +72,7 @@ jobs:
       - store_artifacts:
           path: server/coverage
           prefix: server-coverage
+
   run-e2e:
     docker:
       - image: circleci/node:6.12.0-browsers
