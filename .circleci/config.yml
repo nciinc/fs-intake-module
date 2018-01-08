@@ -5,58 +5,39 @@ jobs:
     steps:
       - checkout
       # - run:
-      #     name: install yarn
-      #     command: cd docker; docker-compose run fs-intake-frontend npm i -g yarn; docker-compose run fs-intake-server npm i -g yarn
-      # - run:
-      #     name: Install angular cli
-      #     command: sudo yarn global add @angular/cli
-      # - run:
       #     name: Install typedoc
       #     command: sudo yarn global add typedoc
-      # - run:
-      #     name: Install sequelize
-      #     command: yarn global add sequelize-cli
       - run:
           name: install dependencies
           command: cd docker; ../.circleci/install-dependencies.sh
-      - run:
-          name: run dist on frontend
-          command: cd docker; docker-compose run fs-intake-frontend yarn dist-staging
-## Setting up DB
       # - run:
-      #     name: Migrate db
-      #     command: cd server; ./node_modules/sequelize-cli/lib/sequelize db:migrate
-      - run:
-          name: seed db with intake data
-          command: cd docker; docker-compose run fs-intake-server yarn seed-ci
+      #     name: run dist on frontend
+      #     command: cd docker; docker-compose run fs-intake-frontend yarn dist-staging
       # - run:
-      #     name: seed db with trees data
-      #     command: cd server; yarn seed
-      # - run:
-      #     name: install protractor
-      #     command: cd frontend; sudo npm install -g protractor
+      #     name: seed db with intake data
+      #     command: cd docker; docker-compose run fs-intake-server yarn seed-ci
 ## Run tests
       # - run:
       #     name: pa11y test
       #     command: .circleci/pa11y.sh
-      - run:
-          name: frontend unit tests
-          command: cd docker; docker-compose run fs-intake-frontend yarn run test:ci
-      - run:
-          name: frontend linting
-          command: cd docker; docker-compose run fs-intake-frontend yarn run lint
-      - run:
-          name: server unit tests
-          command: cd docker; docker-compose run fs-intake-server yarn coverage
-      - run:
-          name: server linting
-          command: cd docker; docker-compose run fs-intake-server yarn run lint
+      # - run:
+      #     name: frontend unit tests
+      #     command: cd docker; docker-compose run fs-intake-frontend yarn run test:ci
+      # - run:
+      #     name: frontend linting
+      #     command: cd docker; docker-compose run fs-intake-frontend yarn run lint
+      # - run:
+      #     name: server unit tests
+      #     command: cd docker; docker-compose run fs-intake-server yarn coverage
+      # - run:
+      #     name: server linting
+      #     command: cd docker; docker-compose run fs-intake-server yarn run lint
       - run:
           name: server snyk tests
-          command: cd docker; docker-compose run fs-intake-server yarn run snyk-test
+          command: cd docker; docker-compose run -e SNYK_TOKEN=$TEST_SNYK_TOKEN fs-intake-server yarn run snyk-test
       - run:
           name: frontend snyk tests
-          command: cd docker; docker-compose run fs-intake-frontend yarn run snyk-test
+          command: cd docker; docker-compose run -e SNYK_TOKEN=$TEST_SNYK_TOKEN fs-intake-frontend yarn run snyk-test
       # - run:
       #     name: generate typedocs
       #     command: cd frontend; yarn run docs
