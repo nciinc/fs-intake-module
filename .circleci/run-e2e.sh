@@ -1,16 +1,11 @@
-cd server;
-yarn start &
-serverid=$!
-sleep 1
-cd ../frontend;
-
+#!/bin/sh
 ARGUMENTS=''
 for i in "$@"
 do
   ARGUMENTS=$ARGUMENTS"--specs=${i} "
 done
 
-yarn run e2e:ci $ARGUMENTS;
+docker-compose run fs-intake-frontend yarn e2e:ci --environment docker $ARGUMENTS;
 e2ereturncode=$?
 
 if [[ $e2ereturncode = 0 ]]

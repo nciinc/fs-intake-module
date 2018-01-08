@@ -1,9 +1,5 @@
-cd server;
-yarn start &
-serverid=$!
-sleep 1
-cd ../frontend;
-yarn run e2e:ci --specs=e2e/unauthenticated/check-authentication.e2e-spec.ts;
+#!/bin/sh
+docker-compose run fs-intake-frontend yarn run e2e:ci --specs=e2e/unauthenticated/check-authentication.e2e-spec.ts;
 e2ereturncode=$?
 
 if [[ $e2ereturncode = 0 ]]

@@ -10,18 +10,18 @@ jobs:
           POSTGRES_PASSWORD: ""
     steps:
       - checkout
-      - run:
-          name: install yarn
-          command: sudo npm i -g yarn
-      - run:
-          name: Install angular cli
-          command: sudo yarn global add @angular/cli
-      - run:
-          name: Install typedoc
-          command: sudo yarn global add typedoc
-      - run:
-          name: Install sequelize
-          command: yarn global add sequelize-cli
+      # - run:
+      #     name: install yarn
+      #     command: sudo npm i -g yarn
+      # - run:
+      #     name: Install angular cli
+      #     command: sudo yarn global add @angular/cli
+      # - run:
+      #     name: Install typedoc
+      #     command: sudo yarn global add typedoc
+      # - run:
+      #     name: Install sequelize
+      #     command: yarn global add sequelize-cli
       - run:
           name: install dependencies
           command: .circleci/install-dependencies.sh
@@ -29,22 +29,22 @@ jobs:
           name: run dist on frontend
           command: cd frontend; yarn dist-staging
 ## Setting up DB
-      - run:
-          name: Migrate db
-          command: cd server; ./node_modules/sequelize-cli/lib/sequelize db:migrate
+      # - run:
+      #     name: Migrate db
+      #     command: cd server; ./node_modules/sequelize-cli/lib/sequelize db:migrate
       - run:
           name: seed db with intake data
           command: cd server; yarn seed-ci
-      - run:
-          name: seed db with trees data
-          command: cd server; yarn seed
-      - run:
-          name: install protractor
-          command: cd frontend; sudo npm install -g protractor
+      # - run:
+      #     name: seed db with trees data
+      #     command: cd server; yarn seed
+      # - run:
+      #     name: install protractor
+      #     command: cd frontend; sudo npm install -g protractor
 ## Run tests
-      - run:
-          name: pa11y test
-          command: .circleci/pa11y.sh
+      # - run:
+      #     name: pa11y test
+      #     command: .circleci/pa11y.sh
       - run:
           name: frontend unit tests
           command: cd frontend; yarn run test:ci
@@ -63,9 +63,9 @@ jobs:
       - run:
           name: frontend snyk tests
           command: cd frontend; yarn run snyk-test
-      - run:
-          name: generate typedocs
-          command: cd frontend; yarn run docs
+      # - run:
+      #     name: generate typedocs
+      #     command: cd frontend; yarn run docs
       - store_artifacts:
           path: frontend/coverage
           prefix: frontend-coverage
@@ -87,31 +87,31 @@ jobs:
       - run:
           name: install yarn
           command: sudo npm i -g yarn
-      - run:
-          name: Install angular cli
-          command: sudo yarn global add @angular/cli
-      - run:
-          name: Install typedoc
-          command: sudo yarn global add typedoc
-      - run:
-          name: Install sequelize
-          command: yarn global add sequelize-cli
+      # - run:
+      #     name: Install angular cli
+      #     command: sudo yarn global add @angular/cli
+      # - run:
+      #     name: Install typedoc
+      #     command: sudo yarn global add typedoc
+      # - run:
+      #     name: Install sequelize
+      #     command: yarn global add sequelize-cli
       - run:
           name: install dependencies
           command: .circleci/install-dependencies.sh
 ## Setting up DB
-      - run:
-          name: Migrate db
-          command: cd server; ./node_modules/sequelize-cli/lib/sequelize db:migrate
+      # - run:
+      #     name: Migrate db
+      #     command: cd server; ./node_modules/sequelize-cli/lib/sequelize db:migrate
       - run:
           name: seed db with intake data
           command: cd server; yarn seed-ci
-      - run:
-          name: seed db with trees data
-          command: cd server; yarn seed
-      - run:
-          name: install protractor
-          command: cd frontend; sudo npm install -g protractor
+      # - run:
+      #     name: seed db with trees data
+      #     command: cd server; yarn seed
+      # - run:
+      #     name: install protractor
+      #     command: cd frontend; sudo npm install -g protractor
 ## Run tests
       - run:
           name: run e2e
