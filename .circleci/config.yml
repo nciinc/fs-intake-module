@@ -34,10 +34,10 @@ jobs:
       #     command: cd docker; docker-compose run fs-intake-server yarn run lint
       - run:
           name: server snyk tests
-          command: cd docker; docker-compose run -e SNYK_TOKEN=$TEST_SNYK_TOKEN fs-intake-server yarn run snyk-test
+          command: cd docker; docker-compose run -e SNYK_TOKEN=$SNYK_TOKEN fs-intake-server yarn run snyk-test
       - run:
           name: frontend snyk tests
-          command: cd docker; docker-compose run -e SNYK_TOKEN=$TEST_SNYK_TOKEN fs-intake-frontend yarn run snyk-test
+          command: cd docker; docker-compose run -e SNYK_TOKEN=$SNYK_TOKEN fs-intake-frontend yarn run snyk-test
       # - run:
       #     name: generate typedocs
       #     command: cd frontend; yarn run docs
