@@ -6,7 +6,7 @@ jobs:
       - checkout
       - run:
           name: install yarn
-          command: cd docker; docker-compose run fs-intake-frontend sudo npm i -g yarn; docker-compose run fs-intake-server sudo npm i -g yarn
+          command: cd docker; docker-compose run fs-intake-frontend npm i -g yarn; docker-compose run fs-intake-server npm i -g yarn
       # - run:
       #     name: Install angular cli
       #     command: sudo yarn global add @angular/cli
