@@ -47,7 +47,7 @@ jobs:
           command: cd docker; docker-compose run fs-intake-frontend yarn run lint
       - run:
           name: server unit tests
-          command: cd docker; yarn coverage
+          command: cd docker; docker-compose run fs-intake-server yarn coverage
       - run:
           name: server linting
           command: cd docker; docker-compose run fs-intake-server yarn run lint
