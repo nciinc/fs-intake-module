@@ -24,17 +24,17 @@ jobs:
       #     command: yarn global add sequelize-cli
       - run:
           name: install dependencies
-          command: .circleci/install-dependencies.sh
+          command: cd docker; ../.circleci/install-dependencies.sh
       - run:
           name: run dist on frontend
-          command: cd frontend; yarn dist-staging
+          command: cd docker; docker-compose run fs-intake-frontend yarn dist-staging
 ## Setting up DB
       # - run:
       #     name: Migrate db
       #     command: cd server; ./node_modules/sequelize-cli/lib/sequelize db:migrate
       - run:
           name: seed db with intake data
-          command: cd server; yarn seed-ci
+          command: cd docker; docker-compose run fs-intake-server yarn seed-ci
       # - run:
       #     name: seed db with trees data
       #     command: cd server; yarn seed
@@ -47,22 +47,22 @@ jobs:
       #     command: .circleci/pa11y.sh
       - run:
           name: frontend unit tests
-          command: cd frontend; yarn run test:ci
+          command: cd docker; docker-compose run fs-intake-frontend yarn run test:ci
       - run:
           name: frontend linting
-          command: cd frontend; yarn run lint
+          command: cd docker; docker-compose run fs-intake-frontend yarn run lint
       - run:
           name: server unit tests
-          command: cd server; yarn coverage
+          command: cd docker; yarn coverage
       - run:
           name: server linting
-          command: cd server; yarn run lint
+          command: cd docker; docker-compose run fs-intake-server yarn run lint
       - run:
           name: server snyk tests
-          command: cd server; yarn run snyk-test
+          command: cd docker; docker-compose run fs-intake-server yarn run snyk-test
       - run:
           name: frontend snyk tests
-          command: cd frontend; yarn run snyk-test
+          command: cd docker; docker-compose run fs-intake-frontend yarn run snyk-test
       # - run:
       #     name: generate typedocs
       #     command: cd frontend; yarn run docs
@@ -84,9 +84,9 @@ jobs:
     parallelism: 4
     steps:
       - checkout
-      - run:
-          name: install yarn
-          command: sudo npm i -g yarn
+      # - run:
+      #     name: install yarn
+      #     command: sudo npm i -g yarn
       # - run:
       #     name: Install angular cli
       #     command: sudo yarn global add @angular/cli
@@ -98,14 +98,14 @@ jobs:
       #     command: yarn global add sequelize-cli
       - run:
           name: install dependencies
-          command: .circleci/install-dependencies.sh
+          command: cd docker; ../.circleci/install-dependencies.sh
 ## Setting up DB
       # - run:
       #     name: Migrate db
       #     command: cd server; ./node_modules/sequelize-cli/lib/sequelize db:migrate
       - run:
           name: seed db with intake data
-          command: cd server; yarn seed-ci
+          command: cd docker; docker-compose run fs-intake-server yarn seed-ci
       # - run:
       #     name: seed db with trees data
       #     command: cd server; yarn seed
@@ -115,10 +115,10 @@ jobs:
 ## Run tests
       - run:
           name: run e2e
-          command: .circleci/run-e2e.sh $(circleci tests split <( cd frontend; circleci tests glob ./e2e/*.e2e-spec.ts))
+          command: cd docker; ../.circleci/run-e2e.sh $(circleci tests split <( cd frontend; circleci tests glob ./e2e/*.e2e-spec.ts))
       - run:
           name: run unauthenticated e2e 
-          command: .circleci/run-unauthenticated-e2e.sh
+          command: cd docker; ../.circleci/run-unauthenticated-e2e.sh
           environment:
             PLATFORM: 'not ci'
       - store_artifacts:
