@@ -1,13 +1,7 @@
 version: 2
 jobs:
   run-all-other-tests:
-    docker:
-      - image: circleci/node:6.12.0-browsers
-      - image: postgres:9.6
-        environment:
-          POSTGRES_USER: "ubuntu"
-          POSTGRES_DB: "circle_test"
-          POSTGRES_PASSWORD: ""
+    machine: true
     steps:
       - checkout
       # - run:
@@ -74,13 +68,7 @@ jobs:
           prefix: server-coverage
 
   run-e2e:
-    docker:
-      - image: circleci/node:6.12.0-browsers
-      - image: postgres:9.6
-        environment:
-          POSTGRES_USER: "ubuntu"
-          POSTGRES_DB: "circle_test"
-          POSTGRES_PASSWORD: ""
+    machine: true
     parallelism: 4
     steps:
       - checkout
