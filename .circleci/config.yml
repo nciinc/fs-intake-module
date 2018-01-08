@@ -39,7 +39,7 @@ jobs:
       #     name: frontend snyk tests
       #     command: cd docker; docker-compose run -e SNYK_TOKEN=$SNYK_TOKEN fs-intake-frontend yarn run snyk-test
       - run:
-          name: generate typedocs
+          name: generate typedocs 
           command: cd frontend; yarn run docs
       - store_artifacts:
           path: frontend/coverage
