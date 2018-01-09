@@ -5,8 +5,11 @@ jobs:
     steps:
       - checkout
       - run:
-          name: install yarn
+          name: install yarn for pa11y
           command: npm i -g yarn
+      - run:
+          name:
+          command: cd docker; docker-compose build
       - run:
           name: install dependencies
           command: cd docker; ../.circleci/install-dependencies.sh
