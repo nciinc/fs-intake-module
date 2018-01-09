@@ -5,8 +5,14 @@ jobs:
     steps:
       - checkout
       - run:
+          name: install yarn
+          command: sudo npm i -g yarn
+      - run:
           name: install dependencies
           command: cd docker; ../.circleci/install-dependencies.sh
+      - run:
+          name: install pa11y
+          command: yarn install pa11y
       # - run:
       #     name: run dist on frontend
       #     command: cd docker; docker-compose run fs-intake-frontend yarn dist-staging
@@ -14,9 +20,9 @@ jobs:
       #     name: seed db with intake data
       #     command: cd docker; docker-compose run fs-intake-server yarn seed-ci
 ## Run tests
-      # - run:
-      #     name: pa11y test
-      #     command: .circleci/pa11y.sh
+      - run:
+          name: pa11y test
+          command: .circleci/pa11y.sh
       # - run:
       #     name: frontend unit tests
       #     command: cd docker; docker-compose run fs-intake-frontend yarn run test:ci
@@ -35,9 +41,9 @@ jobs:
       # - run:
       #     name: frontend snyk tests
       #     command: cd docker; docker-compose run -e SNYK_TOKEN=$SNYK_TOKEN fs-intake-frontend yarn run snyk-test
-      - run:
-          name: generate typedocs 
-          command: cd docker; docker-compose run fs-intake-frontend bash -c "yarn global add typedoc && yarn run docs"
+      # - run:
+      #     name: generate typedocs 
+      #     command: cd docker; docker-compose run fs-intake-frontend bash -c "yarn global add typedoc && yarn run docs"
       - store_artifacts:
           path: frontend/coverage
           prefix: frontend-coverage
@@ -50,9 +56,9 @@ jobs:
     parallelism: 4
     steps:
       - checkout
-      - run:
-          name: install yarn
-          command: cd docker; docker-compose run fs-intake-frontend sudo npm i -g yarn; docker-compose run fs-intake-server sudo npm i -g yarn
+      # - run:
+      #     name: install yarn
+      #     command: cd docker; docker-compose run fs-intake-frontend sudo npm i -g yarn; docker-compose run fs-intake-server sudo npm i -g yarn
       # - run:
       #     name: Install angular cli
       #     command: sudo yarn global add @angular/cli
