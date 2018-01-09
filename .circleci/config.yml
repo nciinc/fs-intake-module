@@ -6,7 +6,7 @@ jobs:
       - checkout
       - run:
           name: install yarn
-          command: sudo npm i -g yarn
+          command: npm i -g yarn
       - run:
           name: install dependencies
           command: cd docker; ../.circleci/install-dependencies.sh
