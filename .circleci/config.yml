@@ -82,6 +82,9 @@ jobs:
       #     name: Install sequelize
       #     command: yarn global add sequelize-cli
       - run:
+          name: build docker compose images
+          command: cd docker; docker-compose build
+      - run:
           name: install dependencies
           command: cd docker; ../.circleci/install-dependencies.sh
 ## Setting up DB
@@ -100,7 +103,7 @@ jobs:
 ## Run tests
       - run:
           name: run e2e
-          command: cd docker; ../.circleci/run-e2e.sh $(circleci tests split <( cd frontend; circleci tests glob ./e2e/*.e2e-spec.ts))
+          command: cd docker; ../.circleci/run-e2e.sh $(circleci tests split <( cd ../frontend; circleci tests glob ./e2e/*.e2e-spec.ts))
       - run:
           name: run unauthenticated e2e 
           command: cd docker; ../.circleci/run-unauthenticated-e2e.sh
