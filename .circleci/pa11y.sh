@@ -10,5 +10,5 @@ then
 else
   echo 'FAIL'
 fi
-docker-compose down fs-intake-frontend
+docker-compose down
 exit $pa11yreturncode
