@@ -21,9 +21,6 @@ jobs:
           name: confirm npm installed
           command: npm -v
       - run:
-          name: confirm npm installed
-          command: sudo npm -v
-      - run:
           name: install yarn for pa11y
           command: npm i -g yarn
       - run:
