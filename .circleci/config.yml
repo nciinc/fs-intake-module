@@ -18,17 +18,23 @@ jobs:
             echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
             echo "[ -s \"$NVM_DIR/nvm.sh\" ] && . \"$NVM_DIR/nvm.sh\"" >> $BASH_ENV
       - run:
+          name: confirm npm installed
+          command: npm -v
+      - run:
+          name: confirm npm installed
+          command: sudo npm -v
+      - run:
           name: install yarn for pa11y
           command: npm i -g yarn
+      - run:
+          name: install pa11y
+          command: cd frontend; npm i -g pa11y-ci
       - run:
           name:
           command: cd docker; docker-compose build
       - run:
           name: install dependencies
           command: cd docker; ../.circleci/install-dependencies.sh
-      - run:
-          name: install pa11y
-          command: cd frontend; sudo npm install pa11y-ci
       # - run:
       #     name: run dist on frontend
       #     command: cd docker; docker-compose run fs-intake-frontend yarn dist-staging
