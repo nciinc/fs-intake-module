@@ -11,5 +11,6 @@ then
 else
   echo 'FAIL'
 fi
+cd ../docker
 docker-compose down
 exit $pa11yreturncode

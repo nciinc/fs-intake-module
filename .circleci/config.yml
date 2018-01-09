@@ -18,51 +18,45 @@ jobs:
             echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
             echo "[ -s \"$NVM_DIR/nvm.sh\" ] && . \"$NVM_DIR/nvm.sh\"" >> $BASH_ENV
       - run:
-          name: confirm npm installed
-          command: npm -v
-      - run:
-          name: install yarn for pa11y
-          command: npm i -g yarn
-      - run:
           name: install pa11y
           command: cd frontend; npm i -g pa11y-ci
       - run:
-          name:
+          name: build docker compose images
           command: cd docker; docker-compose build
       - run:
           name: install dependencies
           command: cd docker; ../.circleci/install-dependencies.sh
-      # - run:
-      #     name: run dist on frontend
-      #     command: cd docker; docker-compose run fs-intake-frontend yarn dist-staging
-      # - run:
-      #     name: seed db with intake data
-      #     command: cd docker; docker-compose run fs-intake-server yarn seed-ci
+      - run:
+          name: run dist on frontend
+          command: cd docker; docker-compose run fs-intake-frontend yarn dist-staging
+      - run:
+          name: seed db with intake data
+          command: cd docker; docker-compose run fs-intake-server yarn seed-ci
 ## Run tests
       - run:
           name: pa11y test
           command: cd docker; ../.circleci/pa11y.sh
-      # - run:
-      #     name: frontend unit tests
-      #     command: cd docker; docker-compose run fs-intake-frontend yarn run test:ci
-      # - run:
-      #     name: frontend linting
-      #     command: cd docker; docker-compose run fs-intake-frontend yarn run lint
-      # - run:
-      #     name: server unit tests
-      #     command: cd docker; docker-compose run fs-intake-server yarn coverage
-      # - run:
-      #     name: server linting
-      #     command: cd docker; docker-compose run fs-intake-server yarn run lint
-      # - run:
-      #     name: server snyk tests
-      #     command: cd docker; docker-compose run -e SNYK_TOKEN=$SNYK_TOKEN fs-intake-server yarn run snyk-test
-      # - run:
-      #     name: frontend snyk tests
-      #     command: cd docker; docker-compose run -e SNYK_TOKEN=$SNYK_TOKEN fs-intake-frontend yarn run snyk-test
-      # - run:
-      #     name: generate typedocs 
-      #     command: cd docker; docker-compose run fs-intake-frontend bash -c "yarn global add typedoc && yarn run docs"
+      - run:
+          name: frontend unit tests
+          command: cd docker; docker-compose run fs-intake-frontend yarn run test:ci
+      - run:
+          name: frontend linting
+          command: cd docker; docker-compose run fs-intake-frontend yarn run lint
+      - run:
+          name: server unit tests
+          command: cd docker; docker-compose run fs-intake-server yarn coverage
+      - run:
+          name: server linting
+          command: cd docker; docker-compose run fs-intake-server yarn run lint
+      - run:
+          name: server snyk tests
+          command: cd docker; docker-compose run -e SNYK_TOKEN=$SNYK_TOKEN fs-intake-server yarn run snyk-test
+      - run:
+          name: frontend snyk tests
+          command: cd docker; docker-compose run -e SNYK_TOKEN=$SNYK_TOKEN fs-intake-frontend yarn run snyk-test
+      - run:
+          name: generate typedocs 
+          command: cd docker; docker-compose run fs-intake-frontend bash -c "yarn global add typedoc && yarn run docs"
       - store_artifacts:
           path: frontend/coverage
           prefix: frontend-coverage
