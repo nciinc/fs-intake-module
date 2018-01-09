@@ -28,7 +28,7 @@ jobs:
           command: cd docker; ../.circleci/install-dependencies.sh
       - run:
           name: install pa11y
-          command: cd frontend; yarn add pa11y
+          command: cd frontend; yarn add pa11y-ci
       # - run:
       #     name: run dist on frontend
       #     command: cd docker; docker-compose run fs-intake-frontend yarn dist-staging
