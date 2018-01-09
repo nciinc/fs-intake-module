@@ -107,8 +107,6 @@ jobs:
       - run:
           name: run unauthenticated e2e 
           command: cd docker; ../.circleci/run-unauthenticated-e2e.sh
-          environment:
-            PLATFORM: 'not ci'
       - store_artifacts:
           path: frontend/e2e-test-results
           prefix: e2e-results
