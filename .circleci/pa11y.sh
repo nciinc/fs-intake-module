@@ -1,5 +1,5 @@
 #!/bin/sh
-docker-compose up fs-intake-frontend
+docker-compose up fs-intake-frontend &
 sleep 30
 cd ../frontend
 yarn run pa11y
