@@ -74,7 +74,7 @@ jobs:
       - checkout
       - run:
           name: build docker compose images
-          command: cd docker; ../.circleci/build-docker-images.sh
+          command: cd docker; chmod +x ../.circleci/build-docker-images.sh; ../.circleci/build-docker-images.sh
       - run:
           name: install dependencies
           command: cd docker; ../.circleci/install-dependencies.sh
