@@ -1,4 +1,3 @@
-#!/bin/sh
 docker-compose up fs-intake-frontend &
 sleep 60
 cd ../frontend

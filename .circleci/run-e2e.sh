@@ -1,4 +1,3 @@
-#!/bin/sh
 ARGUMENTS=''
 for i in "$@"
 do
