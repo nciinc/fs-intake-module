@@ -4,7 +4,7 @@ do
   ARGUMENTS=$ARGUMENTS"--specs=${i} "
 done
 
-docker-compose run -e VCAP_SERVICES=$VCAP_SERVICES -e VCAP_APPLICATION=$VCAP_APPLICATION fs-intake-frontend yarn e2e:ci --environment docker $ARGUMENTS;
+docker-compose run fs-intake-frontend yarn e2e:ci --environment docker $ARGUMENTS;
 e2ereturncode=$?
 
 if [[ $e2ereturncode = 0 ]]
@@ -14,5 +14,4 @@ else
   echo 'FAIL'
 fi
 
-kill -int $serverid
 exit $e2ereturncode

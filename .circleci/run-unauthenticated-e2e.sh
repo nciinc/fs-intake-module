@@ -1,5 +1,6 @@
 #Remove running server image so one with an updated platform env var can be created
 docker-compose down
+
 #Rebuild with PLATFORM set to something other than local to enable test to pass
 docker-compose build --build-arg PLATFORM=NOTCI --build-arg VCAP_SERVICES=$VCAP_SERVICES --build-arg VCAP_APPLICATION=$VCAP_APPLICATION fs-intake-server
 
@@ -13,5 +14,4 @@ else
   echo 'FAIL'
 fi
 
-kill -int $serverid
 exit $e2ereturncode

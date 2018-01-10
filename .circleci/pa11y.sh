@@ -11,5 +11,4 @@ else
 fi
 cd ../docker
 docker-compose down
-sleep 30
 exit $pa11yreturncode

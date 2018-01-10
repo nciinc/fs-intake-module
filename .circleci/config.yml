@@ -21,9 +21,6 @@ jobs:
           name: install pa11y
           command: cd frontend; npm i -g pa11y-ci
       - run:
-          name: 
-          command: cd .circleci; ls -l
-      - run:
           name: build docker compose images
           command: cd docker; chmod +x ../.circleci/build-docker-images.sh; ../.circleci/build-docker-images.sh
       - run:
