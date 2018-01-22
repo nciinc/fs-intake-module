@@ -36,7 +36,7 @@ const addForestSpecificInfo = (permit, frag) => {
     frag.querySelector('#national-forest').textContent = 'NATIONAL FOREST';
   }
 
-  frag.querySelector('#permit-year-vertical').textContent = permit.christmasTreesForest.startDate.getFullYear();
+  frag.querySelector('#permit-year-vertical').textContent = permit.updatedAt.getFullYear();
 
   frag.querySelector('#permit-expiration').textContent = moment(
     permit.christmasTreesForest.endDate,
