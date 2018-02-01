@@ -2,8 +2,8 @@
   <label class="usa-input" id="email-label">Email address</label>
   <span id="email-hint-text" class="help-text usa-form-hint"><span *ngIf="hintText">{{hintText}}</span></span>
   <input id="email" type="email" pattern="(^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$)" formControlName="emailAddress" aria-required="true"
-    [attr.aria-labelledby]="afs.labelledBy(applicantInfo.get('controls') ? applicantInfo.get('controls')['emailAddress'] : '', 'email-label email-hint-text', 'email-error')"
-    [attr.aria-invalid]="afs.hasError(applicantInfo.get('controls') ? applicantInfo.get('controls')['emailAddress'] : '')"
+    [attr.aria-labelledby]="afs.labelledBy(applicantInfo['emailAddress'], 'email-label email-hint-text', 'email-error')"
+    [attr.aria-invalid]="afs.hasError(applicantInfo['emailAddress'])"
   />
-  <app-error-message fieldId="email-error" name="Email address" [control]="applicantInfo.get('controls') ? applicantInfo.get('controls')['emailAddress'] : ''"></app-error-message>
+  <app-error-message fieldId="email-error" name="Email address" [control]="applicantInfo['emailAddress']"></app-error-message>
 </ng-container>

@@ -3,31 +3,31 @@
     <label id="location-label" class="usa-input">Location</label>
     <span id="location-hint-text" class="help-text usa-form-hint">Description of National Forest lands and facilities you would like to use.</span>
     <input id="location" type="text" formControlName="locationDescription" aria-required="true"
-      [attr.aria-labelledby]="afs.labelledBy(noncommercialFields.get('controls') ? noncommercialFields.get('controls')['locationDescription'] : '', 'location-label location-hint-text', 'location-error')"
-      [attr.aria-invalid]="afs.hasError(noncommercialFields.get('controls') ? noncommercialFields.get('controls')['locationDescription'] : '')"
+      [attr.aria-labelledby]="afs.labelledBy(noncommercialFields['locationDescription'], 'location-label location-hint-text', 'location-error')"
+      [attr.aria-invalid]="afs.hasError(noncommercialFields['locationDescription'])"
     />
-    <app-error-message fieldId="location-error" name="Location" [control]="noncommercialFields.get('controls') ? noncommercialFields.get('controls')['locationDescription'] : ''"></app-error-message>
+    <app-error-message fieldId="location-error" name="Location" [control]="noncommercialFields.get('locationDescription')"></app-error-message>
 
     <label id="participants-label" class="usa-input">Estimated number of participants</label>
     <span id="participants-hint-text" class="help-text usa-form-hint">Please provide the number of event participants.</span>
     <input id="participants" type="number" formControlName="numberParticipants" aria-required="true" min="1"
-      [attr.aria-labelledby]="afs.labelledBy(noncommercialFields.get('controls') ? noncommercialFields.get('controls')['numberParticipants'] : '', 'participants-label participants-hint-text', 'participants-error')"
-      [attr.aria-invalid]="afs.hasError(noncommercialFields.get('controls') ? noncommercialFields.get('controls')['numberParticipants'] : '')"
+      [attr.aria-labelledby]="afs.labelledBy(noncommercialFields['numberParticipants'], 'participants-label participants-hint-text', 'participants-error')"
+      [attr.aria-invalid]="afs.hasError(noncommercialFields['numberParticipants'])"
     />
-    <app-error-message fieldId="participants-error" name="Participants" [control]="noncommercialFields.get('controls') ? noncommercialFields.get('controls')['numberParticipants'] : ''"></app-error-message>
+    <app-error-message fieldId="participants-error" name="Participants" [control]="noncommercialFields.get('numberParticipants')"></app-error-message>
 
     <label id="spectators-label" class="usa-input">Estimated number of spectators</label>
     <span id="spectators-hint-text" class="help-text usa-form-hint">If your event will have spectators (such as a sporting event), please provide the number of spectators.</span>
     <input id="spectators" type="number" formControlName="numberSpectators" aria-required="true"
-      [attr.aria-labelledby]="afs.labelledBy(noncommercialFields.get('controls') ? noncommercialFields.get('controls')['numberSpectators'] : '', 'spectators-label spectators-hint-text', 'spectators-error')"
-      [attr.aria-invalid]="afs.hasError(noncommercialFields.get('controls') ? noncommercialFields.get('controls')['numberSpectators'] : '')"
+      [attr.aria-labelledby]="afs.labelledBy(noncommercialFields['numberSpectators'], 'spectators-label spectators-hint-text', 'spectators-error')"
+      [attr.aria-invalid]="afs.hasError(noncommercialFields['numberSpectators'])"
     />
-    <app-error-message fieldId="spectators-error" name="Spectators" [control]="noncommercialFields.get('controls') ? noncommercialFields.get('controls')['numberSpectators'] : ''"></app-error-message>
+    <app-error-message fieldId="spectators-error" name="Spectators" [control]="noncommercialFields['numberSpectators']"></app-error-message>
 
     <label id="activity-description-label" class="usa-input">Description of proposed activity</label>
     <textarea id="activity-description" formControlName="activityDescription" aria-required="true"
-      [attr.aria-labelledby]="afs.labelledBy(noncommercialFields.get('controls') ? noncommercialFields.get('controls')['activityDescription'] : '', 'activity-description-label', 'activity-description-error')"
-      [attr.aria-invalid]="afs.hasError(noncommercialFields.get('controls') ? noncommercialFields.get('controls')['activityDescription'] : '')"></textarea>
-    <app-error-message fieldId="activity-description-error" name="Activity description" [control]="noncommercialFields.get('controls') ? noncommercialFields.get('controls')['activityDescription'] : ''"></app-error-message>
+      [attr.aria-labelledby]="afs.labelledBy(noncommercialFields['activityDescription'], 'activity-description-label', 'activity-description-error')"
+      [attr.aria-invalid]="afs.hasError(noncommercialFields['activityDescription'])"></textarea>
+    <app-error-message fieldId="activity-description-error" name="Activity description" [control]="noncommercialFields['activityDescription']"></app-error-message>
   </ng-container>
 </ng-container>
