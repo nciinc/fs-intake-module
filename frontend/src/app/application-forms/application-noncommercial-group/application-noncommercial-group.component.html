@@ -27,28 +27,28 @@
       <fieldset>
         <legend>Applicant information</legend>
 
-        <app-org-type [applicantInfo]="applicationForm.get('controls')['applicantInfo']" type="simple"></app-org-type>
+        <app-org-type [applicantInfo]="applicationForm.controls.applicantInfo" type="simple"></app-org-type>
         <div [hidden]="applicationForm.get('applicantInfo.orgType').value !== 'Person'">
-          <app-permit-holder-name id="person-primary-name" [applicantInfo]="applicationForm.get('controls')['applicantInfo']" type="primary" name="Primary permit holder"></app-permit-holder-name>
+          <app-permit-holder-name id="person-primary-name" [applicantInfo]="applicationForm.controls.applicantInfo" type="primary" name="Primary permit holder"></app-permit-holder-name>
           <app-address id="person-primary-address" [parentForm]="applicationForm.get('applicantInfo')" formName="primaryAddress" type="primary-permit-holder"></app-address>
         </div>
 
         <div [hidden]="applicationForm.get('applicantInfo.orgType').value !== 'Corporation'">
-          <app-organization-name [applicantInfo]="applicationForm.get('controls')['applicantInfo']" required="true" name="Organization name"></app-organization-name>
+          <app-organization-name [applicantInfo]="applicationForm.controls.applicantInfo" required="true" name="Organization name"></app-organization-name>
           <app-address id="organization-address" [parentForm]="applicationForm.get('applicantInfo')" formName="organizationAddress" type="organization"></app-address>
         </div>
 
-        <app-email [applicantInfo]="applicationForm.get('controls')['applicantInfo']"></app-email>
+        <app-email [applicantInfo]="applicationForm.controls.applicantInfo"></app-email>
         <app-phone-number [parentForm]="applicationForm.get('applicantInfo')" name="Phone number"></app-phone-number>
 
         <div *ngIf="applicationForm.get('applicantInfo.orgType').value === 'Corporation'">
-          <app-website [applicantInfo]="applicationForm.get('controls')['applicantInfo']"></app-website>
+          <app-website [applicantInfo]="applicationForm.controls.applicantInfo"></app-website>
         </div>
       </fieldset>
 
       <fieldset *ngIf="applicationForm.get('applicantInfo.orgType').value === 'Corporation'">
         <legend>Primary permit holder</legend>
-        <app-permit-holder-name id="organization-primary-name" [applicantInfo]="applicationForm.get('controls')['applicantInfo']" type="primary" name="Primary permit holder"></app-permit-holder-name>
+        <app-permit-holder-name id="organization-primary-name" [applicantInfo]="applicationForm.controls.applicantInfo" type="primary" name="Primary permit holder"></app-permit-holder-name>
 
         <ng-container formGroupName="applicantInfo">
           <input id="primary-permit-holder-same-address" formControlName="primaryAddressSameAsOrganization" type="checkbox" />
@@ -66,8 +66,8 @@
         <p id="add-secondary-permit-holder-hint-text" class="help-text usa-form-hint">If there is an additional useful contact or a second significant user of the permit, please add their information.</p>
       </ng-container>
 
-      <div [hidden]="!applicationForm.get('applicantInfo')['addSecondaryPermitHolder'].value">
-          <app-permit-holder-name [applicantInfo]="applicationForm.get('controls')['applicantInfo']" type="secondary" name="Secondary permit holder"></app-permit-holder-name>
+      <div [hidden]="!applicationForm.get('applicantInfo.addSecondaryPermitHolder').value">
+          <app-permit-holder-name [applicantInfo]="applicationForm.controls.applicantInfo" type="secondary" name="Secondary permit holder"></app-permit-holder-name>
 
           <ng-container formGroupName="applicantInfo">
             <input id="secondary-permit-holder-same-address" type="checkbox" formControlName="secondaryAddressSameAsPrimary" type="checkbox" />
@@ -92,10 +92,10 @@
 
         <label id="name-label" class="usa-input">Event Name</label>
         <input id="name" formControlName="eventName" type="text" aria-required="true"
-          [attr.aria-labelledby]="applicationFieldsService.labelledBy(applicationForm.get('controls')['eventName'], 'name-label', 'name-error')"
-          [attr.aria-invalid]="applicationFieldsService.hasError(applicationForm.get('controls')['eventName'])"
+          [attr.aria-labelledby]="applicationFieldsService.labelledBy(applicationForm['eventName'], 'name-label', 'name-error')"
+          [attr.aria-invalid]="applicationFieldsService.hasError(applicationForm['eventName'])"
         />
-        <app-error-message fieldId="name-error" name="Event name" [control]="applicationForm.get('controls')['eventName']"></app-error-message>
+        <app-error-message fieldId="name-error" name="Event name" [control]="applicationForm.controls.eventName"></app-error-message>
 
         <app-noncommercial-fields [parentForm]="applicationForm"></app-noncommercial-fields>
         <app-date-time-range [parentForm]="applicationForm" (updateDateStatus)="updateDateStatus($event)"></app-date-time-range>
@@ -105,10 +105,10 @@
         <legend>Signature</legend>
         <label id="signature-label" class="usa-input">Please sign your application by typing your initials here.</label>
         <input id="signature" name="signature" type="text" minlength="2" maxlength="3" formControlName="signature" aria-required="true"
-          [attr.aria-labelledby]="applicationFieldsService.labelledBy(applicationForm.get('controls')['signature'], 'signature-label signature-hint-text', 'signature-error')"
-          [attr.aria-invalid]="applicationFieldsService.hasError(applicationForm.get('controls')['signature'])"
+          [attr.aria-labelledby]="applicationFieldsService.labelledBy(applicationForm['signature'], 'signature-label signature-hint-text', 'signature-error')"
+          [attr.aria-invalid]="applicationFieldsService.hasError(applicationForm['signature'])"
         />
-        <app-error-message fieldId="signature-error" name="Signature" [control]="applicationForm.get('controls')['signature']"></app-error-message>
+        <app-error-message fieldId="signature-error" name="Signature" [control]="applicationForm.controls.signature"></app-error-message>
       </fieldset>
 
       <button *ngIf="!applicationFieldsService.getEditApplication()" id="submit-application" class="usa-button-primary-alt usa-button-big" type="submit">Submit your application.</button>

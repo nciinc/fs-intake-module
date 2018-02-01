@@ -5,28 +5,28 @@
 
     <label id="advertising-url-label" class="usa-input">
       Promotional website
-      <span *ngIf="tempOutfitterFields.controls.noPromotionalWebsite.value">(optional)</span>
+      <span *ngIf="tempOutfitterFields.get('controls') ? tempOutfitterFields.get('controls')['noPromotionalWebsite'].value : ''">(optional)</span>
     </label>
     <input id="advertising-url"
       type="url"
       formControlName="advertisingURL"
       tabindex="0"
-      [attr.aria-required]="tempOutfitterFields.get('controls')['noPromotionalWebsite'].value ? 'null' : true"
-      [attr.aria-labelledby]="afs.labelledBy(tempOutfitterFields.get('controls')['advertisingURL'], 'advertising-url-label', 'advertising-url-error')"
-      [attr.aria-invalid]="afs.hasError(tempOutfitterFields.get('controls')['advertisingURL'])"
+      [attr.aria-required]="tempOutfitterFields.get('controls') ? (tempOutfitterFields.get('controls')['noPromotionalWebsite'].value ? 'null' : true) : ''"
+      [attr.aria-labelledby]="afs.labelledBy(tempOutfitterFields.get('controls') ? tempOutfitterFields.get('controls')['advertisingURL'] : '', 'advertising-url-label', 'advertising-url-error')"
+      [attr.aria-invalid]="afs.hasError(tempOutfitterFields.get('controls') ? tempOutfitterFields.get('controls')['advertisingURL'] : '')"
     />
-    <app-error-message fieldId="advertising-url-error" name="Advertising url" [control]="tempOutfitterFields.get('controls')['advertisingURL']"></app-error-message>
+    <app-error-message fieldId="advertising-url-error" name="Advertising url" [control]="tempOutfitterFields.get('controls') ? tempOutfitterFields.get('controls')['advertisingURL'] : ''"></app-error-message>
 
     <input id="no-promotional-website" type="checkbox" formControlName="noPromotionalWebsite" />
     <label id="no-promotional-website-label" class="usa-input" for="no-promotional-website">I would like to provide alternate advertising or marketing information for my operation OR I don’t have a promotional website.</label>
 
-    <ng-container *ngIf="tempOutfitterFields.get('controls')['noPromotionalWebsite'].value">
+    <ng-container *ngIf="tempOutfitterFields.get('controls') ? tempOutfitterFields.get('controls')['noPromotionalWebsite'].value : ''">
       <label id="advertising-description-label" class="usa-input" >Advertising description</label>
       <p id="advertising-description-hint-text" class="help-text usa-form-hint">Enter a description of your marketing plan or a reason why there isn't one.</p>
       <textarea id="advertising-description" type="text" formControlName="advertisingDescription" aria-required="true"
-      [attr.aria-labelledby]="afs.labelledBy(tempOutfitterFields.get('controls')['advertisingDescription'], 'advertising-description-label advertising-description-hint-text', 'advertising-description-error')"
-      [attr.aria-invalid]="afs.hasError(tempOutfitterFields.get('controls')['advertisingDescription'])"></textarea>
-      <app-error-message fieldId="advertising-description-error" name="Advertising description" [control]="tempOutfitterFields.get('controls')['advertisingDescription']"></app-error-message>
+      [attr.aria-labelledby]="afs.labelledBy(tempOutfitterFields.get('controls') ? tempOutfitterFields.get('controls')['advertisingDescription'] : '', 'advertising-description-label advertising-description-hint-text', 'advertising-description-error')"
+      [attr.aria-invalid]="afs.hasError(tempOutfitterFields.get('controls') ? tempOutfitterFields.get('controls')['advertisingDescription'] : '')"></textarea>
+      <app-error-message fieldId="advertising-description-error" name="Advertising description" [control]="tempOutfitterFields.get('controls') ? tempOutfitterFields.get('controls')['advertisingDescription'] : ''"></app-error-message>
     </ng-container>
 
   </fieldset>
