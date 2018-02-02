@@ -28,12 +28,12 @@
         <legend>Applicant information</legend>
 
         <app-org-type [applicantInfo]="applicationForm.get('applicantInfo')" type="simple"></app-org-type>
-        <div [hidden]="applicationForm.get('applicantInfo')['orgType']?.value !== 'Person'">
+        <div [hidden]="applicationForm.get('applicantInfo.orgType')?.value !== 'Person'">
           <app-permit-holder-name id="person-primary-name" [applicantInfo]="applicationForm.get('applicantInfo')" type="primary" name="Primary permit holder"></app-permit-holder-name>
           <app-address id="person-primary-address" [parentForm]="applicationForm.get('applicantInfo')" formName="primaryAddress" type="primary-permit-holder"></app-address>
         </div>
 
-        <div [hidden]="applicationForm.get('applicantInfo')['orgType']?.value !== 'Corporation'">
+        <div [hidden]="applicationForm.get('applicantInfo.orgType')?.value !== 'Corporation'">
           <app-organization-name [applicantInfo]="applicationForm.get('applicantInfo')" required="true" name="Organization name"></app-organization-name>
           <app-address id="organization-address" [parentForm]="applicationForm.get('applicantInfo')" formName="organizationAddress" type="organization"></app-address>
         </div>
@@ -41,12 +41,12 @@
         <app-email [applicantInfo]="applicationForm.get('applicantInfo')"></app-email>
         <app-phone-number [parentForm]="applicationForm.get('applicantInfo')" name="Phone number"></app-phone-number>
 
-        <div *ngIf="applicationForm.get('applicantInfo')['orgType']?.value === 'Corporation'">
+        <div *ngIf="applicationForm.get('applicantInfo.orgType')?.value === 'Corporation'">
           <app-website [applicantInfo]="applicationForm.get('applicantInfo')"></app-website>
         </div>
       </fieldset>
 
-      <fieldset *ngIf="applicationForm.get('applicantInfo')['orgType']?.value === 'Corporation'">
+      <fieldset *ngIf="applicationForm.get('applicantInfo.orgType')?.value === 'Corporation'">
         <legend>Primary permit holder</legend>
         <app-permit-holder-name id="organization-primary-name" [applicantInfo]="applicationForm.get('applicantInfo')" type="primary" name="Primary permit holder"></app-permit-holder-name>
 

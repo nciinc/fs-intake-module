@@ -28,19 +28,19 @@
           (inViewportAction)="elementInView($event)">
           <legend>Applicant information</legend>
 
-          <app-permit-holder-name [applicantInfo]="applicationForm['applicantInfo']"
+          <app-permit-holder-name [applicantInfo]="applicationForm.get('applicantInfo')"
             type="primary" name="Applicant"></app-permit-holder-name>
-          <app-organization-name [applicantInfo]="applicationForm['applicantInfo']" name="Business name (optional)"></app-organization-name>
-          <app-address [parentForm]="applicationForm['applicantInfo']" formName="primaryAddress" type="primary-permit-holder"></app-address>
-          <app-phone-number [parentForm]="applicationForm['applicantInfo']" name="Telephone number"></app-phone-number>
-          <app-fax [parentForm]="applicationForm['applicantInfo']" name="Fax number"></app-fax>
-          <app-email [applicantInfo]="applicationForm['applicantInfo']"></app-email>
-          <app-website [applicantInfo]="applicationForm['applicantInfo']" (blurWebsite)="matchUrls()"></app-website>
+          <app-organization-name [applicantInfo]="applicationForm.get('applicantInfo')" name="Business name (optional)"></app-organization-name>
+          <app-address [parentForm]="applicationForm.get('applicantInfo')" formName="primaryAddress" type="primary-permit-holder"></app-address>
+          <app-phone-number [parentForm]="applicationForm.get('applicantInfo')" name="Telephone number"></app-phone-number>
+          <app-fax [parentForm]="applicationForm.get('applicantInfo')" name="Fax number"></app-fax>
+          <app-email [applicantInfo]="applicationForm.get('applicantInfo')"></app-email>
+          <app-website [applicantInfo]="applicationForm.get('applicantInfo')" (blurWebsite)="matchUrls()"></app-website>
 
-          <app-org-type [applicantInfo]="applicationForm['applicantInfo']" type="complex"></app-org-type>
+          <app-org-type [applicantInfo]="applicationForm.get('applicantInfo')" type="complex"></app-org-type>
 
-          <div *ngIf="applicationForm['tempOutfitterFields'] && applicationForm.get('applicantInfo')['orgType']?.value === 'Person'"
-            [formGroup]="applicationForm['tempOutfitterFields']">
+          <div *ngIf="applicationForm.get('tempOutfitterFields') && applicationForm.get('applicantInfo.orgType')?.value === 'Person'"
+            [formGroup]="applicationForm.get('tempOutfitterFields')">
             <input id="individual-citizen" type="checkbox" formControlName="individualIsCitizen" />
             <label id="individual-citizen-label" class="usa-input" for="individual-citizen">Are you a citizen of the United States?</label>
           </div>
@@ -51,17 +51,17 @@
             <app-file-upload-field name="{{ goodStandingEvidenceMessage }}" type="good-standing-evidence" [uploadFiles]="uploadFiles"
               [applicationId]="applicationId"
               [checkFileUploadHasError]="submitted"
-              [field]="applicationForm['applicantInfo']['goodStandingEvidence']"
-              [required]="!applicationForm['applicantInfo']['goodStandingEvidence']?.value"></app-file-upload-field>
+              [field]="applicationForm.get('applicantInfo')['goodStandingEvidence']"
+              [required]="!applicationForm.get('applicantInfo')['goodStandingEvidence']?.value"></app-file-upload-field>
           </div>
 
-          <app-small-business [tempOutfitterFields]="applicationForm['tempOutfitterFields']"></app-small-business>
+          <app-small-business [tempOutfitterFields]="applicationForm.get('tempOutfitterFields')"></app-small-business>
 
         </fieldset>
 
 
         <app-activity-description id="section-activity-description" tabindex="-1"
-          [parentForm]="applicationForm['tempOutfitterFields']"
+          [parentForm]="applicationForm.get('tempOutfitterFields')"
           [pointOfView]="pointOfView"
           (updateRootDateStatus)="updateDateStatus($event)"
           in-viewport
@@ -69,13 +69,13 @@
           (inViewportAction)="elementInView($event)">></app-activity-description>
 
         <app-advertising id="section-advertising" tabindex="-1"
-          [tempOutfitterFields]="applicationForm['tempOutfitterFields']"
+          [tempOutfitterFields]="applicationForm.get('tempOutfitterFields')"
           in-viewport
           [inViewportOptions]="{ partial: true}"
           (inViewportAction)="elementInView($event)"></app-advertising>
 
         <app-client-charges id="section-client-charges" tabindex="-1"
-          [tempOutfitterFields]="applicationForm['tempOutfitterFields']"
+          [tempOutfitterFields]="applicationForm.get('tempOutfitterFields')"
           in-viewport
           [inViewportOptions]="{ partial: true}"
           (inViewportAction)="elementInView($event)"></app-client-charges>
@@ -101,7 +101,7 @@
             [uploadFiles]="uploadFiles"
             [applicationId]="applicationId"
             [checkFileUploadHasError]="submitted"
-            [field]="applicationForm['guideIdentification']"
+            [field]="applicationForm.get('guideIdentification')"
             allowXls="true"
             ></app-file-upload-field>
 
@@ -121,7 +121,7 @@
             [uploadFiles]="uploadFiles"
             [applicationId]="applicationId"
             [checkFileUploadHasError]="submitted"
-            [field]="applicationForm['operatingPlan']"></app-file-upload-field>
+            [field]="applicationForm.get('operatingPlan')"></app-file-upload-field>
         </fieldset>
 
         <fieldset id="section-liability-insurance" tabindex="-1"
@@ -135,9 +135,9 @@
           <app-file-upload-field name="Liability insurance" type="insurance-certificate"
             [uploadFiles]="uploadFiles"
             [applicationId]="applicationId"
-            [required]="!applicationForm['liabilityInsurance']?.value"
+            [required]="!applicationForm.get('liabilityInsurance')?.value"
             [checkFileUploadHasError]="submitted"
-            [field]="applicationForm['liabilityInsurance']"></app-file-upload-field>
+            [field]="applicationForm.get('liabilityInsurance')"></app-file-upload-field>
         </fieldset>
 
         <fieldset id="section-acknowledgement-of-risk" tabindex="-1"
@@ -152,11 +152,11 @@
             [uploadFiles]="uploadFiles"
             [applicationId]="applicationId"
             [checkFileUploadHasError]="submitted"
-            [field]="applicationForm['acknowledgementOfRisk']"></app-file-upload-field>
+            [field]="applicationForm.get('acknowledgementOfRisk')"></app-file-upload-field>
         </fieldset>
 
         <app-experience id="section-experience" tabindex="-1"
-          [parentForm]="applicationForm['tempOutfitterFields']"
+          [parentForm]="applicationForm.get('tempOutfitterFields')"
           [pointOfView]="pointOfView"
           in-viewport
           [inViewportOptions]="{ partial: true}"

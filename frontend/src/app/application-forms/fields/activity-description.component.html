@@ -3,7 +3,7 @@
     <fieldset>
       <legend>Description of proposed activity</legend>
       <p>Please fill out the following fields to the best of your knowledge at this point.</p>
-      <app-date-time-range [parentForm]="parentForm['activityDescriptionFields']" (updateDateStatus)="updateDateStatus($event)" dateOnly="true"></app-date-time-range>
+      <app-date-time-range [parentForm]="parentForm.get('activityDescriptionFields')" (updateDateStatus)="updateDateStatus($event)" dateOnly="true"></app-date-time-range>
 
       <label id="number-of-trips-label" class="usa-input">The anticipated number of trips.</label>
       <input id="number-of-trips"  type="number" formControlName="numberOfTrips" aria-required="true"
