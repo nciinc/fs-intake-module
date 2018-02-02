@@ -6,7 +6,7 @@
     <textarea id="client-charges" type="text" formControlName="clientCharges" aria-required="true"
       [attr.aria-labelledby]="afs.labelledBy(tempOutfitterFields['clientCharges'], 'client-charges-label client-charges-hint-text', 'client-charges-error')"
       [attr.aria-invalid]="afs.hasError(tempOutfitterFields['clientCharges'])"></textarea>
-    <app-error-message fieldId="client-charges-error" name="Client charges" [control]="tempOutfitterFields['clientCharges']"></app-error-message>
+    <app-error-message fieldId="client-charges-error" name="Client charges" [control]="tempOutfitterFields.controls['clientCharges']"></app-error-message>
 
   </fieldset>
 </ng-container>

@@ -5,5 +5,5 @@
     [attr.aria-labelledby]="afs.labelledBy(applicantInfo['emailAddress'], 'email-label email-hint-text', 'email-error')"
     [attr.aria-invalid]="afs.hasError(applicantInfo['emailAddress'])"
   />
-  <app-error-message fieldId="email-error" name="Email address" [control]="applicantInfo['emailAddress']"></app-error-message>
+  <app-error-message fieldId="email-error" name="Email address" [control]="applicantInfo.controls['emailAddress']"></app-error-message>
 </ng-container>

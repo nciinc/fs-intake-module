@@ -4,5 +4,5 @@
     [attr.aria-labelledby]="afs.labelledBy(applicantInfo['website'], 'website-label', 'website-error')"
     [attr.aria-invalid]="afs.hasError(applicantInfo['website'])"
   />
-  <app-error-message fieldId="website-error" name="Website" [control]="applicantInfo['website']"></app-error-message>
+  <app-error-message fieldId="website-error" name="Website" [control]="applicantInfo.controls['website']"></app-error-message>
 </ng-container>

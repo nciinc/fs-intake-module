@@ -4,5 +4,5 @@
   [attr.aria-labelledby]="afs.labelledBy(applicantInfo['organizationName'], 'organization-name-label', 'organization-name-error')"
   [attr.aria-invalid]="afs.hasError(applicantInfo['organizationName'])"
   />
-  <app-error-message fieldId="organization-name-error" name="Organization name" [control]="applicantInfo['organizationName']"></app-error-message>
+  <app-error-message fieldId="organization-name-error" name="Organization name" [control]="applicantInfo.controls['organizationName']"></app-error-message>
 </ng-container>
