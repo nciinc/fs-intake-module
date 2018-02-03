@@ -55,7 +55,7 @@
           <label id="primary-permit-holder-same-address-label" class="usa-input" for="primary-permit-holder-same-address">Permit holder address is same as organization address.</label>
         </ng-container>
 
-        <div [hidden]="applicationForm.get('applicantInfo')['primaryAddressSameAsOrganization']?.value">
+        <div [hidden]="applicationForm.get('applicantInfo.primaryAddressSameAsOrganization').value">
           <app-address id="organization-primary-address" [parentForm]="applicationForm.get('applicantInfo')" formName="primaryAddress" type="primary-permit-holder"></app-address>
         </div>
       </fieldset>
@@ -66,13 +66,13 @@
         <p id="add-secondary-permit-holder-hint-text" class="help-text usa-form-hint">If there is an additional useful contact or a second significant user of the permit, please add their information.</p>
       </ng-container>
 
-      <div [hidden]="!applicationForm.get('applicantInfo.addSecondaryPermitHolder')?.value">
+      <div [hidden]="!applicationForm.get('applicantInfo.addSecondaryPermitHolder').value">
           <app-permit-holder-name [applicantInfo]="applicationForm.get('applicantInfo')" type="secondary" name="Secondary permit holder"></app-permit-holder-name>
 
           <ng-container formGroupName="applicantInfo">
             <input id="secondary-permit-holder-same-address" type="checkbox" formControlName="secondaryAddressSameAsPrimary" type="checkbox" />
-            <label id="secondary-permit-holder-same-address-label" *ngIf="applicationForm.get('applicantInfo')['orgType']?.value === 'Person'" class="usa-input" for="secondary-permit-holder-same-address">Secondary permit holder address is same as primary permit holder address.</label>
-            <label id="secondary-permit-holder-same-address-label" *ngIf="applicationForm.get('applicantInfo')['orgType']?.value === 'Corporation'" class="usa-input" for="secondary-permit-holder-same-address">Secondary permit holder address is same as organization address.</label>
+            <label id="secondary-permit-holder-same-address-label" *ngIf="applicationForm.get('applicantInfo.orgType').value === 'Person'" class="usa-input" for="secondary-permit-holder-same-address">Secondary permit holder address is same as primary permit holder address.</label>
+            <label id="secondary-permit-holder-same-address-label" *ngIf="applicationForm.get('applicantInfo.orgType').value === 'Corporation'" class="usa-input" for="secondary-permit-holder-same-address">Secondary permit holder address is same as organization address.</label>
           </ng-container>
 
           <app-address
