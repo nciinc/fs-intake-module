@@ -20,9 +20,9 @@
       </div>
     </fieldset>
 
-    <app-error-message fieldId="start-month-error" name="Start month" [control]="parentForm.controls.dateTimeRange['startMonth']"></app-error-message>
-    <app-error-message fieldId="start-day-error" name="Start day" [control]="parentForm.controls.dateTimeRange['startDay']"></app-error-message>
-    <app-error-message fieldId="start-year-error" name="Start year" [control]="parentForm.controls.dateTimeRange['startYear']"></app-error-message>
+    <app-error-message fieldId="start-month-error" name="Start month" [control]="parentForm.get('dateTimeRange.startMonth')"></app-error-message>
+    <app-error-message fieldId="start-day-error" name="Start day" [control]="parentForm.get('dateTimeRange.startDay')"></app-error-message>
+    <app-error-message fieldId="start-year-error" name="Start year" [control]="parentForm.get('dateTimeRange.startYear')"></app-error-message>
 
     <fieldset *ngIf="!dateOnly">
       <legend class="fs-datetime-legend">Start time</legend>
@@ -49,10 +49,10 @@
       </div>
     </fieldset>
 
-    <app-error-message fieldId="start-hour-error" name="Start hour" [control]="parentForm.controls.dateTimeRange['startHour']"></app-error-message>
-    <app-error-message fieldId="start-minutes-error" name="Start minutes" [control]="parentForm.controls.dateTimeRange['startMinutes']"></app-error-message>
-    <app-error-message fieldId="start-period-error" name="Start period" [control]="parentForm.controls.dateTimeRange['startPeriod']"></app-error-message>
-    <app-error-message fieldId="start-date-time-error" name="Start date" [control]="parentForm.controls.dateTimeRange['startDateTime']"></app-error-message>
+    <app-error-message fieldId="start-hour-error" name="Start hour" [control]="parentForm.get('dateTimeRange.startHour')"></app-error-message>
+    <app-error-message fieldId="start-minutes-error" name="Start minutes" [control]="parentForm.get('dateTimeRange.startMinutes')"></app-error-message>
+    <app-error-message fieldId="start-period-error" name="Start period" [control]="parentForm.get('dateTimeRange.startPeriod')"></app-error-message>
+    <app-error-message fieldId="start-date-time-error" name="Start date" [control]="parentForm.get('dateTimeRange.startDateTime')"></app-error-message>
 
     <fieldset>
       <legend class="fs-datetime-legend">End date</legend>
@@ -72,9 +72,9 @@
       </div>
     </fieldset>
 
-    <app-error-message fieldId="end-month-error" name="End month" [control]="parentForm.controls.dateTimeRange['endMonth']"></app-error-message>
-    <app-error-message fieldId="end-day-error" name="End day" [control]="parentForm.controls.dateTimeRange['endDay']"></app-error-message>
-    <app-error-message fieldId="end-year-error" name="End year" [control]="parentForm.controls.dateTimeRange['endYear']"></app-error-message>
+    <app-error-message fieldId="end-month-error" name="End month" [control]="parentForm.get('dateTimeRange.endMonth')"></app-error-message>
+    <app-error-message fieldId="end-day-error" name="End day" [control]="parentForm.get('dateTimeRange.endDay')"></app-error-message>
+    <app-error-message fieldId="end-year-error" name="End year" [control]="parentForm.get('dateTimeRange.endYear')"></app-error-message>
 
 
     <fieldset *ngIf="!dateOnly">
@@ -102,10 +102,10 @@
       </div>
     </fieldset>
 
-    <app-error-message fieldId="end-hour-error" name="End hour" [control]="parentForm.controls.dateTimeRange['endHour']"></app-error-message>
-    <app-error-message fieldId="end-minutes-error" name="End minutes" [control]="parentForm.controls.dateTimeRange['endMinutes']"></app-error-message>
-    <app-error-message fieldId="end-period-error" name="End period" [control]="parentForm.controls.dateTimeRange['endPeriod']"></app-error-message>
-    <app-error-message fieldId="end-date-time-error" name="End date" [control]="parentForm.controls.dateTimeRange['endDateTime']"></app-error-message>
+    <app-error-message fieldId="end-hour-error" name="End hour" [control]="parentForm.get('dateTimeRange.endHour')"></app-error-message>
+    <app-error-message fieldId="end-minutes-error" name="End minutes" [control]="parentForm.get('dateTimeRange.endMinutes')"></app-error-message>
+    <app-error-message fieldId="end-period-error" name="End period" [control]="parentForm.get('dateTimeRange.endPeriod')"></app-error-message>
+    <app-error-message fieldId="end-date-time-error" name="End date" [control]="parentForm.get('dateTimeRange.endDateTime')"></app-error-message>
 
   </ng-container>
 </ng-container>
