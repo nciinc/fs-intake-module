@@ -51,8 +51,8 @@
             <app-file-upload-field name="{{ goodStandingEvidenceMessage }}" type="good-standing-evidence" [uploadFiles]="uploadFiles"
               [applicationId]="applicationId"
               [checkFileUploadHasError]="submitted"
-              [field]="applicationForm.get('applicantInfo')['goodStandingEvidence']"
-              [required]="!applicationForm.get('applicantInfo')['goodStandingEvidence']?.value"></app-file-upload-field>
+              [field]="applicationForm.get('applicantInfo.goodStandingEvidence')"
+              [required]="!applicationForm.get('applicantInfo.goodStandingEvidence').value"></app-file-upload-field>
           </div>
 
           <app-small-business [tempOutfitterFields]="applicationForm.get('tempOutfitterFields')"></app-small-business>
