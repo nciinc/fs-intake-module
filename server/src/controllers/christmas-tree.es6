@@ -5,6 +5,7 @@ const uuid = require('uuid/v4');
 const xml2jsParse = require('xml2js').parseString;
 const moment = require('moment-timezone');
 const Sequelize = require('sequelize');
+const uniqid = require('uniqid');
 
 const vcapConstants = require('../vcap-constants.es6');
 const treesDb = require('../models/trees-db.es6');
@@ -32,8 +33,8 @@ const translateGuidelinesFromDatabaseToClient = input => {
     treeHeight: input.treeHeight,
     stumpHeight: input.stumpHeight,
     stumpDiameter: input.stumpDiameter,
-    startDate: startDate.tz(input.timezone).format('YYYY-MM-DD h:mm:ss'),
-    endDate: endDate.tz(input.timezone).format('YYYY-MM-DD h:mm:ss'),
+    startDate: startDate.tz(input.timezone).format('YYYY-MM-DD HH:mm:ss'),
+    endDate: endDate.tz(input.timezone).format('YYYY-MM-DD HH:mm:ss'),
     treeCost: input.treeCost,
     maxNumTrees: input.maxNumTrees,
     allowAdditionalHeight: input.allowAdditionalHeight,
@@ -73,7 +74,8 @@ const translatePermitFromClientToDatabase = input => {
     treeCost: input.treeCost,
     quantity: input.quantity,
     totalCost: input.totalCost,
-    permitExpireDate: input.expDate
+    permitExpireDate: input.expDate,
+    permitTrackingId: uniqid()
   };
 };
 
@@ -133,6 +135,7 @@ christmasTree.getOneGuidelines = (req, res) => {
       }
     })
     .catch(error => {
+      console.error('christmasTree controller getOneGuidelines error for forest abbr ' + req.params.id, error);
       res.status(400).json(error);
     });
 };
@@ -152,7 +155,7 @@ const postPayGov = xmlData => {
       key: payGovPrivateKey,
       cert: payGovCert
     },
-    function(error, response, body) {
+    function (error, response, body) {
       if (!error) {
         return body;
       } else {
@@ -236,42 +239,48 @@ christmasTree.create = (req, res) => {
       }
     })
     .then(forest => {
-      req.body.expDate = forest.endDate;
-      treesDb.christmasTreesPermits
-        .create(translatePermitFromClientToDatabase(req.body))
-        .then(permit => {
-          const xmlData = paygov.getXmlForToken(req.body.forestAbbr, req.body.orgStructureCode, permit);
-          postPayGov(xmlData)
-            .then(xmlResponse => {
-              xml2jsParse(xmlResponse, function(err, result) {
-                if (!err) {
-                  try {
-                    const token = paygov.getToken(result);
-                    return updatePermitWithToken(res, permit, token);
-                  } catch (error) {
+      if (!moment().isBetween(forest.startDate, forest.endDate, null, '[]')) {
+        return res.status(404).send(); // season is closed or not yet started
+      } else {
+        req.body.expDate = forest.endDate;
+        treesDb.christmasTreesPermits
+          .create(translatePermitFromClientToDatabase(req.body))
+          .then(permit => {
+            const xmlData = paygov.getXmlForToken(req.body.forestAbbr, req.body.orgStructureCode, permit);
+            postPayGov(xmlData)
+              .then(xmlResponse => {
+                xml2jsParse(xmlResponse, function (err, result) {
+                  if (!err) {
                     try {
-                      const paygovError = paygov.getResponseError(result);
-                      return updatePermitWithError(res, permit, paygovError);
-                    } catch (faultError) {
-                      throwError(faultError);
+                      const token = paygov.getToken(result);
+                      return updatePermitWithToken(res, permit, token);
+                    } catch (error) {
+                      try {
+                        const paygovError = paygov.getResponseError('startOnlineCollection', result);
+                        return updatePermitWithError(res, permit, paygovError);
+                      } catch (faultError) {
+                        throwError(faultError);
+                      }
                     }
                   }
-                }
+                });
+              })
+              .catch(error => {
+                console.error('postPayGov error=', error);
+                return res.status(500).send();
               });
-            })
-            .catch(() => {
+          })
+          .catch(error => {
+            console.error('permit create error=', error);
+            if (error.name === 'SequelizeValidationError') {
+              return res.status(400).json({
+                errors: error.errors
+              });
+            } else {
               return res.status(500).send();
-            });
-        })
-        .catch(error => {
-          if (error.name === 'SequelizeValidationError') {
-            return res.status(400).json({
-              errors: error.errors
-            });
-          } else {
-            return res.status(500).send();
-          }
-        });
+            }
+          });
+      }
     })
     .catch(error => {
       return res.status(400).json({
@@ -323,7 +332,7 @@ const parseXMLFromPayGov = (res, xmlResponse, permit) => {
           resolve(paygovTrackingId);
         } catch (error) {
           try {
-            const paygovError = paygov.getResponseError(result);
+            const paygovError = paygov.getResponseError('completeOnlineCollection', result);
             return updatePermitWithError(res, permit, paygovError);
           } catch (faultError) {
             reject(faultError);
@@ -385,7 +394,7 @@ christmasTree.getOnePermit = (req, res) => {
         });
       } else if (permit && permit.status === 'Completed') {
         const token = req.query.t;
-        jwt.verify(token, vcapConstants.permitSecret, function(err, decoded) {
+        jwt.verify(token, vcapConstants.permitSecret, function (err, decoded) {
           if (decoded) {
             if (checkPermitValid(permit.permitExpireDate)) {
               permitSvgService.generatePermitSvg(permit).then(permitSvgBuffer => {
@@ -435,7 +444,7 @@ christmasTree.getOnePermitDetail = (req, res) => {
     });
 };
 
-christmasTree.cancelOne = (req, res) => {
+christmasTree.update = (req, res) => {
   treesDb.christmasTreesPermits
     .findOne({
       where: {
@@ -443,12 +452,12 @@ christmasTree.cancelOne = (req, res) => {
       }
     })
     .then(permit => {
-      if (permit.status !== 'Initiated') {
+      if (permit.status !== 'Initiated' && permit.status !== 'Completed') {
         res.status(404).send();
       } else {
         permit
           .update({
-            status: 'Canceled'
+            status: req.body.status
           })
           .then(res.status(200).json(permit));
       }
@@ -566,7 +575,7 @@ christmasTree.getPermitByTrackingId = (req, res) => {
     })
     .then(requestedPermit => {
       if (requestedPermit === null) {
-        return res.status(404).send();
+        return res.status(400).json({ errors: [ { message:'Permit ' + req.params.paygovTrackingId + ' was not found.' } ] });
       } else {
         return returnPermitResults([requestedPermit], res);
       }

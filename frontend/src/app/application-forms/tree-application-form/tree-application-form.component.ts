@@ -47,8 +47,8 @@ export class TreeApplicationFormComponent implements OnInit {
     }
   }
 
-  createForm(data, formBuilder) {
-    this.applicationForm = formBuilder.group({
+  getApplicationForm(formBuilder, maxNumTrees) {
+    return formBuilder.group({
       forestId: ['', [Validators.required]],
       forestAbbr: [''],
       orgStructureCode: ['', [Validators.required]],
@@ -56,10 +56,14 @@ export class TreeApplicationFormComponent implements OnInit {
       firstName: ['', [Validators.required, alphanumericValidator(), Validators.maxLength(255)]],
       lastName: ['', [Validators.required, alphanumericValidator(), Validators.maxLength(255)]],
       emailAddress: ['', [Validators.required, Validators.email, alphanumericValidator(), Validators.maxLength(255)]],
-      quantity: ['', [Validators.required, Validators.min(1), Validators.max(data.forest.maxNumTrees)]],
+      quantity: ['', [Validators.required, Validators.min(1), Validators.max(maxNumTrees)]],
       totalCost: [0, [Validators.required, currencyValidator()]],
       acceptRules: [false, [Validators.required]]
     });
+  }
+
+  createForm(data, formBuilder) {
+    this.applicationForm = this.getApplicationForm(formBuilder, data.forest.maxNumTrees);
 
     this.applicationForm.get('forestId').setValue(data.forest.id);
     this.applicationForm.get('forestAbbr').setValue(data.forest.forestAbbr);
@@ -69,9 +73,9 @@ export class TreeApplicationFormComponent implements OnInit {
     this.maxNumberOfTrees = data.forest.maxNumTrees;
     if (this.permit) {
       this.rePopulateForm();
-      if (this.permit.status !== 'Canceled' || this.permit.status !== 'Error') {
+      if (this.permit.status !== 'Cancelled' || this.permit.status !== 'Error') {
         this.applicationService.cancelOldApp(this.permit.permitId).subscribe(cancelResponse => {
-          this.permit.status = 'Canceled';
+          this.permit.status = 'Cancelled';
         });
       }
     }

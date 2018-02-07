@@ -12,7 +12,7 @@ const server = require('./mock-aws.spec.es6');
 const chai = require('chai');
 const expect = chai.expect;
 let permitId;
-let invalidPermitId = 'xxxxx';
+let invalidPermitId = 'xxxxxxxx-189d-43ba-xxxx-c233ef94f02f';
 let paygovToken;
 let tcsAppID;
 let today = moment(new Date()).format('YYYY-MM-DD');
@@ -31,7 +31,7 @@ describe('christmas tree controller tests', () => {
         .get('/forests')
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
-        .expect(function(res) {
+        .expect(function (res) {
           expect(res.body.length).to.not.equal(0);
         })
         .expect(200, done);
@@ -41,7 +41,7 @@ describe('christmas tree controller tests', () => {
         .get('/forests')
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
-        .expect(function(res) {
+        .expect(function (res) {
           expect(res.body[0]).to.include.all.keys('id', 'forestName', 'description', 'forestAbbr');
         })
         .expect(200, done);
@@ -62,7 +62,7 @@ describe('christmas tree controller tests', () => {
         .get('/forests/arp')
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
-        .expect(function(res) {
+        .expect(function (res) {
           expect(res.body).to.include.all.keys('species', 'locations');
         })
         .expect(200, done);
@@ -73,7 +73,7 @@ describe('christmas tree controller tests', () => {
         .get('/forests/arp')
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
-        .expect(function(res) {
+        .expect(function (res) {
           expect(res.body.species.locations).to.not.equal(0);
         })
         .expect(200, done);
@@ -84,7 +84,7 @@ describe('christmas tree controller tests', () => {
         .get('/forests/arp')
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
-        .expect(function(res) {
+        .expect(function (res) {
           expect(res.body.species[0]).to.include.all.keys('name', 'status', 'notes');
         })
         .expect(200, done);
@@ -95,7 +95,7 @@ describe('christmas tree controller tests', () => {
         .get('/forests/arp')
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
-        .expect(function(res) {
+        .expect(function (res) {
           expect(res.body.species[0].notes.length).to.not.equal(0);
         })
         .expect(200, done);
@@ -106,7 +106,7 @@ describe('christmas tree controller tests', () => {
         .get('/forests/mthood')
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
-        .expect(function(res) {
+        .expect(function (res) {
           expect(res.body.locations.length).to.not.equal(0);
         })
         .expect(200, done);
@@ -219,12 +219,12 @@ describe('christmas tree controller tests', () => {
         .expect(200, done);
     });
     it('POST should return a 200 response when submitted to mock pay.gov with invalid credit card with error code in last 4 digits', done => {
-      const processTransaction = { token: paygovToken, cc: '0000000000001234' };
+      const processTransaction = {token: paygovToken, cc: '0000000000001234'};
       request(server)
         .post('/mock-pay-gov-process')
         .send(processTransaction)
         .expect('Content-Type', /json/)
-        .expect(function(res) {
+        .expect(function (res) {
           expect(res.body.errorCode).to.equal('1234');
         })
         .expect(200, done);
@@ -280,16 +280,29 @@ describe('christmas tree controller tests', () => {
     });
   });
 
-  describe('submit permit application for forest', () => {
+  describe('submit permit application for open forest', () => {
     it('POST should return a 200 response when submitted to get pay.gov token', done => {
       const permitApplication = christmasTreePermitApplicationFactory.create();
-      permitApplication.forestId = 4;
-      permitApplication.forestAbbr = 'shoshone';
-      permitApplication.orgStructureCode = '11-02-14';
+      permitApplication.forestId = 3;
+      permitApplication.forestAbbr = 'mthood';
+      permitApplication.orgStructureCode = '11-06-06';
       request(server)
         .post('/forests/christmas-trees/permits')
         .send(permitApplication)
         .expect(200, done);
+    });
+  });
+
+  describe('submit permit application for closed forest', () => {
+    it('POST should return a 200 response when submitted to get pay.gov token', done => {
+      const permitApplication = christmasTreePermitApplicationFactory.create();
+      permitApplication.forestId = 4;
+      permitApplication.forestAbbr = 'shoshone';
+      permitApplication.orgStructureCode = '11-02-02';
+      request(server)
+        .post('/forests/christmas-trees/permits')
+        .send(permitApplication)
+        .expect(404, done);
     });
   });
 
@@ -342,20 +355,22 @@ describe('christmas tree controller tests', () => {
     });
     it('POST should return a 200 response when submitted to cancel existing permit application', done => {
       const cancelApplication = {
-        permitId: permitId
+        permitId: permitId,
+        status: 'Cancelled'
       };
       request(server)
-        .post('/forests/christmas-trees/permits/cancel')
+        .put('/forests/christmas-trees/permits')
         .send(cancelApplication)
         .expect('Content-Type', /json/)
         .expect(200, done);
     });
     it('POST should return a 404 response when submitted to cancel an invalid permit application', done => {
       const cancelApplication = {
-        permitId: invalidPermitId
+        permitId: invalidPermitId,
+        status: 'Cancelled'
       };
       request(server)
-        .post('/forests/christmas-trees/permits/cancel')
+        .put('/forests/christmas-trees/permits')
         .send(cancelApplication)
         .expect(404, done);
     });
@@ -406,7 +421,7 @@ describe('christmas tree controller tests', () => {
         .get(`/admin/christmas-trees/permits/1/${today}/${today}`)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
-        .expect(function(res) {
+        .expect(function (res) {
           expect(res.body).to.include.all.keys('sumOfTrees', 'sumOfCost', 'numberOfPermits', 'permits');
         })
         .expect(200, done);
@@ -439,16 +454,19 @@ describe('christmas tree controller tests', () => {
       request(server)
         .get(`/admin/christmas-trees/permits/${completedPermit.paygovTrackingId}`)
         .expect('Content-Type', /json/)
-        .expect(function(res) {
+        .expect(function (res) {
           expect(res.body.permits[0]).to.include.all.keys('permitNumber', 'issueDate', 'quantity', 'totalCost', 'expireDate');
         })
         .expect(200, done);
     });
-    it('GET permit details back should get 404 for invalid permit number', done => {
+    it('GET permit details back should get 400 for invalid permit number', done => {
       request(server)
         .get('/admin/christmas-trees/permits/123')
         .set('Accept', 'application/json')
-        .expect(404, done);
+        .expect(function(res) {
+          expect(res.body.errors[0].message).to.equal('Permit 123 was not found.');
+        })
+        .expect(400, done);
     });
   });
 });
