@@ -29,7 +29,7 @@
 
         <app-org-type [applicantInfo]="applicationForm.get('applicantInfo')" type="simple"></app-org-type>
         <div [hidden]="applicationForm.get('applicantInfo.orgType')?.value !== 'Person'">
-          <app-permit-holder-name id="person-primary-name" [applicantInfo]="applicationForm.get('applicantInfo')" type="primary" name="Primary permit holder"></app-permit-holder-name>
+          <app-permit-holder-name id="person-primary-name" prefix="person" [applicantInfo]="applicationForm.get('applicantInfo')" type="primary" name="Primary permit holder"></app-permit-holder-name>
           <app-address id="person-primary-address" [parentForm]="applicationForm.get('applicantInfo')" formName="primaryAddress" type="primary-permit-holder"></app-address>
         </div>
 
@@ -48,7 +48,7 @@
 
       <fieldset *ngIf="applicationForm.get('applicantInfo.orgType')?.value === 'Corporation'">
         <legend>Primary permit holder</legend>
-        <app-permit-holder-name id="organization-primary-name" [applicantInfo]="applicationForm.get('applicantInfo')" type="primary" name="Primary permit holder"></app-permit-holder-name>
+        <app-permit-holder-name id="organization-primary-name" prefix="organization" [applicantInfo]="applicationForm.get('applicantInfo')" type="primary" name="Primary permit holder"></app-permit-holder-name>
 
         <ng-container formGroupName="applicantInfo">
           <input id="primary-permit-holder-same-address" formControlName="primaryAddressSameAsOrganization" type="checkbox" />
@@ -67,7 +67,7 @@
       </ng-container>
 
       <div [hidden]="!applicationForm.get('applicantInfo.addSecondaryPermitHolder').value">
-          <app-permit-holder-name [applicantInfo]="applicationForm.get('applicantInfo')" type="secondary" name="Secondary permit holder"></app-permit-holder-name>
+          <app-permit-holder-name [applicantInfo]="applicationForm.get('applicantInfo')" prefix="secondary" type="secondary" name="Secondary permit holder"></app-permit-holder-name>
 
           <ng-container formGroupName="applicantInfo">
             <input id="secondary-permit-holder-same-address" type="checkbox" formControlName="secondaryAddressSameAsPrimary" type="checkbox" />
