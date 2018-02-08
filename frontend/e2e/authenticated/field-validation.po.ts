@@ -8,6 +8,7 @@ export class FieldValidation {
     it('should require ' + id + ' field to have text', () => {
       queryInput.sendKeys('text');
       queryInput.clear().then(function() {
+        queryInput.sendKeys(protractor.Key.TAB);
         expect<any>(element(by.id(errorId)).getText()).toEqual(error);
       });
     });

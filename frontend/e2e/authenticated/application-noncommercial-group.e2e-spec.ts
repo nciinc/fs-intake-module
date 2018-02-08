@@ -31,7 +31,7 @@ const checkForAdditionalPhone = function(state) {
   expect<any>(element(by.id('evening-phone-ext')).isPresent()).toBe(state);
 };
 
-describe('Apply for a noncommercial group use permit', () => {
+fdescribe('Apply for a noncommercial group use permit', () => {
   let page: NoncommercialGroupForm;
   let fieldValidation: FieldValidation;
   fieldValidation = new FieldValidation();

@@ -11,7 +11,7 @@
       <textarea id="list-all-national-forest-permits" formControlName="listAllNationalForestPermits" aria-required="true"
           [attr.aria-labelledby]="afs.labelledBy(parentForm.get('experienceFields.listAllNationalForestPermits'), 'list-all-national-forest-permits-label', 'list-all-national-forest-permits-error')"
           [attr.aria-invalid]="afs.hasError(parentForm.get('experienceFields.listAllNationalForestPermits'))"></textarea>
-      <app-error-message fieldId="list-all-national-forest-permits-error" name="A list of your US Forest Service permits" [control]="parentForm.get('experienceFields.listAllNationalForestPermits')"></app-error-message>
+      <app-error-message fieldId="list-all-national-forest-permits-error" name="A list of your US Forest Service permits" [control]="parentForm.controls.experienceFields['listAllNationalForestPermits']"></app-error-message>
     </ng-container>
 
     <input id="have-other-permits" type="checkbox" formControlName="haveOtherPermits" />
@@ -21,7 +21,7 @@
       <textarea id="list-all-other-permits" formControlName="listAllOtherPermits" aria-required="true"
           [attr.aria-labelledby]="afs.labelledBy(parentForm.get('experienceFields.listAllOtherPermits'), 'list-all-other-permits-label', 'list-all-other-permits-error')"
           [attr.aria-invalid]="afs.hasError(parentForm.get('experienceFields.listAllOtherPermits'))"></textarea>
-      <app-error-message fieldId="list-all-other-permits-error" name="A list of your other permits" [control]="parentForm.get('experienceFields.listAllOtherPermits')"></app-error-message>
+      <app-error-message fieldId="list-all-other-permits-error" name="A list of your other permits" [control]="parentForm.controls.experienceFields['listAllOtherPermits']"></app-error-message>
     </ng-container>
 
     <input id="have-citations" type="checkbox" formControlName="haveCitations" />
@@ -31,7 +31,7 @@
       <textarea id="list-all-citations" formControlName="listAllCitations" aria-required="true"
           [attr.aria-labelledby]="afs.labelledBy(parentForm.get('experienceFields.listAllCitations'), 'list-all-citations-label', 'list-all-citations-error')"
           [attr.aria-invalid]="afs.hasError(parentForm.get('experienceFields.listAllCitations'))"></textarea>
-      <app-error-message fieldId="list-all-citations-error" name="A list of your citations or violations" [control]="parentForm.get('experienceFields.listAllCitations')"></app-error-message>
+      <app-error-message fieldId="list-all-citations-error" name="A list of your citations or violations" [control]="parentForm.controls.experienceFields['listAllCitations']"></app-error-message>
     </ng-container>
 
   </fieldset>

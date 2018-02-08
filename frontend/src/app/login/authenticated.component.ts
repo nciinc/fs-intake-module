@@ -8,8 +8,8 @@ import { environment } from '../../environments/environment';
   templateUrl: './authenticated.component.html'
 })
 export class AuthenticatedComponent implements OnInit {
-  private displayLogin = true;
-  private user;
+  displayLogin = true;
+  user;
 
   constructor(public authentication: AuthenticationService, private activatedRoute: ActivatedRoute, private router: Router) {}
 

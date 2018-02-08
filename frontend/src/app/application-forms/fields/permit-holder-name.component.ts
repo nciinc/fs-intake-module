@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ApplicationFieldsService } from '../_services/application-fields.service';
 
@@ -6,15 +6,11 @@ import { ApplicationFieldsService } from '../_services/application-fields.servic
   selector: 'app-permit-holder-name',
   templateUrl: './permit-holder-name.component.html'
 })
-export class PermitHolderNameComponent implements OnInit {
+export class PermitHolderNameComponent {
   @Input() applicantInfo: FormGroup;
   @Input() type: string;
   @Input() name: string;
-  unique: string;
+  @Input() prefix = 'name';
 
   constructor(public afs: ApplicationFieldsService) {}
-
-  ngOnInit() {
-    this.unique = Math.random().toString(36).substring(7);
-  }
 }
