@@ -106,9 +106,9 @@ jobs:
       - run:
           name: install pa11y
           command: cd frontend; npm i -g pa11y-ci && npm i
-      - run:
-          name: build pa11y compose images
-          command: cd docker; ../.circleci/build-pa11y-image.sh
+      # - run:
+      #     name: build pa11y compose images
+      #     command: cd docker; ../.circleci/build-pa11y-image.sh
       - run:
           name: pa11y test
           command: cd docker; ../.circleci/pa11y.sh
