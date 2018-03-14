@@ -2,7 +2,7 @@ echo 'building pa11y\n\n'
 docker-compose build fs-intake-pa11y
 echo 'start application\n\n'
 docker-compose up fs-intake-pa11y &
-sleep 120
+sleep 300
 cd ../frontend
 echo 'running pa11y\n\n'
 pa11y-ci
