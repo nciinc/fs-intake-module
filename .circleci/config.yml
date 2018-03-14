@@ -90,7 +90,7 @@ jobs:
     machine: true
     steps:
       - checkout
-      run:
+      - run:
           name: Install node@6.2.2 (need right version for `yarn`)
           command: |
             set +e
