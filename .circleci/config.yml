@@ -56,7 +56,7 @@ jobs:
       - checkout
       - run:
           name: install jq
-          command: sudo apt-get install jq
+          command: sudo apt-get update && sudo apt-get install jq
       - run:
           name: copy frontend assets into server
           command: cd server; ./copy-frontend-assets.sh
@@ -75,7 +75,7 @@ jobs:
           command: cd docker; ../.circleci/run-unauthenticated-e2e.sh
       - run:
           name: install aws cli
-          command: sudo apt-get update && sudo apt-get install -y awscli
+          command: sudo apt-get install -y awscli
       - run:
           name: clean s3 bucket
           command: ./.circleci/clean-s3-bucket.sh
@@ -186,6 +186,9 @@ workflows:
           requires:
       - run-pa11y:
           requires:
+          filters:
+            branches:
+              only: master
       - staging-deploy:
           requires:
             - run-all-other-tests
