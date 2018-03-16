@@ -119,7 +119,7 @@ jobs:
           name: remove yarn dependencies
           command: rm -rf ~/.yarn
       - run:
-          name: instal yarn
+          name: install yarn
           command: sudo npm i -g yarn
       - run:
           name: install dependencies
