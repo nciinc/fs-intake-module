@@ -57,8 +57,20 @@ jobs:
           command: cd frontend; ls
       - run:
           command: cd frontend; ls node_modules
-      # - save_cache:
-      #     key: frontend
+      - save_cache:
+          key: frontend-deps-{{ checksum "/home/circleci/project/frontend/package.json" }}
+          paths:
+              - /home/circleci/project/frontend/node_modules
+      - run: 
+          commmand: rm -rf /home/circleci/project/frontend/node_modules
+      - run:
+          command: cd frontend; ls
+      - restore_cache:
+          key: frontend-deps-{{ checksum "/home/circleci/project/frontend/package.json" }}
+      - run:
+          command: cd frontend; ls
+      - run:
+          command: cd frontend; ls node_modules
       - store_artifacts:
           path: frontend/coverage
           prefix: frontend-coverage
