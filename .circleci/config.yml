@@ -50,9 +50,13 @@ jobs:
       # - run:
       #     name: server unit tests
       #     command: cd docker; docker-compose run fs-intake-server yarn coverage
-      # - run:
-      #     name: cache frontend dependencies
-      #     command: docker cp $(docker-compose ps | grep frontend | cut -d' ' -f 1):app/node_modules /home/circleci/project/frontend
+      - run:
+          name: copy frontend dependencies from docker
+          command: docker cp $(docker ps -a | grep frontend | cut -d' ' -f 1):app/node_modules /home/circleci/project/frontend
+      - run:
+          command: cd frontend; ls
+      - run:
+          command: cd frontend; ls node_modules
       # - save_cache:
       #     key: frontend
       - store_artifacts:
