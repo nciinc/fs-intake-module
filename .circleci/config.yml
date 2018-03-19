@@ -62,7 +62,7 @@ jobs:
           paths:
               - /home/circleci/project/frontend/node_modules
       - run: 
-          command: rm -rf /home/circleci/project/frontend/node_modules
+          command: sudo rm -rf /home/circleci/project/frontend/node_modules
       - run:
           command: cd frontend; ls
       - restore_cache:
