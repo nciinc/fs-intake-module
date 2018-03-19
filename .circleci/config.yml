@@ -25,8 +25,6 @@ jobs:
       #     name: server snyk
       #     command: cd server; npm run snyk-test
       - run:
-          command: cd frontend; ls node_modules
-      - run:
           name: copy frontend assets into server
           command: cd server; ./copy-frontend-assets.sh
       - run:
