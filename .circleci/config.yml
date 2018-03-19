@@ -39,6 +39,10 @@ jobs:
           command: cd frontend; ls node_modules
       - run:
           command: cd frontend; pwd
+      - run:
+          command: cd docker; docker-compose ps
+      - run:
+          command: cd docker; docker ps -a
 ## Run tests
       # - run:
       #     name: frontend unit tests
@@ -48,7 +52,7 @@ jobs:
       #     command: cd docker; docker-compose run fs-intake-server yarn coverage
       # - run:
       #     name: cache frontend dependencies
-      #     command: docker cp $(docker-compose ps | grep server | cut -d' ' -f 1):app/node_modules /circleci/...
+      #     command: docker cp $(docker-compose ps | grep frontend | cut -d' ' -f 1):app/node_modules /home/circleci/project/frontend
       # - save_cache:
       #     key: frontend
       - store_artifacts:
