@@ -51,8 +51,8 @@ jobs:
       # - run:
       #     name: cache frontend dependencies
       #     command: docker cp $(docker-compose ps | grep server | cut -d' ' -f 1):app/node_modules /circleci/...
-      - save_cache:
-          key: frontend
+      # - save_cache:
+      #     key: frontend
       - store_artifacts:
           path: frontend/coverage
           prefix: frontend-coverage
