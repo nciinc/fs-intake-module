@@ -195,13 +195,13 @@ workflows:
     jobs:
       - run-all-other-tests:
           requires:
-      # - run-e2e:
-      #     requires:
-      # - run-pa11y:
-      #     requires:
-      #     filters:
-      #       branches:
-      #         only: sprint-11-development
+      - run-e2e:
+          requires:
+      - run-pa11y:
+          requires:
+          filters:
+            branches:
+              only: sprint-11-development
       - staging-deploy:
           requires:
             - run-all-other-tests
