@@ -52,7 +52,7 @@ jobs:
       #     command: cd docker; docker-compose run fs-intake-server yarn coverage
       - run:
           name: copy frontend dependencies from docker
-          command: docker cp $(docker ps -a | grep frontend | cut -d' ' -f 1):app/node_modules /home/circleci/project/frontend
+          command: sudo docker cp $(docker ps -a | grep frontend | cut -d' ' -f 1):app/node_modules /home/circleci/project/frontend
       - run:
           command: cd frontend; ls
       - run:
