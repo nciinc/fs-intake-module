@@ -6,24 +6,24 @@ jobs:
       - DATABASE_URL: "postgres://ubuntu@localhost/circle_test"
     steps:
       - checkout
-      # - run:
-      #     name: run npm install
-      #     command: cd frontend; npm i
-      # - run:
-      #     name: install eslint
-      #     command: cd server; npm i -g eslint && npm i snyk
-      # - run:
-      #     name: frontend linting
-      #     command: cd frontend; npm run lint
-      # - run:
-      #     name: frontend snyk
-      #     command: cd frontend; npm run snyk-test
-      # - run:
-      #     name: server linting
-      #     command: cd server; npm run lint
-      # - run:
-      #     name: server snyk
-      #     command: cd server; npm run snyk-test
+      - run:
+          name: run npm install
+          command: cd frontend; npm i
+      - run:
+          name: install eslint
+          command: cd server; npm i -g eslint && npm i snyk
+      - run:
+          name: frontend linting
+          command: cd frontend; npm run lint
+      - run:
+          name: frontend snyk
+          command: cd frontend; npm run snyk-test
+      - run:
+          name: server linting
+          command: cd server; npm run lint
+      - run:
+          name: server snyk
+          command: cd server; npm run snyk-test
       - run:
           name: copy frontend assets into server
           command: cd server; ./copy-frontend-assets.sh
@@ -44,33 +44,12 @@ jobs:
       - run:
           command: cd docker; docker ps -a
 ## Run tests
-      # - run:
-      #     name: frontend unit tests
-      #     command: cd docker; docker-compose run fs-intake-frontend yarn run test:ci
-      # - run:
-      #     name: server unit tests
-      #     command: cd docker; docker-compose run fs-intake-server yarn coverage
       - run:
-          name: copy frontend dependencies from docker
-          command: sudo docker cp $(docker ps -a | grep frontend | cut -d' ' -f 1):app/node_modules /home/circleci/project/frontend
+          name: frontend unit tests
+          command: cd docker; docker-compose run fs-intake-frontend yarn run test:ci
       - run:
-          command: cd frontend; ls
-      - run:
-          command: cd frontend; ls node_modules
-      - save_cache:
-          key: frontend-deps-{{ checksum "/home/circleci/project/frontend/package.json" }}
-          paths:
-              - /home/circleci/project/frontend/node_modules
-      - run: 
-          command: sudo rm -rf /home/circleci/project/frontend/node_modules
-      - run:
-          command: cd frontend; ls
-      - restore_cache:
-          key: frontend-deps-{{ checksum "/home/circleci/project/frontend/package.json" }}
-      - run:
-          command: cd frontend; ls
-      - run:
-          command: cd frontend; ls node_modules
+          name: server unit tests
+          command: cd docker; docker-compose run fs-intake-server yarn coverage
       - store_artifacts:
           path: frontend/coverage
           prefix: frontend-coverage
@@ -167,12 +146,12 @@ jobs:
       - run:
           name: copy frontend assets into server
           command: cd server; ./copy-frontend-assets.sh
-      # - run:
-      #     name: deploy
-      #     command: |
-      #       if [ "${CIRCLE_PROJECT_USERNAME}" == "nciinc" ];
-      #         then ./.cg-deploy/deploy.sh public-trees-staging;
-      #       fi
+      - run:
+          name: deploy
+          command: |
+            if [ "${CIRCLE_PROJECT_USERNAME}" == "nciinc" ];
+              then ./.cg-deploy/deploy.sh public-trees-staging;
+            fi
 
   prod-deploy:
     docker:
@@ -224,6 +203,7 @@ workflows:
           requires:
             - run-all-other-tests
             - run-e2e
+            - run-pa11y
           filters:
             branches:
               only: sprint-11-development
