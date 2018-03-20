@@ -204,7 +204,7 @@ To mock Pay.Gov integration use the values in the VCAP example.
 
 The current configuration implements email via google smtp relay. Follow the documentation at https://support.google.com/a/answer/2956491?hl=en to set up your google SMTP relay.
 
-Authentication is set up to support whitelisted IP addresses that are allowed to send emails, so no SMTP authentication is required.
+Authentication is set up to support safelisted IP addresses that are allowed to send emails, so no SMTP authentication is required.
 
 The `smtpserver` value in your VCAP_SERVICES should be `smtp-relay.gmail.com`
 
@@ -291,6 +291,11 @@ Navigate to `/assets/typedoc/index.html`
 The circleci configuration separates e2e tests from all other tests in two different jobs that run simultaneously to decrease build time.
 
 Deployment to a staging server is configured to run on the sprint branch only.
+
+#### Snyk
+
+Check the .snyk file under frontend and server for packages ignored by [snyk](https://snyk.io/). This 
+file is managed by the `snyk wizard`. `snyk-protect` is run in the Procfile at server start-up.
 
 ### Cloud.gov
 

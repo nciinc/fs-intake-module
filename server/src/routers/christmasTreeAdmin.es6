@@ -1,5 +1,10 @@
 'use strict';
 
+/**
+ * Module for christmas trees admin routes
+ * @module routers/christmasTreeAdmin
+ */
+
 const express = require('express');
 
 const christmasTreeAdminController = require('../controllers/christmas-tree-admin.es6');
