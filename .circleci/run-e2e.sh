@@ -18,9 +18,10 @@ else
       else
         for i in "$@"
         do
-          ARGUMENTS=$ARGUMENTS"--specs=${i} "
+          ARGUMENTS=$ARGUMENTS"--specs=../${i} "
         done
       fi
+      ARGUMENTS=$ARGUMENTS"--config ./development-configurations/protractor.conf.js"
       ;;
     -u)
       if [ $# -ge 1 ]
@@ -33,7 +34,7 @@ else
       #Rebuild server with PLATFORM set to something other than local to enable test to pass
       docker-compose build --build-arg PLATFORM='ci-unauthenticated' --build-arg AWS_CONFIG="$AWS_CONFIG" fs-intake-server
 
-      ARGUMENTS=$ARGUMENTS"--config unauth-protractor.conf.js"
+      ARGUMENTS=$ARGUMENTS"--config ./development-configurations/unauth-protractor.conf.js"
       ;;
     *)
       echo 'Valid flag indicating which mode to run this script in must be provided as the first argument.'
