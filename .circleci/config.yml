@@ -33,16 +33,6 @@ jobs:
       - run:
           name: install dependencies
           command: cd docker; ../.circleci/install-dependencies-docker.sh
-      - run:
-          command: cd frontend; ls
-      - run:
-          command: cd frontend; ls node_modules
-      - run:
-          command: cd frontend; pwd
-      - run:
-          command: cd docker; docker-compose ps
-      - run:
-          command: cd docker; docker ps -a
 ## Run tests
       - run:
           name: frontend unit tests
