@@ -22,27 +22,14 @@
     .cancel-button-admin {
       float: right;
       margin-right: 0;
-      background-color: transparent;
+      background-color: $transparent;
       box-shadow: inset 0 0 0 2px #2e1e12;
       color: #2e1e12;
+      @extend .usa-button-secondary;
     }
   }
 
   .app-ctas {
-    background: white;
-    bottom: 0;
-    box-shadow: 0px -10px 20px $dark-grey;
-    position: relative;
-    text-align: center;
-    width: 100%;
-    z-index: 1000;
-    @media (max-width: $medium-screen) {
-      padding-left: 1em;
-      padding-right: 1em;
-    }
-    &.fixed {
-      position: fixed;
-    }
     .app-cta {
       width: 30%;
       margin: 1em 0.25em;
@@ -52,7 +39,7 @@
     #reason-for-action {
       position: relative;
       .close-reason-for-action {
-        background-image: url(/assets/img/close-black.svg);
+        background-image: url(/assets/img/site-wide/close-black.svg);
         background-size: cover;
         cursor: pointer;
         height: 45px;
@@ -99,10 +86,42 @@
       display: none;
     }
   }
+  .confirmation-details-container {
+    h2 {
+      margin-top: 2rem;
+      margin-bottom: 1px;
+    }
+
+    dd {
+      margin-left: 0;
+    }
+    button#tree-print-permit {
+      margin-bottom: 2rem;
+    }
+    #printing-instructions {
+      padding-top: 2rem;
+    }
+    padding-bottom: 1rem;
+    .usa-alert {
+      background-position: 1rem 1.2rem;
+    }
+    label {
+      max-width: 60rem;
+    }
+  }
+
+  .tree-confirmation-table {
+    margin: 0 0 1rem;
+    td {
+      background-color: $fs-tan;
+      border: 0;
+      padding: 0.5rem 1rem;
+    }
+  }
 }
 
 .electronic-signature-success {
-  background: url(/assets/img/checkmark.svg) no-repeat;
+  background: url(/assets/img/site-wide/checkmark.svg) no-repeat;
   width: 20px;
   height: 20px;
   display: inline-block;

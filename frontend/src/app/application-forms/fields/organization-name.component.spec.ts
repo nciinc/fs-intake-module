@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
 import { OrganizationNameComponent } from './organization-name.component';
 import { alphanumericValidator } from '../validators/alphanumeric-validation';
 import { ApplicationFieldsService } from '../_services/application-fields.service';
@@ -17,20 +17,17 @@ describe('Organization Name Component', () => {
         providers: [FormBuilder, ApplicationFieldsService],
         schemas: [NO_ERRORS_SCHEMA]
       }).compileComponents();
+      formBuilder = new FormBuilder();
+      fixture = TestBed.createComponent(OrganizationNameComponent);
+      component = fixture.debugElement.componentInstance;
+      component.name = 'Organization';
+      component.required = true;
+      component.applicantInfo = formBuilder.group({
+        organizationName: ['', [Validators.required, alphanumericValidator()]]
+      });
+      fixture.detectChanges();
     })
   );
-
-  beforeEach(() => {
-    formBuilder = new FormBuilder();
-    fixture = TestBed.createComponent(OrganizationNameComponent);
-    component = fixture.debugElement.componentInstance;
-    component.name = 'Organization';
-    component.required = true;
-    component.applicantInfo = formBuilder.group({
-      organizationName: ['', [Validators.required, alphanumericValidator()]]
-    });
-    fixture.detectChanges();
-  });
 
   it('should create', () => {
     expect(component).toBeTruthy();

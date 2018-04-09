@@ -1,0 +1,20 @@
+@page {
+  margin: 0;
+  size: auto;
+}
+@media print {
+  html,
+  body {
+    height: 100%;
+    margin: 0;
+    max-height: 810px;
+    padding: 0;
+    width: 100%;
+  }
+  svg {
+    display: block;
+    margin-top: -2px;
+    padding: 0;
+    width: 100%;
+  }
+}

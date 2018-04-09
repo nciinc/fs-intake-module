@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-progress',
@@ -8,6 +8,7 @@ export class ProgressComponent {
   @Input() numberOfFiles: number;
   @Input() fileUploadProgress: number;
   @Input() fileUploadError: boolean;
+  @Input() message: string;
   @Output() retryFileUpload: EventEmitter<any> = new EventEmitter<any>();
 
   retry() {

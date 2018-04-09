@@ -1,6 +1,6 @@
 const moment = require('moment');
 
-const util = require('../../../util.es6');
+const util = require('../../../services/util.es6');
 const vcapConstants = require('../../../vcap-constants.es6');
 
 module.exports = application => {
@@ -42,7 +42,7 @@ Phone: 360-854-2660
 Email: sshermanbiery@fs.fed.us
 
 
-If you would like to submit another permit application visit ${vcapConstants.intakeClientBaseUrl}.
+If you would like to submit another permit application visit ${vcapConstants.INTAKE_CLIENT_BASE_URL}.
 
 Thank you for your interest in our National Forests.
 `

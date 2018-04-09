@@ -1,7 +1,11 @@
-import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing';
-import { Component, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { RouterTestingModule } from '@angular/router/testing';
 import { SidebarComponent } from './sidebar.component';
 import { UtilService } from '../_services/util.service';
+import { FilterPipe } from '../_pipes/filter.pipe';
+import { ChristmasTreesAdminService } from '../trees/admin/christmas-trees-admin.service';
+import { WindowRef } from '../_services/native-window.service';
 
 class MockUtilService {
   currentSection: string;
@@ -33,8 +37,13 @@ describe('SidebarComponent', () => {
   beforeEach(
     async(() => {
       TestBed.configureTestingModule({
-        declarations: [SidebarComponent],
-        providers: [{ provide: UtilService, useClass: MockUtilService }],
+        declarations: [SidebarComponent, FilterPipe],
+        providers: [
+          WindowRef,
+          { provide: UtilService, useClass: MockUtilService },
+          ChristmasTreesAdminService
+        ],
+        imports: [RouterTestingModule],
         schemas: [NO_ERRORS_SCHEMA]
       }).compileComponents();
     })
@@ -43,8 +52,7 @@ describe('SidebarComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(SidebarComponent);
     component = fixture.debugElement.componentInstance;
-    component.items = [];
-    component.currentSection = 'test';
+    component.items = [ {'test': true }, { 'test': true }, { 'test2': true }, { 'test3': true }, { 'test4': true } ];
     component.bottom = '10px';
     component.top = '20px';
     component.position = 'absolute';
@@ -55,7 +63,7 @@ describe('SidebarComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should set fixed position if top of container is less than 20px', () => {
+  it('should set fixed position if top of the container is less than items times offset', () => {
     spyOn(document, 'getElementById').and.callFake(function() {
       return {
         value: 'test',
@@ -65,16 +73,16 @@ describe('SidebarComponent', () => {
       };
     });
     component.track(new Event('scroll'));
-    expect(component.top).toEqual('40px');
+    expect(component.top).toEqual('-5px');
     expect(component.position).toEqual('fixed');
   });
 
-  it('should set absolute position if top of container is greator than 20px', () => {
+  it('should set absolute position if top of the container is greater than items times offset', () => {
     spyOn(document, 'getElementById').and.callFake(function() {
       return {
         value: 'test',
         getBoundingClientRect() {
-          return { top: 20 };
+          return { top: 30 };
         }
       };
     });
@@ -82,15 +90,21 @@ describe('SidebarComponent', () => {
       return 50;
     });
     component.track(new Event('scroll'));
-    expect(component.top).toEqual('250px');
-    expect(component.position).toEqual('absolute');
+    expect(component.top).toEqual('-5px');
+    expect(component.position).toEqual('fixed');
   });
 
-  it(
-    'should set current section',
-    inject([UtilService], util => {
-      component.gotoHashtag('test', new Event('click'));
-      expect(util.currentSection).toEqual('test-section');
-    })
-  );
+  it('should toggle mobile nav', () => {
+    component.toggleMobileNav();
+    expect(component.showMobileNav).toBeTruthy();
+  });
+
+  it('should show mobile nav if screen width is greater than or equal to 951', () => {
+    component.showMobileNav = true;
+    component.onResize({ target: { innerWidth: 950 } });
+    expect(component.showMobileNav).toBeTruthy();
+
+    component.onResize({ target: { innerWidth: 951 } });
+    expect(component.showMobileNav).toBeFalsy();
+  });
 });

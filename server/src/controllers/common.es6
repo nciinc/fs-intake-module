@@ -7,64 +7,70 @@
 
 const NoncommercialApplication = require('../models/noncommercial-application.es6');
 const TempOutfitterApplication = require('../models/tempoutfitter-application.es6');
-const util = require('../util.es6');
+const Revision = require('../models/revision.es6');
+const util = require('../services/util.es6');
 
 const commonControllers = {};
 
 /**
- * Generate a sequelize status condition based on the status group.
+ * @function findOrCondition - Generate a sequelize status condition based on the status group.
+ * @param {Object} req - http request
+ * @return {Object} - set of statuses
  */
 const findOrCondition = req => {
   const statusGroup = req.params.statusGroup;
   let orCondition = [];
   switch (statusGroup) {
-    case 'pending':
-      orCondition = [
-        {
-          status: 'Submitted'
-        },
-        {
-          status: 'Hold'
-        },
-        {
-          status: 'Review'
-        }
-      ];
-      break;
-    case 'accepted':
-      orCondition = [
-        {
-          status: 'Accepted'
-        }
-      ];
-      break;
-    case 'rejected':
-      orCondition = [
-        {
-          status: 'Rejected'
-        }
-      ];
-      break;
-    case 'cancelled':
-      orCondition = [
-        {
-          status: 'Cancelled'
-        }
-      ];
-      break;
-    case 'expired':
-      orCondition = [
-        {
-          status: 'Expired'
-        }
-      ];
-      break;
+  case 'pending':
+    orCondition = [
+      {
+        status: 'Submitted'
+      },
+      {
+        status: 'Hold'
+      },
+      {
+        status: 'Review'
+      }
+    ];
+    break;
+  case 'accepted':
+    orCondition = [
+      {
+        status: 'Accepted'
+      }
+    ];
+    break;
+  case 'rejected':
+    orCondition = [
+      {
+        status: 'Rejected'
+      }
+    ];
+    break;
+  case 'cancelled':
+    orCondition = [
+      {
+        status: 'Cancelled'
+      }
+    ];
+    break;
+  case 'expired':
+    orCondition = [
+      {
+        status: 'Expired'
+      }
+    ];
+    break;
   }
   return orCondition;
 };
 
 /**
- * Get permit applications of every type.
+ * @function getPermitApplications() - Get permit applications of every type.
+ * @param {Object} req - http request
+ * @param {Object} res - http response
+ * @return {Object} - http response
  */
 commonControllers.getPermitApplications = (req, res) => {
   const orCondition = findOrCondition(req);
@@ -137,7 +143,17 @@ commonControllers.getPermitApplications = (req, res) => {
 };
 
 /**
- * Misc controllers
- * @exports commonControllers
+ * @function createRevision() Create a new permit application revision entry in the DB.
+ * @param {Object} user - user object
+ * @param {Object} applicationModel - application model object
  */
+commonControllers.createRevision = (user, applicationModel) => {
+  Revision.create({
+    applicationId: applicationModel.applicationId,
+    applicationType: applicationModel.type,
+    status: applicationModel.status,
+    email: user.email ? user.email : user.adminUsername
+  });
+};
+
 module.exports = commonControllers;

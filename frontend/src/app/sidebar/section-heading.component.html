@@ -2,16 +2,20 @@
   *ngIf="selector === 'h2'"
   tabindex="-1"
   id="{{elementId}}"
+  [attr.attr-id]="id"
   in-viewport
   [inViewportOptions]="{ partial: true}"
   (inViewportAction)="elementInView($event)"
+  class="section-heading"
   >{{ heading }}</h2>
 
 <h3
   *ngIf="selector === 'h3'"
   tabindex="-1"
   id="{{elementId}}"
+  [attr.attr-id]="id"
   in-viewport
   [inViewportOptions]="{ partial: true}"
   (inViewportAction)="elementInView($event)"
+  class="section-heading"
   >{{ heading }}</h3>

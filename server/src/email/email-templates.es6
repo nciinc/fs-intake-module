@@ -1,10 +1,10 @@
 'use strict';
 
-const noncommercialApplicationSubmittedConfirmation = require('./templates/noncommercial/application-submitted-confirmation.es6');
-const tempOutfitterApplicationSubmittedConfirmation = require('./templates/temp-outfitter/application-submitted-confirmation.es6');
+const noncommercialSubmittedConfirm = require('./templates/noncommercial/application-submitted-confirmation.es6');
+const tempOutfitterSubmittedConfirm = require('./templates/temp-outfitter/application-submitted-confirmation.es6');
 
-const noncommercialApplicationSubmittedAdminConfirmation = require('./templates/noncommercial/application-submitted-admin-confirmation.es6');
-const tempOutfitterApplicationSubmittedAdminConfirmation = require('./templates/temp-outfitter/application-submitted-admin-confirmation.es6');
+const noncommercialSubmittedAdmConfirm = require('./templates/noncommercial/application-submitted-admin-confirmation.es6');
+const tempOutfitterSubmittedAdmConfirm = require('./templates/temp-outfitter/application-submitted-admin-confirmation.es6');
 
 const noncommercialApplicationAccepted = require('./templates/noncommercial/application-accepted.es6');
 const tempOutfitterApplicationAccepted = require('./templates/temp-outfitter/application-accepted.es6');
@@ -27,21 +27,23 @@ const tempOutfitterApplicationHold = require('./templates/temp-outfitter/applica
 const noncommercialApplicationRemoveHold = require('./templates/noncommercial/application-remove-hold.es6');
 const tempOutfitterApplicationRemoveHold = require('./templates/temp-outfitter/application-remove-hold.es6');
 
+const christmasTreesPermitCreated = require('./templates/christmas-trees/permit-created.es6');
+
 const email = {};
 
 email.noncommercialApplicationSubmittedConfirmation = application => {
-  return noncommercialApplicationSubmittedConfirmation(application);
+  return noncommercialSubmittedConfirm(application);
 };
 email.tempOutfitterApplicationSubmittedConfirmation = application => {
-  return tempOutfitterApplicationSubmittedConfirmation(application);
+  return tempOutfitterSubmittedConfirm(application);
 };
 
 email.noncommercialApplicationSubmittedAdminConfirmation = application => {
-  return noncommercialApplicationSubmittedAdminConfirmation(application);
+  return noncommercialSubmittedAdmConfirm(application);
 };
 
 email.tempOutfitterApplicationSubmittedAdminConfirmation = application => {
-  return tempOutfitterApplicationSubmittedAdminConfirmation(application);
+  return tempOutfitterSubmittedAdmConfirm(application);
 };
 
 email.noncommercialApplicationAccepted = application => {
@@ -97,6 +99,10 @@ email.noncommercialApplicationRemoveHold = application => {
 
 email.tempOutfitterApplicationRemoveHold = application => {
   return tempOutfitterApplicationRemoveHold(application);
+};
+
+email.christmasTreesPermitCreated = application => {
+  return christmasTreesPermitCreated(application);
 };
 
 module.exports = email;

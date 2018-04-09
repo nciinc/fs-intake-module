@@ -1,125 +1,170 @@
 version: 2
 jobs:
-  build:
-    docker:
-      - image: circleci/node:6.12.0-browsers
-      - image: postgres:9.6
-        environment:
-          POSTGRES_USER: "ubuntu"
-          POSTGRES_DB: "circle_test"
-          POSTGRES_PASSWORD: ""
+  run-all-other-tests:
+    machine: true
+    environment:
+      - DATABASE_URL: "postgres://ubuntu@localhost/circle_test"
     steps:
       - checkout
       - run:
-          name: remove yarn dependencies
-          command: rm -rf ~/.yarn
-      - run:
-          name: instal yarn
-          command: sudo npm i -g yarn
-      - run:
-          name: Install angular cli
-          command: sudo yarn global add @angular/cli
-      - run:
-          name: Install typedoc
-          command: sudo yarn global add typedoc
-      - run:
-          name: Install sequelize
-          command: yarn global add sequelize-cli
-      - run:
-          name: install dependencies
-          command: .circleci/install-dependencies.sh
-      - save_cache:
-          key: dependency-cache-trees1123123
-          paths:
-            - frontend/node_modules
-            - server/node_modules
-            - cache/yarn
-      - run:
-          name: Migrate db
-          command: cd server; ./node_modules/sequelize-cli/lib/sequelize db:migrate
-      - run:
-          name: seed db with intake data
-          command: cd server; yarn seed-ci
-      - run:
-          name: seed db with trees data
-          command: cd server; yarn seed
-      - run:
-          name: run dist on frontend
-          command: cd frontend; yarn dist-staging
+          name: Install node@8.9.4
+          command: |
+            set +e
+            curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.5/install.sh | bash
+            export NVM_DIR="/opt/circleci/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            nvm install v8.9.4
+            nvm alias default v8.9.4
 
-## Run tests
+            # Each step uses the same `$BASH_ENV`, so need to modify it
+            echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
+            echo "[ -s \"$NVM_DIR/nvm.sh\" ] && . \"$NVM_DIR/nvm.sh\"" >> $BASH_ENV
       - run:
-          name: install protractor
-          command: cd frontend; sudo npm install -g protractor
-      - run:
-          name: run e2e tests
-          command: .circleci/run-e2e.sh
-      - run:
-          name: pa11y test
-          command: .circleci/pa11y.sh
-      - run:
-          name: frontend unit tests
-          command: cd frontend; yarn run test:ci
+          name: run npm install
+          command: cd frontend; npm i
       - run:
           name: frontend linting
-          command: cd frontend; yarn run lint
+          command: cd frontend; npm run lint
       - run:
-          name: server unit tests
-          command: cd server; yarn coverage
+          name: frontend snyk
+          command: cd frontend; npm run snyk-test
+      - run:
+          name: install server deps
+          command: cd server; npm i
       - run:
           name: server linting
-          command: cd server; yarn run lint
+          command: cd server; npm run lint
       - run:
-          name: server snyk tests
-          command: cd server; yarn run snyk-test
+          name: server snyk
+          command: cd server; npm run snyk-protect; npm run snyk-test
       - run:
-          name: frontend snyk tests
-          command: cd frontend; yarn run snyk-test
+          name: copy frontend assets into server
+          command: cd server; ./copy-frontend-assets.sh
       - run:
-          name: generate typedocs
-          command: cd frontend; yarn run docs
+          name: build docker compose images
+          command: cd docker; ../.circleci/build-docker-images.sh
+      - run:
+          name: install dependencies
+          command: cd docker; ../.circleci/install-dependencies-docker.sh
+## Run tests
+      - run:
+          name: frontend unit tests
+          command: cd docker; docker-compose run fs-intake-frontend yarn run test:ci
+      - run:
+          name: server unit tests
+          command: cd docker; docker-compose run fs-intake-server yarn coverage
       - store_artifacts:
           path: frontend/coverage
           prefix: frontend-coverage
       - store_artifacts:
           path: server/coverage
           prefix: server-coverage
+
+  run-e2e:
+    machine: true
+    parallelism: 4
+    environment:
+      - DATABASE_URL: "postgres://ubuntu@localhost/circle_test"
+    steps:
+      - checkout
+      - run:
+          name: install jq
+          command: sudo apt-get update && sudo apt-get install jq
+      - run:
+          name: copy frontend assets into server
+          command: cd server; ./copy-frontend-assets.sh
+      - run:
+          name: build docker compose images
+          command: cd docker; ../.circleci/build-docker-images.sh
+      - run:
+          name: install dependencies
+          command: cd docker; ../.circleci/install-dependencies-docker.sh
+## Run tests
+      - run:
+          name: run e2e
+          command: cd docker; ../.circleci/run-e2e.sh -a $(circleci tests split <( cd ../frontend; circleci tests glob ./e2e/authenticated/**/*.e2e-spec.ts))
+      - run:
+          name: run unauthenticated e2e
+          command: cd docker; ../.circleci/run-e2e.sh -u 
+      - run:
+          name: install aws cli
+          command: sudo apt-get install -y awscli
+      - run:
+          name: clean s3 bucket
+          command: ./.circleci/clean-s3-bucket.sh
       - store_artifacts:
           path: frontend/e2e-test-results
           prefix: e2e-results
+      - store_artifacts:
+          path: frontend/e2e-unauth-test-results
+          prefix: unauth-e2e-results
+
+  run-pa11y:
+    machine: true
+    steps:
+      - checkout
+      - run:
+          name: Install node@8.9.4
+          command: |
+            set +e
+            curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.5/install.sh | bash
+            export NVM_DIR="/opt/circleci/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            nvm install v8.9.4
+            nvm alias default v8.9.4
+            
+            # Each step uses the same `$BASH_ENV`, so need to modify it
+            echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
+            echo "[ -s \"$NVM_DIR/nvm.sh\" ] && . \"$NVM_DIR/nvm.sh\"" >> $BASH_ENV
+      - run:
+          name: install pa11y
+          command: cd frontend; npm i -g pa11y-ci && npm i
+      - run:
+          name: pa11y test
+          command: cd docker; ../.circleci/pa11y.sh
 
   staging-deploy:
     docker:
-      - image: circleci/node:6.12.0
+      - image: circleci/node:8.9.4
     steps:
       - checkout
       - run:
           name: remove yarn dependencies
           command: rm -rf ~/.yarn
       - run:
-          name: instal yarn
+          name: install yarn
           command: sudo npm i -g yarn
       - run:
           name: install dependencies
-          command: .circleci/install-dependencies.sh
+          command: .circleci/install-deployment-dependencies.sh
       - run:
-          name: Run update script
+          name: Run update-version to set frontend builddate and version in environment.ts for footer
           command: cd frontend; yarn run update-version;
+      - run:
+          name: generate typedocs
+          command: cd frontend; yarn run docs
+      - run:
+          name: server snyk protect
+          command: cd server; yarn run snyk-protect
       - run:
           name: Create dist
           command: cd frontend; yarn dist-trees;
       - run:
+          name: copy frontend assets into server
+          command: cd server; ./copy-frontend-assets.sh
+      - run:
+          name: generate jsdocs
+          command: cd server; yarn run docs
+      - run:
           name: deploy
-#          command: ./cg-deploy/deploy.sh public-trees-staging
           command: |
             if [ "${CIRCLE_PROJECT_USERNAME}" == "nciinc" ];
-              then ./cg-deploy/deploy.sh public-trees-staging;
+              then ./.cg-deploy/deploy.sh public-trees-staging;
             fi
-
 
   prod-deploy:
     docker:
-      - image: circleci/node:6.12.0
+      - image: circleci/node:8.9.4
     steps:
       - checkout
       - run:
@@ -130,36 +175,55 @@ jobs:
           command: sudo npm i -g yarn
       - run:
           name: install dependencies
-          command: .circleci/install-dependencies.sh
+          command: .circleci/install-deployment-dependencies.sh
       - run:
-          name: Run update script
+          name: Run update-version to set frontend builddate and version in environment.ts for footer
           command: cd frontend; yarn run update-version;
+      - run:
+          name: generate typedocs
+          command: cd frontend; yarn run docs
       - run:
           name: Create dist
           command: cd frontend; yarn dist-prod;
       - run:
+          name: copy frontend assets into server
+          command: cd server; ./copy-frontend-assets.sh
+      - run:
+          name: generate jsdocs
+          command: cd server; yarn run docs
+      - run:
           name: deploy
-#          command: ./cg-deploy/deploy.sh public-production
           command: |
             if [ "${CIRCLE_PROJECT_USERNAME}" == "18F" ];
-              then ./cg-deploy/deploy.sh public-production;
+              then ./.cg-deploy/deploy.sh public-production;
             fi
-
 
 workflows:
   version: 2
   build-deploy:
     jobs:
-      - build
-      - staging-deploy:
+      - run-all-other-tests:
           requires:
-            - build
+      - run-e2e:
+          requires:
+      - run-pa11y:
+          requires:
           filters:
             branches:
-              only: sprint-3-development
+              only: sprint-13-development
+      - staging-deploy:
+          requires:
+            - run-all-other-tests
+            - run-e2e
+            - run-pa11y
+          filters:
+            branches:
+              only: sprint-13-development
       - prod-deploy:
           requires:
-            - build
+            - run-all-other-tests
+            - run-e2e
+            - run-pa11y
           filters:
             branches:
               only: master

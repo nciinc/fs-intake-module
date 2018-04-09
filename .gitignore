@@ -7,6 +7,9 @@ server/.nyc_output
 server/coverage.lcov
 server/coverage
 server/*.orig
+server/frontend-assets
+server/lint-results.html
+server/docs/code
 
 # compiled output
 frontend/dist
@@ -38,6 +41,7 @@ frontend/.idea
 frontend/.sass-cache
 frontend/connect.lock
 frontend/coverage
+frontend/.eslintrc.json
 frontend/libpeerconnection.log
 frontend/npm-debug.log
 frontend/testem.log
@@ -52,4 +56,3 @@ frontend/e2e/*.map
 # System Files
 .DS_Store
 Thumbs.db
-server/lint-results.html

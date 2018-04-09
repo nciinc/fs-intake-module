@@ -1,6 +1,6 @@
 const moment = require('moment');
 const vcapConstants = require('../../../vcap-constants.es6');
-const util = require('../../../util.es6');
+const util = require('../../../services/util.es6');
 
 module.exports = application => {
   return {
@@ -14,7 +14,7 @@ module.exports = application => {
 
     ${application.applicantMessage}
 
-    Login at ${vcapConstants.intakeClientBaseUrl}/applications/temp-outfitters/${application.appControlNumber}/edit
+    Login at ${vcapConstants.INTAKE_CLIENT_BASE_URL}/applications/temp-outfitters/${application.appControlNumber}/edit
 
 
     Application details

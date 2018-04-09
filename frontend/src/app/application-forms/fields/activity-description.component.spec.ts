@@ -1,8 +1,7 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
-import { inject, TestBed, getTestBed, async, fakeAsync, ComponentFixture } from '@angular/core/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ApplicationFieldsService } from '../_services/application-fields.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { Observable } from 'rxjs/Observable';
+import { FormBuilder } from '@angular/forms';
 import { ActivityDescriptionComponent } from './activity-description.component';
 
 describe('activity description', () => {
@@ -14,9 +13,10 @@ describe('activity description', () => {
     async(() => {
       TestBed.configureTestingModule({
         declarations: [ActivityDescriptionComponent],
-        providers: [FormBuilder, { provide: ApplicationFieldsService, useClass: ApplicationFieldsService }],
-        schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
+        providers: [FormBuilder, ApplicationFieldsService],
+        schemas: [NO_ERRORS_SCHEMA]
       }).compileComponents();
+
       formBuilder = new FormBuilder();
       fixture = TestBed.createComponent(ActivityDescriptionComponent);
       component = fixture.debugElement.componentInstance;

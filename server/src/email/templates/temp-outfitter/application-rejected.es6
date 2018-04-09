@@ -1,6 +1,6 @@
 const moment = require('moment');
 
-const util = require('../../../util.es6');
+const util = require('../../../services/util.es6');
 const vcapConstants = require('../../../vcap-constants.es6');
 
 module.exports = application => {
@@ -31,7 +31,7 @@ Number of trips: ${application.tempOutfitterFieldsActDescFieldsNumTrips}
 Number of participants: ${application.tempOutfitterFieldsActDescFieldsPartySize}
 Services: ${application.tempOutfitterFieldsActDescFieldsServProvided}
 
-If you would like to submit another permit application visit ${vcapConstants.intakeClientBaseUrl}.
+If you would like to submit another permit application visit ${vcapConstants.INTAKE_CLIENT_BASE_URL}.
 
 
 Contact us

@@ -10,13 +10,17 @@ const moment = require('moment');
 const email = require('../email/email-util.es6');
 const NoncommercialApplication = require('../models/noncommercial-application.es6');
 const Revision = require('../models/revision.es6');
-const util = require('../util.es6');
+const util = require('../services/util.es6');
+const commonControllers = require('./common.es6');
 const vcapConstants = require('../vcap-constants.es6');
 
 const noncommercial = {};
 
 /**
- * Translate permit application object from client format to database format.
+ * @function translateFromClientToDatabase - private function to translate permit application
+ * object from client format to database format.
+ * @param {Object} input
+ * @param {Object} output
  */
 const translateFromClientToDatabase = (input, output) => {
   output.applicantInfoDayPhoneAreaCode = input.applicantInfo.dayPhone.areaCode;
@@ -24,69 +28,88 @@ const translateFromClientToDatabase = (input, output) => {
   output.applicantInfoDayPhoneNumber = input.applicantInfo.dayPhone.number;
   output.applicantInfoDayPhonePrefix = input.applicantInfo.dayPhone.prefix;
   output.applicantInfoEmailAddress = input.applicantInfo.emailAddress;
-  output.applicantInfoEveningPhoneAreaCode = input.applicantInfo.eveningPhone
-    ? input.applicantInfo.eveningPhone.areaCode
-    : null;
-  output.applicantInfoEveningPhoneExtension = input.applicantInfo.eveningPhone
-    ? input.applicantInfo.eveningPhone.extension
-    : null;
-  output.applicantInfoEveningPhoneNumber = input.applicantInfo.eveningPhone
-    ? input.applicantInfo.eveningPhone.number
-    : null;
-  output.applicantInfoEveningPhonePrefix = input.applicantInfo.eveningPhone
-    ? input.applicantInfo.eveningPhone.prefix
-    : null;
+  output.applicantInfoEveningPhoneAreaCode =
+    input.applicantInfo.eveningPhone && input.applicantInfo.eveningPhone.areaCode
+      ? input.applicantInfo.eveningPhone.areaCode
+      : null;
+  output.applicantInfoEveningPhoneExtension =
+    input.applicantInfo.eveningPhone && input.applicantInfo.eveningPhone.extension
+      ? input.applicantInfo.eveningPhone.extension
+      : null;
+  output.applicantInfoEveningPhoneNumber =
+    input.applicantInfo.eveningPhone && input.applicantInfo.eveningPhone.number
+      ? input.applicantInfo.eveningPhone.number
+      : null;
+  output.applicantInfoEveningPhonePrefix =
+    input.applicantInfo.eveningPhone && input.applicantInfo.eveningPhone.prefix
+      ? input.applicantInfo.eveningPhone.prefix
+      : null;
   output.applicantInfoOrganizationName = input.applicantInfo.organizationName;
-  output.applicantInfoOrgMailingAddress = input.applicantInfo.organizationAddress
-    ? input.applicantInfo.organizationAddress.mailingAddress
-    : null;
-  output.applicantInfoOrgMailingAddress2 = input.applicantInfo.organizationAddress
-    ? input.applicantInfo.organizationAddress.mailingAddress2
-    : null;
-  output.applicantInfoOrgMailingCity = input.applicantInfo.organizationAddress
-    ? input.applicantInfo.organizationAddress.mailingCity
-    : null;
-  output.applicantInfoOrgMailingState = input.applicantInfo.organizationAddress
-    ? input.applicantInfo.organizationAddress.mailingState
-    : null;
-  output.applicantInfoOrgMailingZIP = input.applicantInfo.organizationAddress
-    ? input.applicantInfo.organizationAddress.mailingZIP
-    : null;
+  output.applicantInfoOrgMailingAddress =
+    input.applicantInfo.organizationAddress && input.applicantInfo.organizationAddress.mailingAddress
+      ? input.applicantInfo.organizationAddress.mailingAddress
+      : null;
+  output.applicantInfoOrgMailingAddress2 =
+    input.applicantInfo.organizationAddress && input.applicantInfo.organizationAddress.mailingAddress2
+      ? input.applicantInfo.organizationAddress.mailingAddress2
+      : null;
+  output.applicantInfoOrgMailingCity =
+    input.applicantInfo.organizationAddress && input.applicantInfo.organizationAddress.mailingCity
+      ? input.applicantInfo.organizationAddress.mailingCity
+      : null;
+  output.applicantInfoOrgMailingState =
+    input.applicantInfo.organizationAddress && input.applicantInfo.organizationAddress.mailingState
+      ? input.applicantInfo.organizationAddress.mailingState
+      : null;
+  output.applicantInfoOrgMailingZIP =
+    input.applicantInfo.organizationAddress && input.applicantInfo.organizationAddress.mailingZIP
+      ? input.applicantInfo.organizationAddress.mailingZIP
+      : null;
   output.applicantInfoOrgType = input.applicantInfo.orgType;
   output.applicantInfoPrimaryFirstName = input.applicantInfo.primaryFirstName;
   output.applicantInfoPrimaryLastName = input.applicantInfo.primaryLastName;
-  output.applicantInfoPrimaryMailingAddress = input.applicantInfo.primaryAddress
-    ? input.applicantInfo.primaryAddress.mailingAddress
-    : null;
-  output.applicantInfoPrimaryMailingAddress2 = input.applicantInfo.primaryAddress
-    ? input.applicantInfo.primaryAddress.mailingAddress2
-    : null;
-  output.applicantInfoPrimaryMailingCity = input.applicantInfo.primaryAddress
-    ? input.applicantInfo.primaryAddress.mailingCity
-    : null;
-  output.applicantInfoPrimaryMailingState = input.applicantInfo.primaryAddress
-    ? input.applicantInfo.primaryAddress.mailingState
-    : null;
-  output.applicantInfoPrimaryMailingZIP = input.applicantInfo.primaryAddress
-    ? input.applicantInfo.primaryAddress.mailingZIP
-    : null;
+  output.applicantInfoPrimaryMailingAddress =
+    input.applicantInfo.primaryAddress && input.applicantInfo.primaryAddress.mailingAddress
+      ? input.applicantInfo.primaryAddress.mailingAddress
+      : null;
+  output.applicantInfoPrimaryMailingAddress2 =
+    input.applicantInfo.primaryAddress && input.applicantInfo.primaryAddress.mailingAddress2
+      ? input.applicantInfo.primaryAddress.mailingAddress2
+      : null;
+  output.applicantInfoPrimaryMailingCity =
+    input.applicantInfo.primaryAddress && input.applicantInfo.primaryAddress.mailingCity
+      ? input.applicantInfo.primaryAddress.mailingCity
+      : null;
+  output.applicantInfoPrimaryMailingState =
+    input.applicantInfo.primaryAddress && input.applicantInfo.primaryAddress.mailingState
+      ? input.applicantInfo.primaryAddress.mailingState
+      : null;
+  output.applicantInfoPrimaryMailingZIP =
+    input.applicantInfo.primaryAddress && input.applicantInfo.primaryAddress.mailingZIP
+      ? input.applicantInfo.primaryAddress.mailingZIP
+      : null;
   output.applicantInfoSecondaryFirstName = input.applicantInfo.secondaryFirstName;
   output.applicantInfoSecondaryLastName = input.applicantInfo.secondaryLastName;
-  output.applicantInfoSecondaryMailingAddress = input.applicantInfo.secondaryAddress
-    ? input.applicantInfo.secondaryAddress.mailingAddress
-    : null;
-  output.applicantInfoSecondaryMailingAddress2 = input.applicantInfo.secondaryAddress
-    ? input.applicantInfo.secondaryAddress.mailingAddress2
-    : null;
-  output.applicantInfoSecondaryMailingCity = input.applicantInfo.secondaryAddress
-    ? input.applicantInfo.secondaryAddress.mailingCity
-    : null;
-  output.applicantInfoSecondaryMailingState = input.applicantInfo.secondaryAddress
-    ? input.applicantInfo.secondaryAddress.mailingState
-    : null;
-  output.applicantInfoSecondaryMailingZIP = input.applicantInfo.secondaryAddress
-    ? input.applicantInfo.secondaryAddress.mailingZIP
-    : null;
+  output.applicantInfoSecondaryMailingAddress =
+    input.applicantInfo.secondaryAddress && input.applicantInfo.secondaryAddress.mailingAddress
+      ? input.applicantInfo.secondaryAddress.mailingAddress
+      : null;
+  output.applicantInfoSecondaryMailingAddress2 =
+    input.applicantInfo.secondaryAddress && input.applicantInfo.secondaryAddress.mailingAddress2
+      ? input.applicantInfo.secondaryAddress.mailingAddress2
+      : null;
+  output.applicantInfoSecondaryMailingCity =
+    input.applicantInfo.secondaryAddress && input.applicantInfo.secondaryAddress.mailingCity
+      ? input.applicantInfo.secondaryAddress.mailingCity
+      : null;
+  output.applicantInfoSecondaryMailingState =
+    input.applicantInfo.secondaryAddress && input.applicantInfo.secondaryAddress.mailingState
+      ? input.applicantInfo.secondaryAddress.mailingState
+      : null;
+  output.applicantInfoSecondaryMailingZIP =
+    input.applicantInfo.secondaryAddress && input.applicantInfo.secondaryAddress.mailingZIP
+      ? input.applicantInfo.secondaryAddress.mailingZIP
+      : null;
   output.applicantInfoWebsite = input.applicantInfo.website;
   output.authorizingOfficerName = input.authorizingOfficerName;
   output.authorizingOfficerTitle = input.authorizingOfficerTitle;
@@ -105,7 +128,9 @@ const translateFromClientToDatabase = (input, output) => {
 };
 
 /**
- * Translate permit application object from database format to client format.
+ * @function translateFromDatabaseToClient - private function to translate permit application
+ * object from database format to client format..
+ * @param {Object} input
  */
 const translateFromDatabaseToClient = input => {
   const result = {
@@ -171,14 +196,14 @@ const translateFromDatabaseToClient = input => {
       startYear: moment(input.noncommercialFieldsStartDateTime, util.datetimeFormat).format('YYYY'),
       startHour: moment(input.noncommercialFieldsStartDateTime, util.datetimeFormat).format('hh'),
       startMinutes: moment(input.noncommercialFieldsStartDateTime, util.datetimeFormat).format('mm'),
-      startPeriod: moment(input.noncommercialFieldsStartDateTime, util.datetimeFormat).format('A'),
+      startPeriod: moment(input.noncommercialFieldsStartDateTime, util.datetimeFormat).format('a'),
       endDateTime: input.noncommercialFieldsEndDateTime,
       endMonth: moment(input.noncommercialFieldsEndDateTime, util.datetimeFormat).format('M'),
       endDay: moment(input.noncommercialFieldsEndDateTime, util.datetimeFormat).format('D'),
       endYear: moment(input.noncommercialFieldsEndDateTime, util.datetimeFormat).format('YYYY'),
       endHour: moment(input.noncommercialFieldsEndDateTime, util.datetimeFormat).format('hh'),
       endMinutes: moment(input.noncommercialFieldsEndDateTime, util.datetimeFormat).format('mm'),
-      endPeriod: moment(input.noncommercialFieldsEndDateTime, util.datetimeFormat).format('A')
+      endPeriod: moment(input.noncommercialFieldsEndDateTime, util.datetimeFormat).format('a')
     },
     authorizingOfficerName: input.authorizingOfficerName,
     authorizingOfficerTitle: input.authorizingOfficerTitle,
@@ -216,9 +241,12 @@ const translateFromDatabaseToClient = input => {
 };
 
 /**
- * Translate permit application object from database format to middle layer format.
+ * @function translateFromIntakeToMiddleLayer - API function to translate permit application object
+ * from database format to middle layer format.
+ * @param {Object} input
  */
-const translateFromIntakeToMiddleLayer = input => {
+
+noncommercial.translateFromIntakeToMiddleLayer = input => {
   let result = {
     intakeId: input.applicationId,
     region: input.region,
@@ -278,7 +306,11 @@ const translateFromIntakeToMiddleLayer = input => {
 };
 
 /**
- * Update the permit application model values based on permissions.
+ * @function updateApplicationModel - API function to update the permit application
+ * model values based on permissions.
+ * @param {Object} model
+ * @param {Object} submitted
+ * @param {Object} user
  */
 noncommercial.updateApplicationModel = (model, submitted, user) => {
   if (user.role === 'admin') {
@@ -296,16 +328,17 @@ noncommercial.updateApplicationModel = (model, submitted, user) => {
 };
 
 /**
- * Send the permit application to the middle layer.
+ * @function acceptApplication - API function to send the permit application to the middle layer.
+ * @param {Object} application
  */
 noncommercial.acceptApplication = application => {
   const requestOptions = {
     method: 'POST',
-    url: vcapConstants.middleLayerBaseUrl + 'permits/applications/special-uses/noncommercial/',
+    url: vcapConstants.MIDDLE_LAYER_BASE_URL + 'permits/applications/special-uses/noncommercial/',
     headers: {},
     json: true,
     simple: true,
-    body: translateFromIntakeToMiddleLayer(application)
+    body: noncommercial.translateFromIntakeToMiddleLayer(application)
   };
   return new Promise((resolve, reject) => {
     util
@@ -324,7 +357,9 @@ noncommercial.acceptApplication = application => {
 };
 
 /**
- * Get one permit application.
+ * @function getOne - API function to get one permit application.
+ * @param {Object} req - http request
+ * @param {Object} res - http response
  */
 noncommercial.getOne = (req, res) => {
   NoncommercialApplication.findOne({
@@ -360,7 +395,9 @@ noncommercial.getOne = (req, res) => {
 };
 
 /**
- * Create a new permit application.
+ * @function create - API function to create a new permit application.
+ * @param {Object} req - http request
+ * @param {Object} res - http response
  */
 noncommercial.create = (req, res) => {
   util.setAuthEmail(req);
@@ -378,7 +415,9 @@ noncommercial.create = (req, res) => {
     })
     .catch(error => {
       if (error.name === 'SequelizeValidationError') {
-        return res.status(400).json({ errors: error.errors });
+        return res.status(400).json({
+          errors: error.errors
+        });
       } else {
         return res.status(500).send();
       }
@@ -386,7 +425,9 @@ noncommercial.create = (req, res) => {
 };
 
 /**
- * Update a permit application.
+ * @function update - API function to update a permit application.
+ * @param {Object} req - http request
+ * @param {Object} res - http response
  */
 noncommercial.update = (req, res) => {
   NoncommercialApplication.findOne({
@@ -410,7 +451,7 @@ noncommercial.update = (req, res) => {
             app
               .save()
               .then(() => {
-                util.createRevision(util.getUser(req), app);
+                commonControllers.createRevision(util.getUser(req), app);
                 email.sendEmail(`noncommercialApplication${app.status}`, app);
                 return res.status(200).json(translateFromDatabaseToClient(app));
               })
@@ -425,7 +466,7 @@ noncommercial.update = (req, res) => {
         app
           .save()
           .then(() => {
-            util.createRevision(util.getUser(req), app);
+            commonControllers.createRevision(util.getUser(req), app);
             if (app.status === 'Cancelled' && util.getUser(req).role === 'user') {
               email.sendEmail(`noncommercialApplicationUser${app.status}`, app);
             } else if (app.status === 'Review' && util.getUser(req).role === 'admin') {
@@ -437,7 +478,9 @@ noncommercial.update = (req, res) => {
           })
           .catch(error => {
             if (error.name === 'SequelizeValidationError') {
-              return res.status(400).json({ errors: error.errors });
+              return res.status(400).json({
+                errors: error.errors
+              });
             } else {
               return res.status(500).send();
             }
@@ -449,8 +492,4 @@ noncommercial.update = (req, res) => {
     });
 };
 
-/**
- * Noncommercial permit application controllers
- * @exports noncommercial
- */
 module.exports = noncommercial;

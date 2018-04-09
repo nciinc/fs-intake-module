@@ -1,5 +1,5 @@
 const moment = require('moment');
-const util = require('../../../util.es6');
+const util = require('../../../services/util.es6');
 const vcapConstants = require('../../../vcap-constants.es6');
 
 module.exports = application => {
@@ -14,7 +14,7 @@ Your recently submitted application has been put on hold due to insufficient inf
 
 ${application.applicantMessage}
 
-Login at ${vcapConstants.intakeClientBaseUrl}/applications/noncommercial-group-use/${application.appControlNumber}/edit
+Login at ${vcapConstants.INTAKE_CLIENT_BASE_URL}/applications/noncommercial-group-use/${application.appControlNumber}/edit
 
 
 Application details

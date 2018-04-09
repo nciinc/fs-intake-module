@@ -1,5 +1,5 @@
 <div class="usa-grid event-name no-padding padding-top-1">
-  <button *ngIf="application.status === 'Hold' && !isAdmin" class="usa-button-outline float-right" routerLink="/applications/noncommercial-group-use/{{application.appControlNumber}}/edit">Edit application</button>
+  <button *ngIf="application.status === 'Hold' && !isAdmin" class="usa-button-secondary-alt float-right" routerLink="/applications/noncommercial-group-use/{{application.appControlNumber}}/edit">Edit application</button>
   <div class="usa-width-three-fourths">
     <h1 id="skip-nav-target" tabindex="-1">{{ application.eventName }}
       <span *ngIf="['Submitted'].indexOf(application.status) === -1" class="usa-label" [ngClass]="{
@@ -17,7 +17,7 @@
     <h3>Identification number:</h3>
     <span>{{ application.applicationId }}</span>
     <h3>Permit application type:</h3>
-    <span>Noncommercial</span>
+    <span id="permit-type">Noncommercial</span>
     <h2 class="app-item-label padding-right-1">Primary permit holder</h2>
     <div *ngIf="application.applicantInfo.orgType === 'Corporation'" class="margin-bottom-1">
       <span class="display-block">{{ application.applicantInfo.organizationName }}</span>
@@ -82,11 +82,11 @@
 
     <ng-container *ngIf="application.dateTimeRange">
       <h3>Start date:</h3>
-      <span>{{ application.dateTimeRange.startDateTime | date: 'MM/dd/yyyy hh:mm a Z' }}</span>
+      <span>{{ application.dateTimeRange.startDateTime | date: 'MM/dd/yyyy h:mm a': 'UTC' }}</span>
 
       <h3>End date:</h3>
       <span>
-        {{ application.dateTimeRange.endDateTime | date: 'MM/dd/yyyy hh:mm a Z' }}
+        {{ application.dateTimeRange.endDateTime | date: 'MM/dd/yyyy h:mm a': 'UTC' }}
       </span>
     </ng-container>
 

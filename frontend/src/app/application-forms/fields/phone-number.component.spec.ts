@@ -1,6 +1,6 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
-import { inject, TestBed, getTestBed, async, fakeAsync, ComponentFixture } from '@angular/core/testing';
-import { FormGroup, FormControl, FormArray, FormBuilder, Validators } from '@angular/forms';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormBuilder } from '@angular/forms';
 import { PhoneNumberComponent } from './phone-number.component';
 import { ApplicationFieldsService } from '../_services/application-fields.service';
 
@@ -14,19 +14,17 @@ describe('phone number component', () => {
       TestBed.configureTestingModule({
         declarations: [PhoneNumberComponent],
         providers: [FormBuilder, ApplicationFieldsService],
-        schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
+        schemas: [NO_ERRORS_SCHEMA]
       }).compileComponents();
+      formBuilder = new FormBuilder();
+      fixture = TestBed.createComponent(PhoneNumberComponent);
+      component = fixture.componentInstance;
+      component.parentForm = formBuilder.group({
+        addAdditionalPhone: ['']
+      });
+      fixture.detectChanges();
     })
   );
-  beforeEach(() => {
-    formBuilder = new FormBuilder();
-    fixture = TestBed.createComponent(PhoneNumberComponent);
-    component = fixture.componentInstance;
-    component.parentForm = formBuilder.group({
-      addAdditionalPhone: ['']
-    });
-    fixture.detectChanges();
-  });
 
   it('should add phone types', () => {
     const form = component.parentForm;

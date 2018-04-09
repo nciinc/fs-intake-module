@@ -1,5 +1,5 @@
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
@@ -36,12 +36,21 @@ label {
 }
 
 .usa-form-hint {
-  color: $dark-grey;
+  color: #4D4D4D;
+  display: block;
   font-size: 15px;
+  line-height: 23px;
 }
 
 .usa-form-group label {
   margin-top: 8px;
+}
+
+.usa-form-group-period {
+  width: 8rem;
+  clear: none;
+  float: left;
+  margin-right: 1.5rem;
 }
 
 input.ng-valid.ng-touched,
@@ -52,18 +61,25 @@ textarea.ng-valid.ng-touched {
 
 input.ng-invalid.ng-touched,
 select.ng-invalid.ng-touched,
-textarea.ng-invalid.ng-touched {
+textarea.ng-invalid.ng-touched,
+input.ng-touched.invaliddate,
+.usa-input-inline.ng-invalid.ng-touched input {
   border: 3px solid $color-secondary-dark;
 }
 
-[type=radio]:checked + label::before {
+[type='radio']:checked + label::before {
   box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px $fs-green;
 }
 
-[type=checkbox]:checked + label::before,
-[type=radio]:checked + label::before {
+[type='checkbox']:checked + label::before,
+[type='radio']:checked + label::before {
   background-color: $fs-green;
 }
+
+.small-input {
+  max-width: 50%;
+}
+
 
 .usa-file-input {
   border: solid 1px $dark-grey;
@@ -78,10 +94,9 @@ textarea.ng-invalid.ng-touched {
   }
 
   &.file-selected {
-    background-image: url(/assets/img/checkmark.svg);
     background-position-x: 94%;
     background-position-y: 4%;
-    background-repeat: no-repeat;
+    background: url(/assets/img/site-wide/checkmark.svg) no-repeat;
     background-size: 5%;
     @media (min-width: $medium-screen) {
       background-position-x: 94%;
@@ -119,4 +134,16 @@ textarea.ng-invalid.ng-touched {
   .remove-file {
     cursor: pointer;
   }
+}
+
+.total-cost {
+  font-size: 20px;
+}
+
+input[disabled] {
+  background-color: $light-grey;
+}
+
+.invalid-override {
+  border: 3px solid $fs-red-dark !important;
 }

@@ -3,7 +3,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
 
 import { Directive, OnInit } from '@angular/core';
-import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 
 @Directive({
@@ -14,10 +14,11 @@ export class TitleDirective implements OnInit {
   type: string;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private titleService: Title) {}
-  ngOnInit() {
-    // Look at the current route to see if a title is set,
-    // if so, set the page title via titleService
 
+  /**
+   * Look at the current route to see if a title is set, if so, set the page title via titleService
+   */
+  ngOnInit() {
     this.router.events
       .filter(event => event instanceof NavigationEnd)
       .map(() => this.activatedRoute)
@@ -30,8 +31,10 @@ export class TitleDirective implements OnInit {
       .filter(route => route.outlet === 'primary')
       .filter(route => route['data']['value']['title'] !== '')
       .mergeMap(route => route.data)
-      .subscribe(event => {
-        this.titleService.setTitle(`${event['title']}`);
+      .subscribe(routeData => {
+        if (routeData.title) {
+          this.titleService.setTitle(`${routeData['title']}`);
+        }
       });
   }
 }

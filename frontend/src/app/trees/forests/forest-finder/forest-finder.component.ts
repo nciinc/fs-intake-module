@@ -1,8 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ForestService } from '../../_services/forest.service';
 import { RemovePuncPipe } from './remove-punc.pipe';
-import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 
 @Component({
@@ -11,37 +9,49 @@ import 'rxjs/add/observable/of';
   providers: [RemovePuncPipe]
 })
 export class ForestFinderComponent implements OnInit {
+  @ViewChild('forestFinder') form: ElementRef;
+
   forests = [];
   selectedForest = null;
   itemsPerRow = 2;
-  rows: any;
+  showForestSelectError = false;
 
-  constructor(private route: ActivatedRoute, private service: ForestService, private router: Router) {}
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
 
+  /**
+   * Set forest from route resolver
+   */
   ngOnInit() {
     this.route.data.subscribe(data => {
       this.forests = data.forests;
-      if (data.forests) {
-        this.rows = Array.from(Array(Math.ceil(data.forests.length / this.itemsPerRow)).keys());
-      }
     });
   }
 
-  goToForest(forestAbbr: string): void {
-    const navTo = '/christmas-trees/forests/' + forestAbbr + '/tree-guidelines';
-    this.router.navigate([navTo]);
+  /**
+   * Set focus to form
+   */
+  scrollToForestFinder(event) {
+    if (event) {
+      event.preventDefault();
+    }
+
+    this.form.nativeElement.focus();
+
   }
 
-  forestSearchResults(keyword: any) {
-    if (this.forests) {
-      const filteredResults = this.forests.filter(
-        el => el.description.toUpperCase().indexOf(keyword.toUpperCase()) !== -1
-      );
-      return Observable.of(filteredResults);
+  /**
+   * Redirect to forest guidelines page
+   */
+  goToForest(forest) {
+    if (forest) {
+      this.showForestSelectError = false;
+      const navTo = '/christmas-trees/forests/' + forest.forestAbbr;
+      this.router.navigate([navTo]);
+    } else {
+      this.showForestSelectError = true;
     }
   }
-
-  forestListFormatter = (data: any) => {
-    return `${data.description}`;
-  };
 }

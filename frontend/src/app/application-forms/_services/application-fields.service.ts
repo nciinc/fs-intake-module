@@ -1,16 +1,18 @@
-import { Injectable } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { Injectable, Inject} from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { alphanumericValidator } from '../validators/alphanumeric-validation';
 import { numberValidator } from '../validators/number-validation';
 import { stateValidator } from '../validators/state-validation';
+import { DOCUMENT } from '@angular/common';
 
 @Injectable()
 export class ApplicationFieldsService {
-  numberOfFiles: any = 0;
-  fileUploadError = false;
   editApplication = false;
 
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(
+    @Inject(DOCUMENT) public doc: Document,
+    public formBuilder: FormBuilder
+  ) {}
 
   hasError(control: FormControl) {
     if (control && control.touched && control.errors) {
@@ -85,10 +87,14 @@ export class ApplicationFieldsService {
     });
     parentForm.addControl('eveningPhone', eveningPhone);
 
-    parentForm.get('eveningPhone.tenDigit').valueChanges.subscribe(value => {
-      parentForm.patchValue({ eveningPhone: { areaCode: value.substring(0, 3) } });
-      parentForm.patchValue({ eveningPhone: { prefix: value.substring(3, 6) } });
-      parentForm.patchValue({ eveningPhone: { number: value.substring(6, 10) } });
+    this.phoneChangeSubscribers(parentForm, 'eveningPhone');
+  }
+
+  phoneChangeSubscribers(parentForm, type) {
+    parentForm.get(`${type}.tenDigit`).valueChanges.subscribe(value => {
+      parentForm.patchValue({ [type]: { areaCode: value.substring(0, 3) } });
+      parentForm.patchValue({ [type]: { prefix: value.substring(3, 6) } });
+      parentForm.patchValue({ [type]: { number: value.substring(6, 10) } });
     });
   }
 
@@ -109,6 +115,15 @@ export class ApplicationFieldsService {
     });
   }
 
+  toggleSwitchAdder(toggleSubFields, parentFieldName, parentForm) {
+    toggleSubFields.forEach(subField => {
+      this.simpleRequireToggle(
+        parentForm.get(`${parentFieldName}.${subField.toggleField}`),
+        parentForm.get(`${parentFieldName}.${subField.dataField}`)
+      );
+    });
+  }
+
   updateValidators(dataField, validate, length = null) {
     if (dataField && validate && length) {
       dataField.setValidators([Validators.required, alphanumericValidator(), Validators.maxLength(length)]);
@@ -119,28 +134,37 @@ export class ApplicationFieldsService {
     }
   }
 
+  /*
+  ** Gets first invalid element and assigns id if id isn't set.
+  */
+  getInvalidElement(firstInvalidElement) {
+    let element = this.doc.getElementById(firstInvalidElement.getAttribute('id'));
+    if (!element) {
+      const invalidClass = this.doc.getElementsByClassName(firstInvalidElement.getAttribute('class'));
+      if (invalidClass) {
+        invalidClass[0].setAttribute('id', 'temporaryId');
+        element = this.doc.getElementById('temporaryId');
+      }
+    }
+    return element;
+  }
+
+  setTemporaryIdToNull(invalidElement) {
+    if (invalidElement && invalidElement.getAttribute('id') === 'temporaryId') {
+      invalidElement.setAttribute('id', null);
+    }
+  }
+
   scrollToFirstError() {
     const invalidElements = document.querySelectorAll(
       'input.ng-invalid, select.ng-invalid, textarea.invalid, .usa-file-input.ng-invalid, .ng-untouched.required'
     );
-    if (invalidElements.length === 0) {
-      return;
+    if (invalidElements.length !== 0) {
+      const firstInvalidElement = invalidElements[0];
+      firstInvalidElement.scrollIntoView();
+      this.setTemporaryIdToNull(this.getInvalidElement(firstInvalidElement));
     }
-    invalidElements[0].scrollIntoView();
-    let invalid = document.getElementById(invalidElements[0].getAttribute('id'));
-    if (!invalid) {
-      const invalidClass = document.getElementsByClassName(invalidElements[0].getAttribute('class'));
-      if (invalidClass) {
-        invalidClass[0].setAttribute('id', 'temporaryId');
-        invalid = document.getElementById('temporaryId');
-      }
-    }
-    if (invalid) {
-      invalid.focus();
-      if (invalid.getAttribute('id') === 'temporaryId') {
-        invalid.setAttribute('id', null);
-      }
-    }
+    return;
   }
 
   touchField(control: FormControl) {
@@ -178,7 +202,7 @@ export class ApplicationFieldsService {
 
   loopChildControlsForErrors(formGroup: FormGroup) {
     if (formGroup.controls) {
-      const errors = (<any>Object).keys(formGroup.controls).some(control => {
+      return (<any>Object).keys(formGroup.controls).some(control => {
         if (formGroup.controls[control].errors && formGroup.controls[control].touched) {
           return true;
         }
@@ -186,45 +210,8 @@ export class ApplicationFieldsService {
           this.loopChildControlsForErrors(<FormGroup>formGroup.controls[control]);
         }
       });
-      return errors;
     }
     return;
-  }
-
-  parseNumberOfFilesToUpload(FormControls) {
-    let numberOfFiles = 0;
-    FormControls.forEach(function(control) {
-      if (control && control.value) {
-        numberOfFiles++;
-      }
-    });
-    this.setNumberOfFiles(numberOfFiles);
-    return this.numberOfFiles;
-  }
-
-  getNumberOfFiles() {
-    return this.numberOfFiles;
-  }
-
-  setNumberOfFiles(num) {
-    this.numberOfFiles = num;
-  }
-
-  removeOneFile() {
-    this.numberOfFiles--;
-  }
-
-  addOneFile() {
-    this.numberOfFiles++;
-  }
-
-  getFileUploadProgress(startingNumberOfFiles) {
-    const filesRemaining = this.numberOfFiles;
-    return startingNumberOfFiles - filesRemaining;
-  }
-
-  setFileUploadError(value: boolean) {
-    this.fileUploadError = value;
   }
 
   setEditApplication(value: boolean) {

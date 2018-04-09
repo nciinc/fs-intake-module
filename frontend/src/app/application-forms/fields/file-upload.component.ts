@@ -1,8 +1,9 @@
-import { Component, EventEmitter, Input, DoCheck, OnInit, Output } from '@angular/core';
-import { FileUploader, FileLikeObject, FileItem } from 'ng2-file-upload';
+import { Component, DoCheck, Input, OnInit } from '@angular/core';
+import { FileLikeObject, FileUploader } from 'ng2-file-upload';
 import { FormControl } from '@angular/forms';
 import { environment } from '../../../environments/environment';
 import { ApplicationFieldsService } from '../_services/application-fields.service';
+import { FileUploadService } from '../_services/file-upload.service';
 
 @Component({
   selector: 'app-file-upload-field',
@@ -28,7 +29,7 @@ export class FileUploadComponent implements DoCheck, OnInit {
   maxFileSize = 25 * 1024 * 1024;
   uploader: FileUploader;
 
-  constructor(public fieldsService: ApplicationFieldsService) {
+  constructor(public fieldsService: ApplicationFieldsService, public fileUploadService: FileUploadService) {
     this.uploader = new FileUploader({
       url: environment.apiUrl + 'permits/applications/special-uses/temp-outfitter/file',
       maxFileSize: this.maxFileSize,
@@ -45,22 +46,22 @@ export class FileUploadComponent implements DoCheck, OnInit {
   }
 
   onErrorItem(item, response, status, headers) {
-    this.fieldsService.setFileUploadError(true);
+    this.fileUploadService.setFileUploadError(true);
     item._onBeforeUpload();
   }
 
   onCompleteItem(item, response, status, headers) {
-    this.fieldsService.removeOneFile();
+    this.fileUploadService.removeOneFile();
   }
 
   onAfterAddingFile(uploader) {
     if (uploader.queue.length > 0) {
       this.errorMessage = '';
-      this.fieldsService.addOneFile();
+      this.fileUploadService.addOneFile();
     }
     if (uploader.queue.length > 1) {
       uploader.removeFromQueue(uploader.queue[0]);
-      this.fieldsService.removeOneFile();
+      this.fileUploadService.removeOneFile();
     }
     if (uploader.queue.length > 0) {
       this.field.patchValue(uploader.queue[0].file.name);
@@ -70,11 +71,11 @@ export class FileUploadComponent implements DoCheck, OnInit {
     }
   }
 
-  onWhenAddingFileFailed(item: FileLikeObject, filter: any, options: any) {
+  onWhenAddingFileFailed(item: FileLikeObject, Filter: any, options: any) {
     if (this.uploader.queue.length > 0) {
       this.uploader.removeFromQueue(this.uploader.queue[0]);
     }
-    switch (filter.name) {
+    switch (Filter.name) {
       case 'fileSize':
         this.errorMessage = `Maximum upload size exceeded (${item.size} of ${this.maxFileSize} allowed)`;
         break;
@@ -83,7 +84,7 @@ export class FileUploadComponent implements DoCheck, OnInit {
         this.errorMessage = `The file type you selected is not allowed. The allowed file types are .pdf, .doc, .docx, ${xls}or .rtf`;
         break;
       default:
-        this.errorMessage = `Unknown error (filter is ${filter.name})`;
+        this.errorMessage = `Unknown error (filter is ${Filter.name})`;
     }
 
     this.field.markAsTouched();

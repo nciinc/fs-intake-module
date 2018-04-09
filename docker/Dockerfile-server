@@ -1,5 +1,5 @@
-# Use node 6.11 as the base image
-FROM node:6.11.1
+# Use node 8.9.4 as the base image
+FROM node:8.9.4
 
 # Set the environment switch for scripts
 ENV FS_DOCKER=true
@@ -29,11 +29,26 @@ WORKDIR /app
 # Make port 8080 available to the world outside this container
 EXPOSE 8080
 
+ARG VCAP_SERVICES
+ARG AWS_CONFIG
+ARG VCAP_APPLICATION='{"uris":["http://localhost:8080/"]}'
+ARG PLATFORM=local
+ARG SNYK_TOKEN
+
 # env vars for VCAP_SERVICES and DATABASE_URL
-ENV VCAP_SERVICES='{"user-provided":[{"credentials":{"middlelayer_base_url":"https://fs-middlelayer-api-staging.app.cloud.gov/","middlelayer_password":"","middlelayer_username":"admin"},"label":"user-provided","name":"middlelayer-service","syslog_drain_url":"","tags":[],"volume_mounts":[]},{"credentials":{"intake_client_base_url":"http://localhost:4200","intake_password":"password","intake_username":"username"},"label":"user-provided","name":"intake-client-service","syslog_drain_url":"","tags":[],"volume_mounts":[]},{"credentials":{"entrypoint":"https://idp.int.login.gov/api/saml/auth","issuer":"urn:gov:gsa:SAML:2.0.profiles:sp:sso:usda-forestservice:epermit-dev","private_key":"saml.key.enc.usdaforestserviceepermitdevlogin","discovery_url":"https://idp.int.login.gov/.well-known/openid-configuration","idp_username":"18f","idp_password":"","jwk":{"d":"1234","dp":"1234","dq":"1234","e":"1234","kty":"RSA","kid":"1234","n":"1234","p":"1234","q":"1234","qi":"1234"}},"label":"user-provided","name":"login-service-provider","syslog_drain_url":"","tags":[],"volume_mounts":[]},{"credentials":{"whitelist":["esorenson@flexion.us"],"issuer":"fs-intake-api-staging.app.cloud.gov","entrypoint":"https://www.cert.eauth.usda.gov/affwebservices/public/saml2sso","cert":"1234","private_key":"1234"},"label":"user-provided","name":"eauth-service-provider","syslog_drain_url":"","tags":[],"volume_mounts":[]},{"credentials":{"smtp_server":"server","username":"username"},"label":"user-provided","name":"smtp-service","syslog_drain_url":"","tags":[],"volume_mounts":[]}],"s3":[{"name":"intake-s3","credentials":{"bucket":"flexion-test","access_key_id":"","region":"us-east-1","secret_access_key":""}}]}'
-ENV VCAP_APPLICATION='{"uris":["http://localhost:8080/"]}'
+ENV VCAP_SERVICES=$VCAP_SERVICES
+ENV AWS_CONFIG=$AWS_CONFIG
+ENV VCAP_APPLICATION=$VCAP_APPLICATION
+ENV PLATFORM=$PLATFORM
 ENV DATABASE_URL=postgresql://postgres:postgres@fs-intake-postgres:5432/postgres
-ENV PLATFORM=local
+ENV SNYK_TOKEN=$SNYK_TOKEN
+
+# Add Arial for docker images
+
+RUN apt-get update && apt-get -y install cabextract xfonts-utils #Required for mscorefonts
+RUN wget http://ftp.us.debian.org/debian/pool/contrib/m/msttcorefonts/ttf-mscorefonts-installer_3.6_all.deb
+RUN dpkg -i ttf-mscorefonts-installer_3.6_all.deb
+RUN fc-cache
 
 # symlink the node_modules directory into the app dir
 RUN ln -s /node/node_modules /app/node_modules

@@ -1,48 +1,70 @@
-<div class="usa-overlay" [ngClass]="{'is-visible' : showMobileNav}"></div>
-<button id="mobile-menu-btn" class="usa-menu-btn tree-guidelines-menu-btn" (click)='toggleMobileNav()' [style.position]="position" [style.top]="top">Menu</button>
-<nav role="navigation" [ngClass]="{'is-visible' : showMobileNav}" class="usa-nav sidenav-mobile">
-  <button class="usa-nav-close" (click)="toggleMobileNav()">
-    <img src="/assets/img/close.svg" alt="close">
-  </button>
-  <ul id="sidenav-mobile" class="usa-sidenav-list usa-accordion">
-    <li>
-      <a href="#" id="mobile-cutting-dates-link" (click)="util.gotoHashtag('cutting-dates', $event); toggleMobileNav();">When to cut your tree</a>
-    </li>
+<app-trees-buy-permit-bar [forest]="forest"></app-trees-buy-permit-bar>
+<section id="sidebar-page" class="usa-section usa-content tree-guidelines">
+  <div class="usa-grid">
+    <div class="usa-width-one-whole">
+      <app-breadcrumbs></app-breadcrumbs>
+      <app-tree-progress-bar *ngIf='forest.isSeasonOpen' step="details"></app-tree-progress-bar>
+    </div>
 
-    <li>
-      <a href="#" id="mobile-tree-selection-link" (click)="util.gotoHashtag('tree-selection', $event); toggleMobileNav();">How to choose your tree</a>
-    </li>
-    <li>
-      <a href="#" id="mobile-cutting-instructions-link" (click)="util.gotoHashtag('cutting-instructions', $event); toggleMobileNav();">How to cut your tree</a>
-      <ul class="usa-sidenav-sub_list">
-        <li>
-          <a href="#" id="mobile-cutting-instructions-before-you-cut-link" (click)="util.gotoHashtag('cutting-instructions-before-you-cut', $event); toggleMobileNav();">Before you cut</a>
-        </li>
-        <li>
-          <a href="#" id="mobile-cutting-instructions-when-you-cut-link" (click)="util.gotoHashtag('cutting-instructions-when-you-cut', $event); toggleMobileNav();">When you cut</a>
-        </li>
-      </ul>
-    </li>
-    <li>
-      <a href="#" id="mobile-need-to-know-link" (click)="util.gotoHashtag('need-to-know', $event); toggleMobileNav();">Rules to know</a>
-    </li>
-    <li>
-      <a href="#" id="mobile-trip-planning-link" (click)="util.gotoHashtag('trip-planning', $event); toggleMobileNav();">How to plan your trip</a>
-    </li>
-    <li>
-      <a href="#" id="mobile-tree-locations-link" (click)="util.gotoHashtag('tree-locations', $event); toggleMobileNav();">Where to find your tree</a>
-      <ul class="usa-sidenav-sub_list">
-        <li>
-          <a href="#" id="mobile-tree-locations-prohibited-link" (click)="util.gotoHashtag('tree-locations-prohibited', $event); toggleMobileNav();">Prohibited areas and restrictions</a>
-        </li>
-        <li>
-          <a href="#" id="mobile-tree-locations-allowed-link" (click)="util.gotoHashtag('tree-locations-allowed', $event); toggleMobileNav();">Cutting area maps</a>
-        </li>
-      </ul>
-    </li>
-    <li>
-      <a href="#" id="mobile-contact-information-link" (click)="util.gotoHashtag('contact-information', $event); toggleMobileNav();">Contact us</a>
-    </li>
-  </ul>
-</nav>
-<app-sidebar-view *ngIf="template === 'sidebar'" [forest]="forest"></app-sidebar-view>
+    <app-sidebar mobileMenu="true" [items]="sidebarItems" [user]="user" class="usa-width-one-third usa-layout-docs-sidenav"></app-sidebar>
+
+    <div id="skip-nav-target" tabindex="-1" class="usa-width-two-thirds sidebar-page-main-content">
+      <h1 *ngIf="forest">{{forest.forestName}} Christmas Tree Permit Information</h1>
+      <div id="forest-season-open-alert" [hidden]="forest.isSeasonOpen" role="alert" aria-label="info" class="usa-alert usa-alert-info">
+        <div class="usa-alert-body">
+          <p class="usa-alert-text">{{ forest.seasonOpenAlert }}</p>
+        </div>
+      </div>
+      <div id="forest-mock-data-alert" [hidden]="!forest.isMockData" role="alert" aria-label="info" class="usa-alert usa-alert-info">
+        <div class="usa-alert-body">
+          <p class="usa-alert-text">{{ forest.mockDataAlert }}</p>
+        </div>
+      </div>
+      <markdown *ngIf="forest && forest.content" [data]="forest.content.introduction"></markdown>
+
+      <!--when to cut-->
+      <app-section-heading heading="When to cut your tree" id="season-dates" tabIndex="-1"></app-section-heading>
+      <app-tree-cutting-dates [forest]="forest"></app-tree-cutting-dates>
+
+      <!--where to cut-->
+      <hr class="thick" />
+      <app-section-heading heading="Where to cut your tree" id="tree-locations" tabIndex="-1"></app-section-heading>
+      <app-section-heading heading="Prohibited areas and restrictions" id="tree-locations-prohibited" tabIndex="-1" selector="h3"></app-section-heading>
+      <hr class="trees-section-divider">
+      <markdown *ngIf="forest && forest.content" [data]="forest.content.treeLocationsProhibited"></markdown>
+
+      <app-section-heading heading="Cutting area maps" id="tree-locations-allowed" tabIndex="-1" selector="h3"></app-section-heading>
+
+      <hr class="trees-section-divider">
+      <markdown *ngIf="forest && forest.content" [data]="forest.content.treeLocationsAllowed"></markdown>
+
+      <!--how to cut-->
+      <hr class="thick" />
+      <app-section-heading heading="How to cut your tree" id="cutting-instructions" tabIndex="-1"></app-section-heading>
+
+      <app-section-heading heading="Measuring your tree" id="cutting-instructions-measuring" tabIndex="-1" selector="h3"></app-section-heading>
+      <hr class="trees-section-divider">
+      <markdown id="tree-measuring-container" *ngIf="forest && forest.content" [data]="forest.content.whenYouCut"></markdown>
+
+      <app-section-heading heading="Helpful cutting tips" id="cutting-instructions-helpful" tabIndex="-1" selector="h3"></app-section-heading>
+      <hr class="trees-section-divider">
+      <markdown *ngIf="forest && forest.content" [data]="forest.content.beforeYouCut"></markdown>
+
+      <app-section-heading heading="Identifying tree species" id="cutting-instructions-tree-selection" tabIndex="-1" selector="h3"></app-section-heading>
+      <hr class="trees-section-divider">
+      <app-tree-species [forest]="forest"></app-tree-species>
+
+
+      <hr class="thick" />
+      <app-section-heading heading="How to plan your trip" id="trip-planning" tabIndex="-1"></app-section-heading>
+      <markdown id="how-to-plan-container" *ngIf="forest && forest.content" [data]="forest.content.howToPlanYourTrip"></markdown>
+
+
+      <hr class="thick" />
+
+      <app-section-heading heading="Contact us" tabIndex="-1" id="contact-information"></app-section-heading>
+      <markdown *ngIf="forest && forest.content" [data]="forest.content.contactUs"></markdown>
+
+    </div>
+  </div>
+</section>

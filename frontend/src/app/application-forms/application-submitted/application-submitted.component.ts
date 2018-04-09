@@ -1,7 +1,6 @@
-import { SpecialUseApplication } from '../../_models/special-use-application';
 import { ApplicationService } from '../../_services/application.service';
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-application-submitted',
@@ -9,7 +8,6 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 })
 export class ApplicationSubmittedComponent implements OnInit {
   application: any = {};
-  // TODO Use type in the template to filter content. type = 'noncommercial' or 'temp-outfitter'
   type: string;
   errorMessage: string;
 

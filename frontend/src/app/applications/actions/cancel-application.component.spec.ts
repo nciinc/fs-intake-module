@@ -1,11 +1,12 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
-import { inject, TestBed, getTestBed, async, fakeAsync, ComponentFixture } from '@angular/core/testing';
+import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ApplicationService } from '../../_services/application.service';
 import { AuthenticationService } from '../../_services/authentication.service';
 import { AlertService } from '../../_services/alert.service';
 import { UtilService } from '../../_services/util.service';
 import { CancelApplicationComponent } from './cancel-application.component';
 import { Observable } from 'rxjs/Observable';
+import { CamelToHyphensPipe } from '../../_pipes/camel-to-hyphens.pipe';
 
 @Component({
   selector: 'app-test-component-wrapper',
@@ -37,6 +38,7 @@ describe('Cancel application', () => {
         providers: [
           { provide: ApplicationService, useClass: MockApplicationService },
           { provide: AuthenticationService, useClass: MockApplicationService },
+          CamelToHyphensPipe,
           AlertService,
           UtilService
         ],

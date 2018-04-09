@@ -1,8 +1,6 @@
-import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing';
-import { Component, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
-import { HttpModule, Http, Response, ResponseOptions, XHRBackend } from '@angular/http';
+import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { MockBackend } from '@angular/http/testing';
 import { PermitApplicationListComponent } from './permit-application-list.component';
 import { ApplicationService } from './../../_services/application.service';
 import { AuthenticationService } from '../../_services/authentication.service';
@@ -10,13 +8,11 @@ import { SortArray } from './../../_pipes/sort-array.pipe';
 import { HoursFromOrDate } from './../../_pipes/hours-from-or-date.pipe';
 import { DaysToOrDate } from './../../_pipes/days-to-or-date.pipe';
 import { SpacesToDashesPipe } from './../../_pipes/spaces-to-dashes.pipe';
-import { FormsModule } from '@angular/forms';
 import { AlertService } from '../../_services/alert.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Router } from '@angular/router';
-import { tempOutfitterMock } from '../../application-forms/temporary-outfitters/temp-outfitter.mock';
 import * as moment from 'moment/moment';
-import * as sinon from 'sinon';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 class MockService {
   isAdmin() {
@@ -47,11 +43,10 @@ describe('PermitApplicationListComponent', () => {
         providers: [
           { provide: ApplicationService, useClass: MockService },
           { provide: AlertService, useClass: AlertService },
-          { provide: XHRBackend, useClass: MockBackend },
           { provide: Router, useValue: router },
           { provide: AuthenticationService, useClass: MockService }
         ],
-        imports: [HttpModule, RouterTestingModule]
+        imports: [HttpClientTestingModule, RouterTestingModule]
       }).compileComponents();
     })
   );
@@ -60,42 +55,6 @@ describe('PermitApplicationListComponent', () => {
     fixture = TestBed.createComponent(PermitApplicationListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-  });
-
-  it('should return true if we are past deadline', () => {
-    const now = moment();
-    const startDateTime = moment(now, 'YYYY-MM-DDTHH:mm:ss').add(1, 'weeks');
-    expect(component.isApproachingBeginDateTime(startDateTime)).toBeTruthy();
-  });
-
-  it('should return false if we are prior to deadline', () => {
-    const now = moment();
-    const startDateTime = moment(now, 'YYYY-MM-DDTHH:mm:ss').add(3, 'weeks');
-    expect(component.isApproachingBeginDateTime(startDateTime)).toBeFalsy();
-  });
-
-  it('should return true if now is past date', () => {
-    const now = moment();
-    const date = moment(now, 'YYYY-MM-DDTHH:mm:ss').subtract(1, 'weeks');
-    expect(component.isPastDate(date)).toBeTruthy();
-  });
-
-  it('should return false if now is not past date', () => {
-    const now = moment();
-    const date = moment(now, 'YYYY-MM-DDTHH:mm:ss').add(1, 'weeks');
-    expect(component.isPastDate(date)).toBeFalsy();
-  });
-
-  it('should return true if over one day old', () => {
-    const now = moment();
-    const date = moment(now, 'YYYY-MM-DDTHH:mm:ss').subtract(2, 'days');
-    expect(component.isOverOneDayOld(date)).toBeTruthy();
-  });
-
-  it('should return false if less than one day old', () => {
-    const now = moment();
-    const date = moment(now, 'YYYY-MM-DDTHH:mm:ss').subtract(1, 'hours');
-    expect(component.isOverOneDayOld(date)).toBeFalsy();
   });
 
   it('should return true if over two days old', () => {

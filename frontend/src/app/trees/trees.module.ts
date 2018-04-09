@@ -1,63 +1,52 @@
 import { NgModule } from '@angular/core';
-
-import { ContactInfoComponent } from './forests/tree-guidelines/contact-info/contact-info.component';
-import { SharedModule } from '../_shared/shared.module';
+import { ApplicationsModule } from '../application-forms/applications.module';
+import { ReportComponent } from './admin/report/report.component';
+import { ReportResultsComponent } from './admin/report/results/report-results.component';
+import { SharedModule } from '../shared/shared.module';
 import { TreeGuidelinesComponent } from './forests/tree-guidelines/tree-guidelines.component';
-import { TreeCuttingDatesComponent } from './forests/tree-guidelines/tree-cutting-dates.component';
-import { TreeSpeciesComponent } from './forests/tree-guidelines/tree-selection/tree-species/tree-species.component';
-
-import { TreeToolsComponent } from './forests/tree-guidelines/tree-cutting/tree-tools/tree-tools.component';
-
-import { TripPlanningComponent } from './forests/tree-guidelines/trip-planning/trip-planning.component';
-
-import { TreesService } from './_services/trees.service';
-import { SidebarViewComponent } from './forests/tree-guidelines/sidebar-view.component';
-import { TreeCuttingRulesComponent } from './forests/tree-guidelines/tree-cutting/tree-cutting-rules/tree-cutting-rules.component';
-import { TreeLocationsProhibitedComponent } from './forests/tree-guidelines/tree-locations/tree-locations-prohibited/tree-locations-prohibited.component';
-import { TreeLocationsAllowedComponent } from './forests/tree-guidelines/tree-locations/tree-locations-allowed/tree-locations-allowed.component';
-import { TreeLocationsMapsComponent } from './forests/tree-guidelines/tree-locations/tree-locations-maps/tree-locations-maps.component';
-
-import { TreeRulesComponent } from './forests/tree-guidelines/tree-rules.component';
-
-import { ForestService } from './_services/forest.service';
+import { TreeCuttingDatesComponent } from './forests/tree-guidelines/tree-cutting-dates/tree-cutting-dates.component';
+import { TreeSpeciesComponent } from './forests/tree-guidelines/tree-species/tree-species.component';
+import { ChristmasTreesInfoService } from './_services/christmas-trees-info.service';
+import { TreeCuttingRulesComponent } from './forests/tree-guidelines/tree-cutting-rules/tree-cutting-rules.component';
 import { ForestFinderComponent } from './forests/forest-finder/forest-finder.component';
 import { RemovePuncPipe } from './forests/forest-finder/remove-punc.pipe';
-import { LineBreakFormatterPipe } from '../_pipes/line-break-formatter.pipe';
-import { ColumnizeArrayPipe } from '../_pipes/columnize-array.pipe';
+import { ChristmasTreesApplicationService } from './_services/christmas-trees-application.service';
+import { AdminSeasonDatesComponent } from './admin/season-dates/season-dates.component';
+import { ChristmasTreesAdminService } from './admin/christmas-trees-admin.service';
+import { AdminDistrictDatesComponent } from './admin/district-dates/district-dates.component';
+import { ChristmasTreeMapDetailsComponent } from './forests/christmas-tree-map-details/christmas-tree-map-details.component';
+import { BuyPermitBarComponent } from './forests/tree-guidelines/tree-buy-permit-bar/buy-permit-bar.component';
 
 @NgModule({
   declarations: [
-    ContactInfoComponent,
+    ReportComponent,
+    ReportResultsComponent,
+    AdminDistrictDatesComponent,
+    AdminSeasonDatesComponent,
     TreeCuttingRulesComponent,
     TreeGuidelinesComponent,
     TreeCuttingDatesComponent,
-    TreeLocationsMapsComponent,
-    TreeLocationsProhibitedComponent,
-    TreeLocationsAllowedComponent,
     TreeSpeciesComponent,
-    TripPlanningComponent,
-    TreeRulesComponent,
-    TreeToolsComponent,
-    SidebarViewComponent,
     ForestFinderComponent,
-    RemovePuncPipe,
-    LineBreakFormatterPipe,
-    ColumnizeArrayPipe
+    ChristmasTreeMapDetailsComponent,
+    BuyPermitBarComponent,
+    RemovePuncPipe
   ],
   exports: [
-    ContactInfoComponent,
+    ReportComponent,
+    ReportResultsComponent,
     TreeCuttingRulesComponent,
     TreeGuidelinesComponent,
+    BuyPermitBarComponent,
     TreeCuttingDatesComponent,
     TreeSpeciesComponent,
-    TripPlanningComponent,
-    TreeRulesComponent,
-    TreeToolsComponent,
-    SidebarViewComponent,
-    LineBreakFormatterPipe,
-    ColumnizeArrayPipe
+    ChristmasTreeMapDetailsComponent
   ],
-  imports: [SharedModule],
-  providers: [TreesService, ForestService]
+  imports: [SharedModule, ApplicationsModule],
+  providers: [
+    ChristmasTreesInfoService,
+    ChristmasTreesAdminService,
+    ChristmasTreesApplicationService
+  ]
 })
 export class TreesModule {}

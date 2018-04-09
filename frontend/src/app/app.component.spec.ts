@@ -1,105 +1,181 @@
-import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing';
-import { Component, CUSTOM_ELEMENTS_SCHEMA, DebugElement } from '@angular/core';
-
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { AppComponent } from './app.component';
 import { AuthenticationService } from './_services/authentication.service';
-import { HttpModule, Http, Response, ResponseOptions, XHRBackend } from '@angular/http';
 import { UsaBannerComponent } from './usa-banner/usa-banner.component';
-
 import { RouterTestingModule } from '@angular/router/testing';
+import { UtilService } from './_services/util.service';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Observable } from 'rxjs/Observable';
-import { MockBackend } from '@angular/http/testing';
-import * as sinon from 'sinon';
+import { NavigationEnd, Router, Routes } from '@angular/router';
+
+export class MockAuthenticationService {
+  user = { email: 'test@test.com', role: 'admin' };
+  getAuthenticatedUser(): Observable<{}> {
+    return Observable.of({ email: 'test@test.com', role: 'admin' });
+  }
+}
+
+class MockServices {
+  // Router
+  public events = Observable.of( new NavigationEnd(0, 'http://localhost:4200/', 'http://localhost:4200/'));
+  parseUrl(): String { return ''; }
+}
+
+const testRoutes: Routes = [
+  {
+    path: '',
+    children: [
+      {
+        path: '',
+        component: AppComponent
+      },
+      {
+        path: '#tree',
+        component: AppComponent
+      }
+    ]
+  }
+];
 
 describe('AppComponent', () => {
-  let component: AppComponent;
-  let fixture: ComponentFixture<AppComponent>;
+  describe('init', () => {
+    let component: AppComponent;
+    let fixture: ComponentFixture<AppComponent>;
 
-  beforeEach(
-    async(() => {
-      TestBed.configureTestingModule({
-        imports: [RouterTestingModule, HttpModule],
-        declarations: [AppComponent, UsaBannerComponent],
-        providers: [
-          { provide: AuthenticationService, useClass: AuthenticationService },
-          { provide: XHRBackend, useClass: MockBackend }
-        ],
-        schemas: [CUSTOM_ELEMENTS_SCHEMA]
-      }).compileComponents();
-    })
-  );
+    beforeEach(
+      async(() => {
+        TestBed.configureTestingModule({
+          imports: [RouterTestingModule.withRoutes(testRoutes), HttpClientTestingModule],
+          declarations: [AppComponent, UsaBannerComponent],
+          providers: [
+            { provide: AuthenticationService, useClass: MockAuthenticationService },
+            UtilService,
+            { provide: Router, useClass: MockServices }
+          ],
+          schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
+        }).compileComponents();
+      })
+    );
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(AppComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    beforeEach(() => {
+      fixture = TestBed.createComponent(AppComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+    });
+
+    it(
+      'should create the app',
+      async(() => {
+        const app = fixture.debugElement.componentInstance;
+        expect(app).toBeTruthy();
+      })
+    );
+    it('should show the status alert if present', () => {
+      expect(localStorage.getItem('status')).toBe(null);
+    });
+    it('should set logged in message', () => {
+      component.setLoggedInMessage({email: 'test@test.com'});
+      expect(component.status).toEqual({
+        heading: '',
+        message: 'You have successfully logged in as test@test.com.'
+      });
+    });
   });
 
-  it(
-    'should create the app',
-    async(() => {
-      const app = fixture.debugElement.componentInstance;
-      expect(app).toBeTruthy();
-    })
-  );
+  describe('set status alert', () => {
+    let component: AppComponent;
+    let fixture: ComponentFixture<AppComponent>;
 
-  it('should call go to hashtag', () => {
-    const spy = sinon.spy(component, 'gotoHashtag');
-    component.gotoHashtag('main', new Event('click'));
-    component.gotoHashtag(null, new Event('click'));
-    expect(spy.calledTwice).toBeTruthy();
+    beforeEach(
+      async(() => {
+        TestBed.configureTestingModule({
+          imports: [RouterTestingModule, HttpClientTestingModule],
+          declarations: [AppComponent, UsaBannerComponent],
+          providers: [{ provide: AuthenticationService, useClass: MockAuthenticationService }, UtilService],
+          schemas: [CUSTOM_ELEMENTS_SCHEMA]
+        }).compileComponents();
+      })
+    );
+
+    beforeEach(() => {
+      fixture = TestBed.createComponent(AppComponent);
+      component = fixture.componentInstance;
+      localStorage.setItem('status', JSON.stringify({ message: 'test', heading: 'test' }));
+      fixture.detectChanges();
+    });
+
+    it ('should set the status message', () => {
+      component.setStatus();
+      expect(component.status.message).toEqual('test');
+
+    });
+
+    it ('should set the status heading', () => {
+      component.setStatus();
+      expect(component.status.heading).toEqual('test');
+    });
+
+    it ('should clear status from local storage', () => {
+      component.setStatus();
+      expect(localStorage.getItem('status')).toBeNull();
+    });
   });
 
-  it(
-    'should check if user is authenticated',
-    inject([AuthenticationService, XHRBackend], (service, mockBackend) => {
-      const mockResponse = { email: 'test@test.com', role: 'admin' };
-      mockBackend.connections.subscribe(connection => {
-        connection.mockRespond(
-          new Response(
-            new ResponseOptions({
-              body: JSON.stringify(mockResponse)
-            })
-          )
-        );
-      });
+  describe('set loggedIn message', () => {
+    let component: AppComponent;
+    let fixture: ComponentFixture<AppComponent>;
 
-      service.getAuthenticatedUser().subscribe(user => {
-        expect(user.email).toBe('test@test.com');
-      });
+    beforeEach(
+      async(() => {
+        TestBed.configureTestingModule({
+          imports: [RouterTestingModule, HttpClientTestingModule],
+          declarations: [AppComponent, UsaBannerComponent],
+          providers: [{ provide: AuthenticationService, useClass: MockAuthenticationService }, UtilService],
+          schemas: [CUSTOM_ELEMENTS_SCHEMA]
+        }).compileComponents();
+      })
+    );
 
-      const status = { message: 'test', heading: 'test' };
-      localStorage.setItem('status', JSON.stringify(status));
-      component.isAuthenticated();
-      expect(component.status.message).toBe('test');
-      expect(component.status.heading).toBe('test');
-      expect(localStorage.getItem('status')).toBeFalsy();
+    beforeEach(() => {
+      fixture = TestBed.createComponent(AppComponent);
+      component = fixture.componentInstance;
+      localStorage.setItem('showLoggedIn', 'true');
+      fixture.detectChanges();
+    });
 
-      component.isAuthenticated();
-      expect(component.status.message).toBe('');
-      expect(component.status.heading).toBe('');
-    })
-  );
+    it ('should set the logged in message', () => {
+      component.setLoggedInMessage({ email: 'test@test.com'});
+      expect(component.status.message).toEqual(`You have successfully logged in as test@test.com.`);
 
-  it(
-    'should throw error if error',
-    inject([AuthenticationService, XHRBackend], (service, mockBackend) => {
-      mockBackend.connections.subscribe(connection => {
-        connection.mockError(new Error('error'));
-      });
+    });
 
-      service.getAuthenticatedUser().subscribe(
-        success => {},
-        (e: any) => {
-          expect(e).toBe('error');
-        }
-      );
-    })
-  );
+    it ('should clear the showLoggedIn from local storage', () => {
+      component.setLoggedInMessage({ email: 'test@test.com'});
+      expect(localStorage.getItem('showLoggedIn')).toBeNull();
+    });
 
-  it('should update status', () => {
-    component.updateStatus({ heading: 'test', message: 'test message' });
-    expect(component.status.heading).toBe('test');
-    expect(component.status.message).toBe('test message');
+    it ('should not set the logged in message if no user', () => {
+      component.setLoggedInMessage(null);
+      expect(component.status.message).toEqual('');
+
+    });
+
+    it ('should clear the local storage if no user', () => {
+      component.setLoggedInMessage(null);
+      expect(localStorage.getItem('showLoggedIn')).toBeNull();
+    });
+
+    it ('should clear the local storage if no user', () => {
+      component.setLoggedInMessage(null);
+      expect(localStorage.getItem('showLoggedIn')).toBeNull();
+    });
+
+    it ('should clear the local storage and remove showLoggedIn if no email on the user', () => {
+      component.setLoggedInMessage({});
+      expect(localStorage.getItem('showLoggedIn')).toBeNull();
+      expect(component.status.message).toEqual('');
+    });
+
   });
 });

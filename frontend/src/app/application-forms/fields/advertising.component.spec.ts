@@ -1,8 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
+import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { AdvertisingComponent } from './advertising.component';
-import { tempOutfitterMock } from '../temporary-outfitters/temp-outfitter.mock';
 import { ApplicationFieldsService } from '../_services/application-fields.service';
 
 @Component({
@@ -32,14 +31,12 @@ describe('Advertising Component', () => {
         providers: [FormBuilder, ApplicationFieldsService],
         schemas: [NO_ERRORS_SCHEMA]
       }).compileComponents();
+
+      fixture = TestBed.createComponent(TestComponentWrapperComponent);
+      component = fixture.debugElement.children[0].componentInstance;
+      fixture.detectChanges();
     })
   );
-
-  beforeEach(() => {
-    fixture = TestBed.createComponent(TestComponentWrapperComponent);
-    component = fixture.debugElement.children[0].componentInstance;
-    fixture.detectChanges();
-  });
 
   it('should create', () => {
     expect(component).toBeTruthy();

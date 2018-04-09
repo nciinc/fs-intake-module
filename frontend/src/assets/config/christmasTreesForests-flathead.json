@@ -1,0 +1,47 @@
+{
+  "name": "flathead",
+  "treeSpecies": [
+    {
+      "id": "engelmann-spruce",
+      "name": "Engelmann Spruce",
+      "status": "recommended",
+      "photoCredits": "Susan McDougal"
+    },
+    {
+      "id": "douglas-fir",
+      "name": "Douglas-fir",
+      "status": "recommended",
+      "photoCredits": "J.S. Peterson"
+    },
+    {
+      "id": "grand-fir",
+      "name": "Grand Fir",
+      "status": "recommended",
+      "photoCredits": "Susan McDougal"
+    },
+    {
+      "id": "lodgepole-pine",
+      "name": "Lodgepole Pine",
+      "status": "recommended",
+      "photoCredits": "J.S. Peterson"
+    },
+    {
+      "id": "subalpine-fir",
+      "name": "Subalpine Fir",
+      "status": "recommended",
+      "photoCredits": "J.S. Peterson"
+    },
+    {
+      "id": "ponderosa-pine",
+      "name": "Ponderosa Pine",
+      "status": "not recommended",
+      "photoCredits": "J.S. Peterson"
+    },
+    {
+      "id": "whitebark-pine",
+      "name": "Whitebark Pine",
+      "status": "prohibited",
+      "photoCredits": "Susan McDougal"
+    }
+  ]
+}

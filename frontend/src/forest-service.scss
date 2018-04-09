@@ -1,9 +1,8 @@
-// TODO: Remove these unnecessary variables, they're only here for USWDS defaults!
+// these variables are only here for USWDS defaults! The site breaks when they are removed.
 $helvetica: 'helvetica';
 $georgia: 'georgia';
 
 @import '../node_modules/uswds/src/stylesheets/core/_defaults.scss';
-@import '../node_modules/@cmsgov/design-system-core/dist/index.css';
 @import 'sass/_all.scss';
 
 body {

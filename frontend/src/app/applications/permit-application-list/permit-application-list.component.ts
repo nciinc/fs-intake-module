@@ -1,8 +1,7 @@
 import { AlertService } from '../../_services/alert.service';
 import { ApplicationService } from '../../_services/application.service';
 import { AuthenticationService } from '../../_services/authentication.service';
-import { Component, OnInit } from '@angular/core';
-import { Injectable } from '@angular/core';
+import { Component, Injectable, OnInit } from '@angular/core';
 import * as moment from 'moment/moment';
 
 @Component({
@@ -45,24 +44,6 @@ export class PermitApplicationListComponent implements OnInit {
     this.alertService.clear();
     this.successMessage = null;
     this.getApplications(this.applicationStatus);
-  }
-
-  isApproachingBeginDateTime(startDateTime) {
-    const now = moment();
-    const deadline = moment(startDateTime, 'YYYY-MM-DDTHH:mm:ss').subtract(2, 'weeks');
-    return now.isAfter(deadline);
-  }
-
-  isPastDate(dateTime) {
-    const now = moment();
-    const pastDate = moment(dateTime, 'YYYY-MM-DDTHH:mm:ss');
-    return now.isAfter(pastDate);
-  }
-
-  isOverOneDayOld(submittedDateTime) {
-    const now = moment();
-    const deadline = moment(submittedDateTime, 'YYYY-MM-DDTHH:mm:ss').add(1, 'days');
-    return now.isAfter(deadline);
   }
 
   isOverTwoDaysOld(submittedDateTime) {

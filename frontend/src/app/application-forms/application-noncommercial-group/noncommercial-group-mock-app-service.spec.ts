@@ -1,16 +1,16 @@
-import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { AlertService } from '../../_services/alert.service';
 import { AuthenticationService } from '../../_services/authentication.service';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import * as sinon from 'sinon';
 import { ApplicationNoncommercialGroupComponent } from './application-noncommercial-group.component';
 import { ApplicationService } from '../../_services/application.service';
 import { ApplicationFieldsService } from '../_services/application-fields.service';
 import { Observable } from 'rxjs/Observable';
 import { RouterTestingModule } from '@angular/router/testing';
-import { FormGroup, FormControl, FormArray, FormBuilder, Validators } from '@angular/forms';
-import { HttpModule, Http, Response, ResponseOptions, XHRBackend } from '@angular/http';
+import { FormBuilder } from '@angular/forms';
 import { noncommercialMock } from './noncommercial.mock';
+import { UtilService } from '../../_services/util.service';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 export class MockApplicationService {
   getOne(id): Observable<{}> {
@@ -48,9 +48,10 @@ describe('Noncommercial with mock application service', () => {
           { provide: ApplicationFieldsService, useClass: ApplicationFieldsService },
           { provide: FormBuilder, useClass: FormBuilder },
           AlertService,
-          AuthenticationService
+          AuthenticationService,
+          UtilService
         ],
-        imports: [RouterTestingModule, HttpModule]
+        imports: [RouterTestingModule, HttpClientTestingModule]
       }).compileComponents();
     })
   );

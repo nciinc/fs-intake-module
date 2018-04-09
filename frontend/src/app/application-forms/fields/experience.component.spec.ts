@@ -1,8 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 import { ExperienceComponent } from './experience.component';
-import { alphanumericValidator } from '../validators/alphanumeric-validation';
 import { ApplicationFieldsService } from '../_services/application-fields.service';
 
 describe('Experience Component', () => {
@@ -17,16 +16,13 @@ describe('Experience Component', () => {
         providers: [FormBuilder, ApplicationFieldsService],
         schemas: [NO_ERRORS_SCHEMA]
       }).compileComponents();
+      formBuilder = new FormBuilder();
+      fixture = TestBed.createComponent(ExperienceComponent);
+      component = fixture.debugElement.componentInstance;
+      component.parentForm = formBuilder.group({});
+      fixture.detectChanges();
     })
   );
-
-  beforeEach(() => {
-    formBuilder = new FormBuilder();
-    fixture = TestBed.createComponent(ExperienceComponent);
-    component = fixture.debugElement.componentInstance;
-    component.parentForm = formBuilder.group({});
-    fixture.detectChanges();
-  });
 
   it('should create', () => {
     expect(component).toBeTruthy();

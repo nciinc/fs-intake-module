@@ -77,3 +77,18 @@
   overflow: hidden;
   top: -10px;
 }
+
+.display-none {
+  display: none;
+}
+
+.vertical-center {
+  display: flex;
+  align-items: center;
+}
+
+.transparent {
+  zoom: 1;
+  filter: alpha(opacity=50);
+  opacity: 0.5;
+}

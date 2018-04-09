@@ -9,10 +9,11 @@ engines:
     enabled: true
   fixme:
     enabled: true
-exclude_patterns:
+exclude_paths:
 - "frontend/node_modules/"
 - "frontend/e2e/"
 - "server/node_modules/"
 - "server/test/"
 - "server/dba/"
-- "*.spec.ts"
+- "**/*.spec.ts"
+- "frontend/karma.conf.js"
