@@ -40,7 +40,8 @@
     "uuid": "^3.1.0",
     "xml": "^1.0.1",
     "xml2js": "^0.4.19",
-    "zpad": "^0.5.0"
+    "zpad": "^0.5.0",
+    "snyk": "^1.88.2"
   },
   "resolutions": {
     "debug": "^3.1.0",
@@ -69,13 +70,11 @@
     "nyc": "^11.2.1",
     "path": "^0.12.7",
     "sinon": "^4.4.6",
-    "snyk": "1.42.4",
     "supertest": "^3.0.0",
     "unionized": "^4.12.2"
   },
   "scripts": {
-    "coverage":
-      "nyc --check-coverage --lines 90 --reporter=html --reporter=text --reporter=lcov --extension .es6 mocha ./test/**/*.es6 ./test/*.es6",
+    "coverage": "nyc --check-coverage --lines 90 --reporter=html --reporter=text --reporter=lcov --extension .es6 mocha ./test/**/*.es6 ./test/*.es6",
     "dev": "yarn; yarn copy-frontend-assets; sequelize db:migrate; NODE_ENV=local nodemon ./src/app.es6",
     "copy-frontend-assets": "./copy-frontend-assets.sh",
     "lint": "eslint **/**/*.es6",
@@ -89,13 +88,19 @@
     "undoAllSeed": "sequelize db:seed:undo:all",
     "undoAllMigrate": "sequelize db:migrate:undo:all",
     "undoLastMigrate": "sequelize db:migrate:undo",
-    "jsdoc": "./node_modules/.bin/jsdoc -c .jsdoc.json -d docs/code -t ./node_modules/ink-docstrap/template -r ."
+    "jsdoc": "./node_modules/.bin/jsdoc -c .jsdoc.json -d docs/code -t ./node_modules/ink-docstrap/template -r .",
+    "prepare": "npm run snyk-protect"
   },
   "engines": {
     "node": "^8.9.4"
   },
   "nyc": {
-    "extension": [".es6"],
-    "exclude": ["src/pay-gov-mocks/*.*"]
-  }
+    "extension": [
+      ".es6"
+    ],
+    "exclude": [
+      "src/pay-gov-mocks/*.*"
+    ]
+  },
+  "snyk": true
 }
