@@ -29,7 +29,7 @@
     "nodemailer-juice": "^1.0.0",
     "openid-client": "1.19.4",
     "passport": "^0.4.0",
-    "passport-saml": "^0.33.0",
+    "passport-saml": "^1.0.0",
     "pg": "^6.0.0",
     "request": "^2.83.0",
     "request-promise": "^4.2.2",
