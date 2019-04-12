@@ -33,7 +33,7 @@
     "pg": "^6.0.0",
     "request": "^2.83.0",
     "request-promise": "^4.2.2",
-    "sequelize": "4.33.4",
+    "sequelize": "5.3.0",
     "sequelize-cli": "^3.0.0",
     "svg2png": "^4.1.1",
     "swagger-ui-express": "^2.0.15",
